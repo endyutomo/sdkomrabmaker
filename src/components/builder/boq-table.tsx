@@ -8,8 +8,6 @@ import { BoqCategory, BoqItem, ProjectBoq } from "@/lib/types";
 import { 
   Trash2, 
   Plus, 
-  Info, 
-  Percent, 
   Package, 
   UserCog, 
   ChevronDown, 
@@ -21,7 +19,9 @@ import {
   Calendar,
   MapPin,
   Hash,
-  FileText
+  FileText,
+  Percent,
+  Store
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -107,12 +107,13 @@ export function BoqTable({
       
       onUpdateItem(categoryId, item.id, {
         unitPrice: result.suggestedPrice,
-        sourceUrl: result.sourceUrl
+        sourceUrl: result.sourceUrl,
+        vendorName: result.sourceName
       });
 
       toast({
-        title: "Saran Harga Berhasil",
-        description: `Harga untuk ${item.name} diperbarui ke ${formatCurrency(result.suggestedPrice)}.`
+        title: "Saran AI Berhasil",
+        description: `Harga dan referensi vendor untuk ${item.name} telah diperbarui.`
       });
     } catch (error) {
       console.error("Gagal mendapatkan saran harga:", error);
@@ -228,11 +229,12 @@ export function BoqTable({
               <TableHeader>
                 <TableRow className="bg-slate-50/50 hover:bg-slate-50/50">
                   <TableHead className="w-[50px] text-center">Tipe</TableHead>
-                  <TableHead className="min-w-[400px]">Uraian Pekerjaan & Spesifikasi</TableHead>
+                  <TableHead className="min-w-[300px]">Uraian Pekerjaan & Spesifikasi</TableHead>
                   <TableHead className="w-[120px]">Satuan</TableHead>
                   <TableHead className="w-[100px] text-right">Vol</TableHead>
                   <TableHead className="w-[180px] text-right">Harga Satuan (Rp)</TableHead>
                   <TableHead className="w-[180px] text-right">Total (Rp)</TableHead>
+                  <TableHead className="w-[200px]">Referensi Vendor</TableHead>
                   <TableHead className="w-[80px] text-center">AI</TableHead>
                   <TableHead className="w-[50px]"></TableHead>
                 </TableRow>
@@ -288,6 +290,17 @@ export function BoqTable({
                     </TableCell>
                     <TableCell className="text-right font-bold text-primary text-sm whitespace-nowrap">
                       {formatCurrency(item.quantity * item.unitPrice)}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Store className="h-4 w-4 text-muted-foreground shrink-0" />
+                        <Input
+                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 text-xs text-slate-600 px-2 -ml-1"
+                          value={item.vendorName || ""}
+                          placeholder="Nama Toko / Vendor..."
+                          onChange={(e) => onUpdateItem(category.id, item.id, { vendorName: e.target.value })}
+                        />
+                      </div>
                     </TableCell>
                     <TableCell className="text-center">
                       <div className="flex items-center justify-center gap-1">

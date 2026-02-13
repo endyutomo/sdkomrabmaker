@@ -7,6 +7,7 @@ export interface BoqItem {
   type: 'perangkat' | 'jasa';
   suggestedPrice?: number;
   sourceUrl?: string;
+  vendorName?: string;
 }
 
 export interface BoqCategory {
