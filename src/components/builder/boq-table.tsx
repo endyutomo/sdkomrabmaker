@@ -138,7 +138,7 @@ export function BoqTable({
               <span className="text-xs font-bold uppercase tracking-wider">Informasi Klien</span>
             </div>
             <Input 
-              className="text-2xl font-bold bg-transparent border-none focus:ring-0 p-0 h-auto placeholder:text-muted-foreground/30"
+              className="text-3xl font-bold bg-transparent border-none focus:ring-0 p-0 h-auto placeholder:text-muted-foreground/30"
               placeholder="Nama Klien / Perusahaan"
               value={project.clientName}
               onChange={(e) => onUpdateProjectInfo({ clientName: e.target.value })}
@@ -173,7 +173,7 @@ export function BoqTable({
             <div className="space-y-2">
               <Label className="text-[10px] text-muted-foreground uppercase font-bold">Nomor Dokumen</Label>
               <Input 
-                className="text-sm border-slate-200 focus:border-primary transition-colors"
+                className="text-sm border-slate-200 focus:border-primary transition-colors h-11"
                 placeholder="RAB/2024/001"
                 value={project.documentNumber}
                 onChange={(e) => onUpdateProjectInfo({ documentNumber: e.target.value })}
@@ -181,7 +181,7 @@ export function BoqTable({
             </div>
             <div className="space-y-2">
               <Label className="text-[10px] text-muted-foreground uppercase font-bold">Tanggal</Label>
-              <div className="flex items-center gap-2 bg-slate-50 border rounded-md px-3 h-10 border-slate-200">
+              <div className="flex items-center gap-2 bg-slate-50 border rounded-md px-3 h-11 border-slate-200">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
                 <input 
                   type="date"
@@ -206,11 +206,11 @@ export function BoqTable({
                 {categories.indexOf(category) + 1}
               </div>
               <Input
-                className="font-bold text-xl bg-transparent border-transparent hover:border-slate-200 focus:border-primary h-10 w-full max-w-md transition-all"
+                className="font-bold text-2xl bg-transparent border-transparent hover:border-slate-200 focus:border-primary h-12 w-full max-w-xl transition-all"
                 value={category.name}
                 onChange={(e) => onUpdateCategory(category.id, { name: e.target.value })}
               />
-              <Badge variant="outline" className="hidden lg:inline-flex bg-white px-3 py-1 text-sm shadow-sm">
+              <Badge variant="outline" className="hidden lg:inline-flex bg-white px-4 py-2 text-base font-bold shadow-sm text-primary">
                 Sub-total: {formatCurrency(category.items.reduce((s, i) => s + (i.quantity * i.unitPrice), 0))}
               </Badge>
             </div>
@@ -228,13 +228,13 @@ export function BoqTable({
             <Table>
               <TableHeader>
                 <TableRow className="bg-slate-50/50 hover:bg-slate-50/50">
-                  <TableHead className="w-[50px] text-center">Tipe</TableHead>
-                  <TableHead className="min-w-[300px]">Uraian Pekerjaan & Spesifikasi</TableHead>
+                  <TableHead className="w-[60px] text-center">Tipe</TableHead>
+                  <TableHead className="min-w-[500px]">Uraian Pekerjaan & Spesifikasi</TableHead>
                   <TableHead className="w-[120px]">Satuan</TableHead>
                   <TableHead className="w-[140px] text-right">Volume (Qty)</TableHead>
-                  <TableHead className="w-[200px] text-right">Harga Satuan (Rp)</TableHead>
-                  <TableHead className="w-[200px] text-right">Total (Rp)</TableHead>
-                  <TableHead className="w-[200px]">Referensi Vendor</TableHead>
+                  <TableHead className="w-[250px] text-right">Harga Satuan (Rp)</TableHead>
+                  <TableHead className="w-[220px] text-right">Total (Rp)</TableHead>
+                  <TableHead className="w-[250px]">Referensi Vendor</TableHead>
                   <TableHead className="w-[80px] text-center">AI</TableHead>
                   <TableHead className="w-[50px]"></TableHead>
                 </TableRow>
@@ -252,13 +252,13 @@ export function BoqTable({
                     <TableCell>
                       <div className="flex flex-col gap-1 pr-4">
                         <Input
-                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 font-medium text-slate-900 transition-all px-2 -ml-2"
+                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 font-medium text-slate-900 transition-all px-3 -ml-2 text-base"
                           value={item.name}
                           placeholder="Ketik nama item atau deskripsi pekerjaan..."
                           onChange={(e) => onUpdateItem(category.id, item.id, { name: e.target.value })}
                         />
                         <div className="flex gap-2">
-                          <Badge variant={item.type === 'perangkat' ? 'outline' : 'secondary'} className="text-[9px] h-4 px-1.5 uppercase tracking-tighter font-bold">
+                          <Badge variant={item.type === 'perangkat' ? 'outline' : 'secondary'} className="text-[10px] h-5 px-2 uppercase tracking-tight font-bold">
                             {item.type}
                           </Badge>
                         </div>
@@ -266,7 +266,7 @@ export function BoqTable({
                     </TableCell>
                     <TableCell>
                       <Input
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 text-slate-600 px-2 -ml-2"
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-slate-600 px-3 -ml-2"
                         value={item.unit}
                         placeholder="Unit/Lot/Titik"
                         onChange={(e) => onUpdateItem(category.id, item.id, { unit: e.target.value })}
@@ -275,7 +275,7 @@ export function BoqTable({
                     <TableCell>
                       <Input
                         type="number"
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 text-right font-medium px-2 -ml-2 w-full"
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-medium px-3 -ml-2 w-full text-base"
                         value={item.quantity}
                         onChange={(e) => onUpdateItem(category.id, item.id, { quantity: parseFloat(e.target.value) || 0 })}
                       />
@@ -283,19 +283,19 @@ export function BoqTable({
                     <TableCell>
                       <Input
                         type="number"
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 text-right font-bold text-slate-800 px-2 -ml-2 w-full"
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-bold text-slate-800 px-3 -ml-2 w-full text-base"
                         value={item.unitPrice}
                         onChange={(e) => onUpdateItem(category.id, item.id, { unitPrice: parseFloat(e.target.value) || 0 })}
                       />
                     </TableCell>
-                    <TableCell className="text-right font-bold text-primary text-sm whitespace-nowrap">
+                    <TableCell className="text-right font-bold text-primary text-base whitespace-nowrap">
                       {formatCurrency(item.quantity * item.unitPrice)}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Store className="h-4 w-4 text-muted-foreground shrink-0" />
                         <Input
-                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 text-xs text-slate-600 px-2 -ml-1"
+                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-sm text-slate-600 px-3 -ml-1"
                           value={item.vendorName || ""}
                           placeholder="Nama Toko / Vendor..."
                           onChange={(e) => onUpdateItem(category.id, item.id, { vendorName: e.target.value })}
@@ -307,14 +307,14 @@ export function BoqTable({
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-accent hover:text-accent hover:bg-accent/10 transition-colors"
+                          className="h-10 w-10 text-accent hover:text-accent hover:bg-accent/10 transition-colors"
                           onClick={() => handleSuggestPrice(category.id, item)}
                           disabled={loadingPriceId === item.id}
                         >
                           {loadingPriceId === item.id ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <Loader2 className="h-5 w-5 animate-spin" />
                           ) : (
-                            <Sparkles className="h-4 w-4" />
+                            <Sparkles className="h-5 w-5" />
                           )}
                         </Button>
                         {item.sourceUrl && (
@@ -325,7 +325,7 @@ export function BoqTable({
                             className="text-muted-foreground hover:text-primary transition-colors"
                             title="Lihat Sumber Harga"
                           >
-                            <ExternalLink className="h-3 w-3" />
+                            <ExternalLink className="h-4 w-4" />
                           </a>
                         )}
                       </div>
@@ -334,10 +334,10 @@ export function BoqTable({
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="opacity-0 group-hover:opacity-100 transition-opacity text-destructive h-8 w-8"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity text-destructive h-10 w-10"
                         onClick={() => onDeleteItem(category.id, item.id)}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-5 w-5" />
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -346,30 +346,30 @@ export function BoqTable({
             </Table>
           </div>
           
-          <div className="p-4 border-t bg-slate-50/30 flex gap-2">
+          <div className="p-6 border-t bg-slate-50/30 flex gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button 
                   variant="outline" 
-                  size="sm" 
-                  className="w-full h-10 text-primary border-primary/20 hover:border-primary/50 hover:bg-primary/5 font-semibold bg-white"
+                  size="lg" 
+                  className="w-full h-12 text-primary border-primary/20 hover:border-primary/50 hover:bg-primary/5 font-bold bg-white text-base"
                 >
-                  <Plus className="h-4 w-4 mr-2" /> Tambah Item Pekerjaan <ChevronDown className="h-3 w-3 ml-2 opacity-50" />
+                  <Plus className="h-5 w-5 mr-2" /> Tambah Item Pekerjaan <ChevronDown className="h-4 w-4 ml-2 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="w-64 p-2">
-                <DropdownMenuItem className="cursor-pointer py-2" onClick={() => onAddItem(category.id, 'perangkat')}>
-                  <Package className="mr-3 h-5 w-5 text-primary" /> 
+              <DropdownMenuContent align="center" className="w-80 p-3">
+                <DropdownMenuItem className="cursor-pointer py-3" onClick={() => onAddItem(category.id, 'perangkat')}>
+                  <Package className="mr-4 h-6 w-6 text-primary" /> 
                   <div className="flex flex-col">
-                    <span className="font-bold">Baris Perangkat</span>
-                    <span className="text-[10px] text-muted-foreground">Material, Hardware, atau Barang Fisik</span>
+                    <span className="font-bold text-base">Baris Perangkat</span>
+                    <span className="text-xs text-muted-foreground">Material, Hardware, atau Barang Fisik</span>
                   </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer py-2" onClick={() => onAddItem(category.id, 'jasa')}>
-                  <UserCog className="mr-3 h-5 w-5 text-accent" /> 
+                <DropdownMenuItem className="cursor-pointer py-3" onClick={() => onAddItem(category.id, 'jasa')}>
+                  <UserCog className="mr-4 h-6 w-6 text-accent" /> 
                   <div className="flex flex-col">
-                    <span className="font-bold">Baris Jasa</span>
-                    <span className="text-[10px] text-muted-foreground">Instalasi, Konfigurasi, atau Tenaga Kerja</span>
+                    <span className="font-bold text-base">Baris Jasa</span>
+                    <span className="text-xs text-muted-foreground">Instalasi, Konfigurasi, atau Tenaga Kerja</span>
                   </div>
                 </DropdownMenuItem>
               </DropdownMenuContent>
