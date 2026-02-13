@@ -3,7 +3,8 @@ export interface BoqItem {
   name: string;
   unit: string;
   quantity: number;
-  unitPrice: number;
+  unitPrice: number; // Harga Dasar / Modal
+  margin?: number;    // Persentase Margin (%)
   type: 'perangkat' | 'jasa';
   suggestedPrice?: number;
   sourceUrl?: string;

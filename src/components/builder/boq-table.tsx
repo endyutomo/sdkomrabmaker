@@ -21,7 +21,9 @@ import {
   Hash,
   FileText,
   Percent,
-  Store
+  Store,
+  TrendingUp,
+  Coins
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -62,14 +64,31 @@ export function BoqTable({
 
   const categories = project.categories;
 
-  // Perhitungan Subtotals
+  const calculateItemSellingPrice = (item: BoqItem) => {
+    const margin = item.margin || 0;
+    return item.unitPrice * (1 + margin / 100);
+  };
+
+  const calculateItemTotal = (item: BoqItem) => {
+    return item.quantity * calculateItemSellingPrice(item);
+  };
+
+  const calculateItemCost = (item: BoqItem) => {
+    return item.quantity * item.unitPrice;
+  };
+
+  // Perhitungan Subtotals (Berdasarkan Harga Jual)
   const totalPerangkat = categories.reduce((sum, cat) => 
-    sum + cat.items.filter(i => i.type === 'perangkat').reduce((s, i) => s + (i.quantity * i.unitPrice), 0), 0);
+    sum + cat.items.filter(i => i.type === 'perangkat').reduce((s, i) => s + calculateItemTotal(i), 0), 0);
   
   const totalJasa = categories.reduce((sum, cat) => 
-    sum + cat.items.filter(i => i.type === 'jasa').reduce((s, i) => s + (i.quantity * i.unitPrice), 0), 0);
+    sum + cat.items.filter(i => i.type === 'jasa').reduce((s, i) => s + calculateItemTotal(i), 0), 0);
+
+  const totalCost = categories.reduce((sum, cat) => 
+    sum + cat.items.reduce((s, i) => s + calculateItemCost(i), 0), 0);
 
   const subTotal = totalPerangkat + totalJasa;
+  const totalProfit = subTotal - totalCost;
   const contingencyAmount = (subTotal * contingencyRate) / 100;
   const totalBeforeTax = subTotal + contingencyAmount;
   
@@ -211,7 +230,7 @@ export function BoqTable({
                 onChange={(e) => onUpdateCategory(category.id, { name: e.target.value })}
               />
               <Badge variant="outline" className="hidden lg:inline-flex bg-white px-4 py-2 text-base font-bold shadow-sm text-primary whitespace-nowrap">
-                Sub-total: {formatCurrency(category.items.reduce((s, i) => s + (i.quantity * i.unitPrice), 0))}
+                Sub-total Jual: {formatCurrency(category.items.reduce((s, i) => s + calculateItemTotal(i), 0))}
               </Badge>
             </div>
             <Button 
@@ -229,12 +248,14 @@ export function BoqTable({
               <TableHeader>
                 <TableRow className="bg-slate-50/50 hover:bg-slate-50/50">
                   <TableHead className="w-[60px] text-center whitespace-nowrap">Tipe</TableHead>
-                  <TableHead className="min-w-[400px]">Uraian Pekerjaan & Spesifikasi</TableHead>
+                  <TableHead className="w-auto min-w-[400px]">Uraian Pekerjaan & Spesifikasi</TableHead>
                   <TableHead className="w-auto whitespace-nowrap">Satuan</TableHead>
-                  <TableHead className="w-auto text-right whitespace-nowrap">Vol (Qty)</TableHead>
-                  <TableHead className="w-auto text-right whitespace-nowrap">Harga Satuan (Rp)</TableHead>
-                  <TableHead className="w-auto text-right whitespace-nowrap">Total (Rp)</TableHead>
-                  <TableHead className="min-w-[200px]">Referensi Vendor</TableHead>
+                  <TableHead className="w-auto text-right whitespace-nowrap">Vol</TableHead>
+                  <TableHead className="w-auto text-right whitespace-nowrap">Harga Dasar (Modal)</TableHead>
+                  <TableHead className="w-auto text-right whitespace-nowrap">Margin (%)</TableHead>
+                  <TableHead className="w-auto text-right whitespace-nowrap">Harga Jual</TableHead>
+                  <TableHead className="w-auto text-right whitespace-nowrap">Total Jual (Rp)</TableHead>
+                  <TableHead className="w-auto min-w-[200px]">Referensi Vendor</TableHead>
                   <TableHead className="w-[80px] text-center">AI</TableHead>
                   <TableHead className="w-[50px]"></TableHead>
                 </TableRow>
@@ -252,7 +273,7 @@ export function BoqTable({
                     <TableCell>
                       <div className="flex flex-col gap-1">
                         <Input
-                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 font-medium text-slate-900 transition-all px-3 -ml-2 text-base w-full"
+                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 font-medium text-slate-900 transition-all px-3 -ml-2 text-base w-full min-w-[400px]"
                           value={item.name}
                           placeholder="Ketik nama item atau deskripsi pekerjaan..."
                           onChange={(e) => onUpdateItem(category.id, item.id, { name: e.target.value })}
@@ -275,7 +296,7 @@ export function BoqTable({
                     <TableCell>
                       <Input
                         type="number"
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-medium px-3 -ml-2 w-full text-base min-w-[80px]"
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-medium px-3 -ml-2 w-full text-base min-w-[100px]"
                         value={item.quantity}
                         onChange={(e) => onUpdateItem(category.id, item.id, { quantity: parseFloat(e.target.value) || 0 })}
                       />
@@ -283,19 +304,33 @@ export function BoqTable({
                     <TableCell>
                       <Input
                         type="number"
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-bold text-slate-800 px-3 -ml-2 w-full text-base min-w-[150px]"
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-bold text-slate-800 px-3 -ml-2 w-full text-base min-w-[200px]"
                         value={item.unitPrice}
                         onChange={(e) => onUpdateItem(category.id, item.id, { unitPrice: parseFloat(e.target.value) || 0 })}
                       />
                     </TableCell>
-                    <TableCell className="text-right font-bold text-primary text-base whitespace-nowrap px-4 min-w-[150px]">
-                      {formatCurrency(item.quantity * item.unitPrice)}
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <Input
+                          type="number"
+                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-medium text-accent px-3 -ml-2 w-full text-base min-w-[80px]"
+                          value={item.margin || 0}
+                          onChange={(e) => onUpdateItem(category.id, item.id, { margin: parseFloat(e.target.value) || 0 })}
+                        />
+                        <Percent className="h-4 w-4 text-accent opacity-50 shrink-0" />
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right font-medium text-slate-500 text-sm whitespace-nowrap min-w-[150px]">
+                      {formatCurrency(calculateItemSellingPrice(item))}
+                    </TableCell>
+                    <TableCell className="text-right font-bold text-primary text-base whitespace-nowrap px-4 min-w-[180px]">
+                      {formatCurrency(calculateItemTotal(item))}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Store className="h-4 w-4 text-muted-foreground shrink-0" />
                         <Input
-                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-sm text-slate-600 px-3 -ml-1 w-full"
+                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-sm text-slate-600 px-3 -ml-1 w-full min-w-[250px]"
                           value={item.vendorName || ""}
                           placeholder="Nama Toko / Vendor..."
                           onChange={(e) => onUpdateItem(category.id, item.id, { vendorName: e.target.value })}
@@ -389,16 +424,29 @@ export function BoqTable({
             <div className="space-y-4">
               <div className="flex items-center justify-between p-3 border-b border-slate-100 hover:bg-slate-50 transition-colors">
                 <span className="text-slate-600 flex items-center gap-3 font-medium">
-                  <Package className="h-5 w-5 text-primary opacity-70" /> Total Barang/Perangkat
+                  <Package className="h-5 w-5 text-primary opacity-70" /> Total Jual Barang/Perangkat
                 </span>
                 <span className="font-bold text-slate-900">{formatCurrency(totalPerangkat)}</span>
               </div>
               
               <div className="flex items-center justify-between p-3 border-b border-slate-100 hover:bg-slate-50 transition-colors">
                 <span className="text-slate-600 flex items-center gap-3 font-medium">
-                  <UserCog className="h-5 w-5 text-accent opacity-70" /> Total Jasa Instalasi
+                  <UserCog className="h-5 w-5 text-accent opacity-70" /> Total Jual Jasa Instalasi
                 </span>
                 <span className="font-bold text-slate-900">{formatCurrency(totalJasa)}</span>
+              </div>
+
+              <div className="p-4 bg-emerald-50 rounded-xl space-y-2 border border-emerald-100">
+                <div className="flex items-center justify-between">
+                  <span className="text-emerald-700 flex items-center gap-3 font-bold">
+                    <TrendingUp className="h-5 w-5" /> Estimasi Laba Kotor (Profit)
+                  </span>
+                  <span className="font-bold text-emerald-800">{formatCurrency(totalProfit)}</span>
+                </div>
+                <div className="flex justify-between text-[10px] text-emerald-600/70 font-medium pl-8">
+                  <span>Total Harga Modal:</span>
+                  <span>{formatCurrency(totalCost)}</span>
+                </div>
               </div>
 
               <div className="p-4 bg-slate-50 rounded-xl space-y-4 border border-slate-100">
@@ -415,7 +463,7 @@ export function BoqTable({
                         PPh 23 (Potongan Jasa 2%)
                       </Label>
                     </div>
-                    <p className="text-[10px] text-slate-500 ml-8 italic">Pajak penghasilan atas jasa yang wajib dipotong.</p>
+                    <p className="text-[10px] text-slate-500 ml-8 italic">Potongan pajak atas jasa dari harga jual.</p>
                   </div>
                   <span className="font-bold text-destructive">-{formatCurrency(pph23Amount)}</span>
                 </div>
@@ -446,7 +494,7 @@ export function BoqTable({
                     onCheckedChange={(checked) => setIncludeVat(!!checked)} 
                   />
                   <Label htmlFor="include-vat" className="text-slate-700 cursor-pointer font-bold">
-                    Sertakan PPN 11% (Standard Pajak Indonesia)
+                    Sertakan PPN 11% (Dihitung dari Harga Jual)
                   </Label>
                 </div>
                 {includeVat && (
@@ -462,21 +510,21 @@ export function BoqTable({
           <div className="flex flex-col justify-center gap-4">
             <div className="boq-accent-gradient rounded-3xl p-10 text-white flex flex-col items-center justify-center text-center space-y-4 relative overflow-hidden shadow-2xl">
               <div className="absolute top-0 right-0 p-6 opacity-10">
-                <Calculator className="h-32 w-32" />
+                <Coins className="h-32 w-32" />
               </div>
-              <span className="text-xs opacity-80 uppercase tracking-[0.2em] font-black">Total Anggaran Keseluruhan</span>
+              <span className="text-xs opacity-80 uppercase tracking-[0.2em] font-black">Total Penawaran (Harga Jual)</span>
               <div className="text-5xl font-black tracking-tight drop-shadow-lg">
                 {formatCurrency(grandTotal)}
               </div>
               <div className="mt-8 pt-6 border-t border-white/20 w-full text-sm opacity-80">
                 <div className="flex justify-between font-medium">
-                  <span>Netto Transfer Vendor Jasa:</span>
-                  <span className="font-bold">{formatCurrency(totalJasa - pph23Amount)}</span>
+                  <span>Margin Profit Proyek:</span>
+                  <span className="font-bold">{formatCurrency(totalProfit)}</span>
                 </div>
               </div>
             </div>
             <p className="text-[10px] text-center text-muted-foreground uppercase tracking-widest font-bold">
-              Dokumen ini dihasilkan secara otomatis oleh Pembuat RAB AI
+              Harga Jual = Harga Dasar + Margin Pekerjaan
             </p>
           </div>
         </div>
