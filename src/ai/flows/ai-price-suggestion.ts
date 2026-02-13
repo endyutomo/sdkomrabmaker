@@ -1,6 +1,7 @@
+
 'use server';
 /**
- * @fileOverview Genkit flow untuk menyarankan harga item spesifik berdasarkan data pasar.
+ * @fileOverview Genkit flow untuk menyarankan harga item berdasarkan harga tertinggi di pasar.
  */
 
 import { ai } from '@/ai/genkit';
@@ -13,9 +14,10 @@ const PriceSuggestionInputSchema = z.object({
 export type PriceSuggestionInput = z.infer<typeof PriceSuggestionInputSchema>;
 
 const PriceSuggestionOutputSchema = z.object({
-  suggestedPrice: z.number().describe('Estimasi harga satuan dalam Rupiah.'),
-  sourceUrl: z.string().url().describe('Tautan referensi harga (misal dari marketplace atau portal harga jasa).'),
-  sourceName: z.string().describe('Nama sumber (misal: "Tokopedia", "HSP", "Shopee").'),
+  suggestedPrice: z.number().describe('Estimasi harga TERTINGGI dalam Rupiah.'),
+  sourceUrl: z.string().url().describe('Tautan referensi harga tertinggi.'),
+  sourceName: z.string().describe('Nama sumber harga tertinggi (misal: "Official Store Tokopedia").'),
+  priceRangeNote: z.string().describe('Catatan singkat tentang rentang harga pasar.'),
 });
 export type PriceSuggestionOutput = z.infer<typeof PriceSuggestionOutputSchema>;
 
@@ -29,16 +31,22 @@ const priceSuggestionPrompt = ai.definePrompt({
   name: 'priceSuggestionPrompt',
   input: { schema: PriceSuggestionInputSchema },
   output: { schema: PriceSuggestionOutputSchema },
-  prompt: `Anda adalah asisten riset pasar konstruksi dan teknologi di Indonesia.
-Berikan estimasi harga terbaru untuk item berikut di pasar Indonesia.
-Jika itu perangkat, berikan estimasi harga dari marketplace besar (Tokopedia/Shopee/Bhinneka).
-Jika itu jasa, berikan estimasi sesuai standar upah minimum atau harga jasa umum di industri.
+  prompt: `Anda adalah ahli riset pasar untuk estimasi proyek di Indonesia.
+Tugas Anda adalah menemukan referensi harga pasar terbaru untuk item berikut.
+
+PENTING: Berikan harga TERTINGGI (Upper Bound/High-End) yang masuk akal di marketplace atau standar industri. 
+Ini bertujuan agar user memiliki cadangan anggaran (budget safety margin) yang cukup.
 
 Item: {{{itemName}}}
 Tipe: {{{itemType}}}
 
-PENTING: Berikan tautan (URL) referensi yang masuk akal dan nyata yang berkaitan dengan item tersebut di Indonesia.
-Output harus dalam JSON.`,
+Instruksi:
+1. Jika perangkat, cari harga dari Official Store atau penjual bereputasi tinggi di Tokopedia/Shopee/Bhinneka. Ambil harga tertingginya.
+2. Jika jasa, gunakan standar harga jasa profesional atau vendor kelas atas.
+3. Berikan URL asli yang merujuk pada harga tersebut.
+4. Berikan catatan singkat mengapa harga tersebut diambil (misal: "Harga varian tertinggi dengan garansi resmi").
+
+Output harus dalam format JSON.`,
 });
 
 const priceSuggestionFlow = ai.defineFlow(
@@ -50,7 +58,7 @@ const priceSuggestionFlow = ai.defineFlow(
   async (input) => {
     const { output } = await priceSuggestionPrompt(input);
     if (!output) {
-      throw new Error('Gagal mendapatkan saran harga.');
+      throw new Error('Gagal mendapatkan saran harga tertinggi.');
     }
     return output;
   }
