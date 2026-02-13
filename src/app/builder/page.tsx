@@ -13,7 +13,6 @@ import {
   Save, 
   LayoutDashboard, 
   ChevronLeft,
-  Settings,
   Printer,
   History,
   HardDrive,
@@ -23,9 +22,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
-import { useFirestore, useUser, useAuth, useDoc, useMemoFirebase } from "@/firebase";
+import { useFirestore, useUser, useAuth } from "@/firebase";
 import { doc, setDoc, serverTimestamp, getDoc } from "firebase/firestore";
 import { signInAnonymously } from "firebase/auth";
+import { Logo } from "@/components/ui/logo";
 
 export default function BuilderPage() {
   const searchParams = useSearchParams();
@@ -247,7 +247,7 @@ export default function BuilderPage() {
           </Link>
           <div className="h-8 w-px bg-border" />
           <div className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-primary opacity-50" />
+            <Logo className="h-8 w-8" />
             <input 
               className="text-lg font-bold bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-primary/20 px-2 rounded min-w-[300px] text-primary"
               value={project.title}
@@ -313,7 +313,7 @@ export default function BuilderPage() {
             {project.categories.length === 0 ? (
               <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6 animate-fade-in-up">
                 <div className="w-20 h-20 bg-primary/5 rounded-2xl flex items-center justify-center text-primary rotate-3">
-                  <LayoutDashboard className="h-10 w-10 opacity-40" />
+                  <Logo className="h-10 w-10 opacity-40" />
                 </div>
                 <div className="space-y-2">
                   <h2 className="text-2xl font-bold text-primary">Siap Menyusun RAB?</h2>

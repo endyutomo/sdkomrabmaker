@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { 
   Sparkles, 
-  FileText, 
   Calculator, 
   ShieldCheck, 
   ArrowRight, 
@@ -12,6 +11,7 @@ import {
   CheckCircle2,
   LayoutDashboard
 } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 
 export default function Home() {
   return (
@@ -20,9 +20,7 @@ export default function Home() {
       <nav className="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-lg border-b">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
-              <FileText className="h-5 w-5 text-white" />
-            </div>
+            <Logo className="h-10 w-10" />
             <span className="text-xl font-bold tracking-tight text-primary">SDKOM RAB MAker</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
@@ -144,7 +142,7 @@ export default function Home() {
               description="Data RAB Anda tersimpan aman di cloud Firebase, dapat diakses kapan saja dari perangkat mana pun."
             />
             <FeatureCard 
-              icon={<FileText className="h-6 w-6" />}
+              icon={<LayoutTemplate className="h-6 w-6" />}
               title="Kop Surat Kustom"
               description="Kelola informasi klien, nomor dokumen, dan data proyek lainnya dalam format kop surat profesional."
             />
@@ -179,9 +177,7 @@ export default function Home() {
       <footer className="bg-white border-t py-12 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-2">
-            <div className="h-6 w-6 bg-primary rounded flex items-center justify-center">
-              <FileText className="h-4 w-4 text-white" />
-            </div>
+            <Logo className="h-8 w-8" />
             <span className="text-lg font-bold text-primary">SDKOM RAB MAker</span>
           </div>
           <div className="flex gap-8 text-sm text-muted-foreground">

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { 
   Plus, 
-  FileText, 
   Calendar, 
   ChevronRight, 
   LayoutDashboard, 
@@ -21,6 +20,7 @@ import { collection, deleteDoc, doc, query, orderBy } from "firebase/firestore";
 import { format } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import { useToast } from "@/hooks/use-toast";
+import { Logo } from "@/components/ui/logo";
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
@@ -72,9 +72,7 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-slate-50 flex flex-col">
       <header className="h-16 border-b bg-white flex items-center justify-between px-6 sticky top-0 z-30">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
-            <FileText className="h-5 w-5 text-white" />
-          </div>
+          <Logo className="h-10 w-10" />
           <span className="text-xl font-bold tracking-tight text-primary">SDKOM RAB MAker</span>
         </div>
         <Link href="/builder">
@@ -114,7 +112,7 @@ export default function DashboardPage() {
                 <div className="bg-white rounded-2xl border p-6 hover:shadow-xl transition-all group relative">
                   <div className="flex justify-between items-start mb-4">
                     <div className="h-12 w-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center group-hover:boq-accent-gradient group-hover:text-white transition-colors">
-                      <FileText className="h-6 w-6" />
+                      <Logo className="h-8 w-8" />
                     </div>
                     <Button 
                       variant="ghost" 
