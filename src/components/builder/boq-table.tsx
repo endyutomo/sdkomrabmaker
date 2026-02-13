@@ -308,16 +308,16 @@ export function BoqTable({
           </div>
           
           <div className="overflow-x-auto">
-            <Table className="table-auto w-full">
+            <Table className="table-auto w-full min-w-[1500px]">
               <TableHeader>
                 <TableRow className="bg-slate-50/50 hover:bg-slate-50/50">
                   <TableHead className="w-[60px] text-center">Tipe</TableHead>
                   <TableHead className="min-w-[600px]">Uraian Pekerjaan & Spesifikasi</TableHead>
                   <TableHead className="w-[120px]">Satuan</TableHead>
-                  <TableHead className="w-[160px] text-right">Vol (Qty)</TableHead>
-                  <TableHead className="w-[350px] text-right">Harga Dasar (Modal)</TableHead>
-                  <TableHead className="w-[150px] text-right">Margin (%)</TableHead>
-                  <TableHead className="w-[300px] text-right font-bold text-primary">Total Jual (Rp)</TableHead>
+                  <TableHead className="min-w-[160px] text-right">Vol (Qty)</TableHead>
+                  <TableHead className="min-w-[400px] text-right">Harga Dasar (Modal)</TableHead>
+                  <TableHead className="min-w-[150px] text-right">Margin (%)</TableHead>
+                  <TableHead className="min-w-[300px] text-right font-bold text-primary">Total Jual (Rp)</TableHead>
                   <TableHead className="min-w-[250px]">Referensi Vendor</TableHead>
                   <TableHead className="w-[100px] text-center">AI</TableHead>
                   <TableHead className="w-[50px]"></TableHead>
