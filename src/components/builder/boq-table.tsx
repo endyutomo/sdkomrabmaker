@@ -24,7 +24,8 @@ import {
   Store,
   Coins,
   Search,
-  History
+  History,
+  User
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -238,7 +239,7 @@ export function BoqTable({
             </div>
           </div>
 
-          <div className="space-y-4 w-full md:w-64">
+          <div className="space-y-4 w-full md:w-72">
             <div className="flex items-center gap-2 text-primary">
               <Hash className="h-5 w-5" />
               <span className="text-xs font-bold uppercase tracking-wider">Data Dokumen</span>
@@ -261,6 +262,18 @@ export function BoqTable({
                   className="bg-transparent border-none focus:ring-0 text-sm flex-1 outline-none"
                   value={project.documentDate}
                   onChange={(e) => onUpdateProjectInfo({ documentDate: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-[10px] text-muted-foreground uppercase font-bold">Pembuat RAB</Label>
+              <div className="flex items-center gap-2 bg-white border rounded-md px-3 h-11 border-slate-200 focus-within:border-primary transition-colors">
+                <User className="h-4 w-4 text-primary" />
+                <Input 
+                  className="bg-transparent border-none focus:ring-0 p-0 h-auto text-sm font-semibold"
+                  placeholder="Nama Penyusun"
+                  value={project.creatorName || ""}
+                  onChange={(e) => onUpdateProjectInfo({ creatorName: e.target.value })}
                 />
               </div>
             </div>

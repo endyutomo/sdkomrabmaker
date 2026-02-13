@@ -26,6 +26,7 @@ export interface ProjectBoq {
   createdAt: string;
   // Fields untuk Kop Surat
   clientName?: string;
+  creatorName?: string; // Penambahan kolom Pembuat RAB
   documentNumber?: string;
   projectLocation?: string;
   documentDate?: string;
