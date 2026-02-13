@@ -5,7 +5,19 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BoqCategory, BoqItem } from "@/lib/types";
-import { Trash2, Plus, Info, Percent, Package, UserCog, ChevronDown, Calculator } from "lucide-react";
+import { 
+  Trash2, 
+  Plus, 
+  Info, 
+  Percent, 
+  Package, 
+  UserCog, 
+  ChevronDown, 
+  Calculator, 
+  Sparkles, 
+  Loader2, 
+  ExternalLink 
+} from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +27,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { suggestItemPrice } from "@/ai/flows/ai-price-suggestion";
+import { useToast } from "@/hooks/use-toast";
 
 interface BoqTableProps {
   categories: BoqCategory[];
@@ -36,6 +50,8 @@ export function BoqTable({
   const [includeVat, setIncludeVat] = useState(true);
   const [includePph23, setIncludePph23] = useState(true);
   const [contingencyRate, setContingencyRate] = useState(5);
+  const [loadingPriceId, setLoadingPriceId] = useState<string | null>(null);
+  const { toast } = useToast();
 
   // Perhitungan Subtotals
   const totalPerangkat = categories.reduce((sum, cat) => 
@@ -61,6 +77,44 @@ export function BoqTable({
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(val);
+  };
+
+  const handleSuggestPrice = async (categoryId: string, item: BoqItem) => {
+    if (!item.name || item.name === "Item Baru") {
+      toast({
+        variant: "destructive",
+        title: "Nama item kosong",
+        description: "Masukkan nama item terlebih dahulu sebelum meminta saran harga.",
+      });
+      return;
+    }
+
+    setLoadingPriceId(item.id);
+    try {
+      const result = await suggestItemPrice({
+        itemName: item.name,
+        itemType: item.type
+      });
+      
+      onUpdateItem(categoryId, item.id, {
+        unitPrice: result.suggestedPrice,
+        sourceUrl: result.sourceUrl
+      });
+
+      toast({
+        title: "Saran Harga Berhasil",
+        description: `Harga untuk ${item.name} diperbarui ke ${formatCurrency(result.suggestedPrice)}.`
+      });
+    } catch (error) {
+      console.error("Gagal mendapatkan saran harga:", error);
+      toast({
+        variant: "destructive",
+        title: "Gagal",
+        description: "Terjadi kesalahan saat menghubungi AI.",
+      });
+    } finally {
+      setLoadingPriceId(null);
+    }
   };
 
   return (
@@ -97,6 +151,7 @@ export function BoqTable({
                 <TableHead className="w-[120px] text-right">Vol</TableHead>
                 <TableHead className="w-[150px] text-right">Harga Satuan</TableHead>
                 <TableHead className="w-[150px] text-right">Total</TableHead>
+                <TableHead className="w-[100px] text-center">AI Ref</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -151,6 +206,34 @@ export function BoqTable({
                   </TableCell>
                   <TableCell className="text-right font-medium">
                     {formatCurrency(item.quantity * item.unitPrice)}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <div className="flex items-center justify-center gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-accent hover:text-accent hover:bg-accent/10"
+                        onClick={() => handleSuggestPrice(category.id, item)}
+                        disabled={loadingPriceId === item.id}
+                      >
+                        {loadingPriceId === item.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Sparkles className="h-4 w-4" />
+                        )}
+                      </Button>
+                      {item.sourceUrl && (
+                        <a 
+                          href={item.sourceUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-muted-foreground hover:text-primary transition-colors"
+                          title="Lihat Sumber Harga"
+                        >
+                          <ExternalLink className="h-3 w-3" />
+                        </a>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell>
                     <Button 
