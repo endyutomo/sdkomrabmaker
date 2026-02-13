@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BoqTable } from "@/components/builder/boq-table";
 import { AiGenerator } from "@/components/builder/ai-generator";
 import { Button } from "@/components/ui/button";
@@ -8,22 +8,23 @@ import { BoqCategory, BoqItem, ProjectBoq } from "@/lib/types";
 import { 
   Plus, 
   FileDown, 
-  FileUp, 
   Save, 
   LayoutDashboard, 
   ChevronLeft,
   Settings,
   Printer,
-  History
+  History,
+  HardDrive,
+  Wrench,
+  Truck
 } from "lucide-react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 
 export default function BuilderPage() {
   const [project, setProject] = useState<ProjectBoq>({
     id: "draft",
-    title: "Proyek Tanpa Judul",
+    title: "Draft RAB Baru",
     type: "",
     specifications: "",
     categories: [],
@@ -32,10 +33,10 @@ export default function BuilderPage() {
   
   const { toast } = useToast();
 
-  const handleAddCategory = () => {
+  const handleAddCategory = (name = "Bagian Baru") => {
     const newCategory: BoqCategory = {
       id: `cat-${Date.now()}`,
-      name: "Bagian Baru",
+      name: name,
       items: [],
     };
     setProject(prev => ({
@@ -66,11 +67,11 @@ export default function BuilderPage() {
     }));
   };
 
-  const handleAddItem = (categoryId: string) => {
+  const handleAddItem = (categoryId: string, name = "Item Baru", unit = "Unit") => {
     const newItem: BoqItem = {
       id: `item-${Date.now()}`,
-      name: "Item Pekerjaan Baru",
-      unit: "m2",
+      name: name,
+      unit: unit,
       quantity: 1,
       unitPrice: 0,
     };
@@ -110,22 +111,20 @@ export default function BuilderPage() {
       categories: [...prev.categories, ...suggestedCategories]
     }));
     toast({
-      title: "Berhasil",
-      description: `Menambahkan ${suggestedCategories.length} bagian dari saran AI.`,
+      title: "Saran AI Diterapkan",
+      description: `Berhasil menambahkan ${suggestedCategories.length} kategori pekerjaan baru.`,
     });
   };
 
   const handleExport = () => {
     toast({
-      title: "Ekspor Dimulai",
-      description: "Laporan RAB Anda sedang dibuat...",
+      title: "Mengekspor RAB",
+      description: "Menyiapkan file PDF dan Excel...",
     });
-    // Implementation for CSV/Excel/PDF would go here
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      {/* Top Header */}
       <header className="h-16 border-b bg-white flex items-center justify-between px-6 sticky top-0 z-30 shadow-sm">
         <div className="flex items-center gap-4">
           <Link href="/">
@@ -134,78 +133,75 @@ export default function BuilderPage() {
             </Button>
           </Link>
           <div className="h-8 w-px bg-border" />
-          <div>
-            <input 
-              className="text-lg font-bold bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-primary/20 px-2 rounded"
-              value={project.title}
-              onChange={(e) => setProject(prev => ({ ...prev, title: e.target.value }))}
-            />
-          </div>
+          <input 
+            className="text-lg font-bold bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-primary/20 px-2 rounded min-w-[300px]"
+            value={project.title}
+            onChange={(e) => setProject(prev => ({ ...prev, title: e.target.value }))}
+          />
         </div>
         
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={handleExport}>
             <FileDown className="h-4 w-4 mr-2" /> Ekspor
           </Button>
-          <Button variant="outline" size="sm" className="hidden sm:flex">
-            <Printer className="h-4 w-4 mr-2" /> Cetak
-          </Button>
-          <Button className="boq-accent-gradient h-9">
+          <Button className="boq-accent-gradient h-9 text-white font-semibold">
             <Save className="h-4 w-4 mr-2" /> Simpan Proyek
           </Button>
         </div>
       </header>
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar Controls */}
         <aside className="w-80 border-r bg-white p-6 space-y-8 overflow-y-auto hidden lg:block">
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Kotak Peralatan</h3>
-            <AiGenerator onSuggest={handleAiSuggest} />
-          </div>
+          <AiGenerator onSuggest={handleAiSuggest} />
           
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Tindakan Cepat</h3>
+            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Tambah Cepat Kategori</h3>
             <div className="grid grid-cols-1 gap-2">
-              <Button variant="outline" className="justify-start" onClick={handleAddCategory}>
-                <Plus className="h-4 w-4 mr-2" /> Tambah Bagian
+              <Button variant="outline" className="justify-start border-dashed hover:border-primary" onClick={() => handleAddCategory("Perangkat & Hardware")}>
+                <HardDrive className="h-4 w-4 mr-2 text-primary" /> Perangkat Utama
               </Button>
-              <Button variant="outline" className="justify-start">
-                <FileUp className="h-4 w-4 mr-2" /> Impor Template
+              <Button variant="outline" className="justify-start border-dashed hover:border-primary" onClick={() => handleAddCategory("Jasa Instalasi & Konfigurasi")}>
+                <Wrench className="h-4 w-4 mr-2 text-accent" /> Jasa Instalasi
               </Button>
-              <Button variant="outline" className="justify-start">
-                <History className="h-4 w-4 mr-2" /> Riwayat Versi
+              <Button variant="outline" className="justify-start border-dashed hover:border-primary" onClick={() => handleAddCategory("Mobilisasi & Alat Kerja")}>
+                <Truck className="h-4 w-4 mr-2 text-amber-500" /> Mobilisasi
               </Button>
-              <Button variant="outline" className="justify-start">
-                <Settings className="h-4 w-4 mr-2" /> Pengaturan RAB
+              <Button variant="outline" className="justify-start" onClick={() => handleAddCategory()}>
+                <Plus className="h-4 w-4 mr-2" /> Bagian Kustom
               </Button>
             </div>
           </div>
+
+          <div className="pt-6 border-t space-y-2">
+            <Button variant="ghost" className="w-full justify-start text-muted-foreground">
+              <History className="h-4 w-4 mr-2" /> Riwayat Versi
+            </Button>
+            <Button variant="ghost" className="w-full justify-start text-muted-foreground">
+              <Printer className="h-4 w-4 mr-2" /> Pratinjau Cetak
+            </Button>
+            <Button variant="ghost" className="w-full justify-start text-muted-foreground">
+              <Settings className="h-4 w-4 mr-2" /> Pengaturan Global
+            </Button>
+          </div>
         </aside>
 
-        {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto p-8 lg:p-12">
           <div className="max-w-5xl mx-auto">
             {project.categories.length === 0 ? (
               <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6 animate-fade-in-up">
-                <div className="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center text-primary">
-                  <LayoutDashboard className="h-12 w-12 opacity-50" />
+                <div className="w-20 h-20 bg-primary/5 rounded-2xl flex items-center justify-center text-primary rotate-3">
+                  <LayoutDashboard className="h-10 w-10 opacity-40" />
                 </div>
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-bold">Mulai Susun RAB Anda</h2>
+                  <h2 className="text-2xl font-bold text-primary">Siap Menyusun RAB?</h2>
                   <p className="text-muted-foreground max-w-sm">
-                    Tambah bagian secara manual atau gunakan penyusun AI kami untuk menghasilkan saran berdasarkan tipe proyek Anda.
+                    Gunakan panel samping untuk menambah kategori perangkat dan jasa secara cepat, atau biarkan AI kami memberikan saran item yang relevan.
                   </p>
                 </div>
                 <div className="flex gap-4">
-                  <Button size="lg" onClick={handleAddCategory}>
-                    <Plus className="h-5 w-5 mr-2" /> Tambah Bagian Pertama
+                  <Button size="lg" className="boq-accent-gradient h-12 px-8" onClick={() => handleAddCategory("Perangkat Utama")}>
+                    <Plus className="h-5 w-5 mr-2" /> Mulai Input Manual
                   </Button>
-                  <div className="lg:hidden">
-                     <Button size="lg" variant="outline" className="boq-accent-gradient text-white border-none">
-                       <Sparkles className="h-5 w-5 mr-2" /> Gunakan Penyusun AI
-                     </Button>
-                  </div>
                 </div>
               </div>
             ) : (
@@ -222,28 +218,5 @@ export default function BuilderPage() {
         </main>
       </div>
     </div>
-  );
-}
-
-function Sparkles(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-      <path d="M5 3v4" />
-      <path d="M19 17v4" />
-      <path d="M3 5h4" />
-      <path d="M17 19h4" />
-    </svg>
   );
 }

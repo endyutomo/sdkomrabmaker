@@ -1,10 +1,6 @@
 'use server';
 /**
- * @fileOverview This file implements a Genkit flow for suggesting Bill of Quantities (BOQ) items in Indonesian.
- *
- * - suggestBoqItems - A function that suggests BOQ items based on project type and specifications.
- * - BoqItemSuggestionInput - The input type for the suggestBoqItems function.
- * - BoqItemSuggestionOutput - The return type for the suggestBoqItems function.
+ * @fileOverview Implementasi Genkit flow untuk saran item RAB (Bill of Quantities) dalam Bahasa Indonesia.
  */
 
 import { ai } from '@/ai/genkit';
@@ -13,41 +9,41 @@ import { z } from 'genkit';
 const BoqItemSuggestionInputSchema = z.object({
   projectType: z
     .string()
-    .describe('The type of project (e.g., "residential building", "road construction").'),
+    .describe('Tipe proyek (misal: "instalasi server", "pembangunan rumah", "sistem keamanan CCTV").'),
   specifications: z
     .string()
-    .describe('Detailed specifications or requirements for the project.'),
+    .describe('Detail spesifikasi atau kebutuhan proyek.'),
 });
 export type BoqItemSuggestionInput = z.infer<typeof BoqItemSuggestionInputSchema>;
 
 const BoqItemSchema = z.object({
   name: z
     .string()
-    .describe('The name or description of the item in Indonesian (e.g., "Pondasi beton", "Pasangan bata dinding").'),
+    .describe('Nama item dalam Bahasa Indonesia (misal: "Server Dell PowerEdge", "Jasa Tarik Kabel").'),
   unit: z
     .string()
-    .describe('The Indonesian unit of measurement (e.g., "m3", "m2", "ls", "titik").'),
+    .describe('Satuan (misal: "Unit", "Lot", "Titik", "Jasa").'),
   quantity: z
     .number()
-    .describe('A suggested quantity estimate.')
+    .describe('Estimasi jumlah.')
     .default(1),
   unitPrice: z
     .number()
-    .describe('A suggested unit price in IDR.')
+    .describe('Estimasi harga satuan dalam Rupiah.')
     .default(0),
 });
 
 const BoqCategorySchema = z.object({
   name: z
     .string()
-    .describe('The name of the category in Indonesian (e.g., "Pekerjaan Tanah", "Pekerjaan Struktur").'),
-  items: z.array(BoqItemSchema).describe('A list of items within this category.'),
+    .describe('Nama kategori (misal: "Perangkat Utama", "Jasa Instalasi", "Material Bantu").'),
+  items: z.array(BoqItemSchema).describe('Daftar item dalam kategori ini.'),
 });
 
 const BoqItemSuggestionOutputSchema = z.object({
   categories: z
     .array(BoqCategorySchema)
-    .describe('A list of categorized items for the project.'),
+    .describe('Daftar kategori item untuk proyek.'),
 });
 export type BoqItemSuggestionOutput = z.infer<typeof BoqItemSuggestionOutputSchema>;
 
@@ -61,16 +57,16 @@ const boqItemSuggestionPrompt = ai.definePrompt({
   name: 'boqItemSuggestionPrompt',
   input: { schema: BoqItemSuggestionInputSchema },
   output: { schema: BoqItemSuggestionOutputSchema },
-  prompt: `Anda adalah seorang Ahli Quantity Surveyor profesional di Indonesia. Tugas Anda adalah menghasilkan Rencana Anggaran Biaya (RAB) yang komprehensif berdasarkan tipe proyek dan spesifikasi yang diberikan.
+  prompt: `Anda adalah seorang Ahli Estimator Proyek profesional di Indonesia. Tugas Anda adalah menghasilkan Rencana Anggaran Biaya (RAB) yang detail.
 
-Gunakan Bahasa Indonesia yang formal dan teknis untuk semua nama item, kategori, dan satuan (misalnya m3, m2, kg, m', ls).
+Jika proyek melibatkan teknologi, pastikan Anda memisahkan kategori antara "Perangkat/Hardware", "Jasa Instalasi/Konfigurasi", dan "Material Pendukung". 
 
-Kategorikan item RAB secara logis (Pekerjaan Persiapan, Tanah, Struktur, Arsitektur, dll). Berikan nama item, satuan, estimasi volume yang masuk akal, dan estimasi harga satuan dalam Rupiah.
+Gunakan Bahasa Indonesia yang formal. Berikan harga pasar yang wajar di Indonesia dalam Rupiah.
 
 Tipe Proyek: {{{projectType}}}
 Spesifikasi: {{{specifications}}}
 
-Mohon berikan output dalam format JSON sesuai skema berikut:`,
+Mohon berikan output dalam format JSON sesuai skema:`,
 });
 
 const boqItemSuggestionFlow = ai.defineFlow(
