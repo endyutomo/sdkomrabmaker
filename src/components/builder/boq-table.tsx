@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BoqCategory, BoqItem } from "@/lib/types";
-import { Trash2, Plus, Info, Percent, Package, UserCog, ChevronDown } from "lucide-react";
+import { Trash2, Plus, Info, Percent, Package, UserCog, ChevronDown, Calculator } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
