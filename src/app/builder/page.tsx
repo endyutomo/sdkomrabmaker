@@ -67,13 +67,14 @@ export default function BuilderPage() {
     }));
   };
 
-  const handleAddItem = (categoryId: string, name = "Item Baru", unit = "Unit") => {
+  const handleAddItem = (categoryId: string, type: 'perangkat' | 'jasa' = 'perangkat') => {
     const newItem: BoqItem = {
       id: `item-${Date.now()}`,
-      name: name,
-      unit: unit,
+      name: type === 'perangkat' ? "Item Perangkat Baru" : "Item Jasa Baru",
+      unit: type === 'perangkat' ? "Unit" : "Lot",
       quantity: 1,
       unitPrice: 0,
+      type: type,
     };
     setProject(prev => ({
       ...prev,

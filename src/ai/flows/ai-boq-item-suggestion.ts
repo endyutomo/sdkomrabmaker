@@ -31,6 +31,9 @@ const BoqItemSchema = z.object({
     .number()
     .describe('Estimasi harga satuan dalam Rupiah.')
     .default(0),
+  type: z
+    .enum(['perangkat', 'jasa'])
+    .describe('Tipe item: "perangkat" untuk barang fisik, "jasa" untuk tenaga kerja/instalasi.'),
 });
 
 const BoqCategorySchema = z.object({
@@ -59,7 +62,7 @@ const boqItemSuggestionPrompt = ai.definePrompt({
   output: { schema: BoqItemSuggestionOutputSchema },
   prompt: `Anda adalah seorang Ahli Estimator Proyek profesional di Indonesia. Tugas Anda adalah menghasilkan Rencana Anggaran Biaya (RAB) yang detail.
 
-Jika proyek melibatkan teknologi, pastikan Anda memisahkan kategori antara "Perangkat/Hardware", "Jasa Instalasi/Konfigurasi", dan "Material Pendukung". 
+PENTING: Kelompokkan item ke dalam kategori yang logis. Setiap item HARUS ditentukan tipenya: "perangkat" untuk barang/material atau "jasa" untuk instalasi/konfigurasi/upah.
 
 Gunakan Bahasa Indonesia yang formal. Berikan harga pasar yang wajar di Indonesia dalam Rupiah.
 

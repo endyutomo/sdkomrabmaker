@@ -4,6 +4,7 @@ export interface BoqItem {
   unit: string;
   quantity: number;
   unitPrice: number;
+  type: 'perangkat' | 'jasa';
 }
 
 export interface BoqCategory {

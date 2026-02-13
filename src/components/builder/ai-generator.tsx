@@ -32,7 +32,8 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
           name: item.name,
           unit: item.unit,
           quantity: item.quantity,
-          unitPrice: item.unitPrice
+          unitPrice: item.unitPrice,
+          type: item.type as 'perangkat' | 'jasa'
         }))
       }));
       
