@@ -5,15 +5,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BoqCategory, BoqItem, ProjectBoq } from "@/lib/types";
-import { 
-  Trash2, 
-  Plus, 
-  Package, 
-  UserCog, 
-  ChevronDown, 
-  Calculator, 
-  Sparkles, 
-  Loader2, 
+import {
+  Trash2,
+  Plus,
+  Package,
+  UserCog,
+  ChevronDown,
+  Calculator,
+  Sparkles,
+  Loader2,
   ExternalLink,
   Building2,
   Calendar,
@@ -43,8 +43,8 @@ import {
 } from "@/components/ui/popover";
 import { suggestItemPrice } from "@/ai/flows/ai-price-suggestion";
 import { useToast } from "@/hooks/use-toast";
-import { collection, serverTimestamp, setDoc, doc } from "firebase/firestore";
-import { useFirestore, useCollection, useMemoFirebase, useUser } from "@/firebase";
+import { useSupabase } from "@/components/providers/supabase-provider";
+import { useSupabaseQuery } from "@/hooks/use-supabase-query";
 
 interface BoqTableProps {
   project: ProjectBoq;
@@ -56,47 +56,50 @@ interface BoqTableProps {
   onDeleteCategory: (categoryId: string) => void;
 }
 
-export function BoqTable({ 
+export function BoqTable({
   project,
   onUpdateProjectInfo,
-  onUpdateCategory, 
-  onUpdateItem, 
-  onDeleteItem, 
+  onUpdateCategory,
+  onUpdateItem,
+  onDeleteItem,
   onAddItem,
-  onDeleteCategory 
+  onDeleteCategory
 }: BoqTableProps) {
   const [includeVat, setIncludeVat] = useState(true);
   const [includePph23, setIncludePph23] = useState(true);
   const [contingencyRate, setContingencyRate] = useState(5);
   const [loadingPriceId, setLoadingPriceId] = useState<string | null>(null);
   const { toast } = useToast();
-  const db = useFirestore();
-  const { user } = useUser();
+  const { supabase, user } = useSupabase();
 
-  // Fetch catalog items for autocomplete from path /users/{userId}/historicalBoqItems
-  const catalogQuery = useMemoFirebase(() => {
-    if (!db || !user) return null;
-    return collection(db, "users", user.uid, "historicalBoqItems");
-  }, [db, user]);
-  const { data: catalogItems } = useCollection(catalogQuery);
+  // Fetch catalog items for autocomplete using Supabase
+  const { data: catalogItems } = useSupabaseQuery<any>(
+    'historical_boq_items',
+    (q) => q.order('last_used', { ascending: false })
+  );
 
   const categories = project.categories;
 
   const recordToCatalog = async (item: BoqItem) => {
-    if (!db || !user || !item.name || item.name.includes("Baru") || item.unitPrice <= 0) return;
-    
+    if (!supabase || !user || !item.name || item.name.includes("Baru") || item.unitPrice <= 0) return;
+
     try {
       const catalogId = item.name.toLowerCase().trim().replace(/\s+/g, '-');
-      const catalogRef = doc(db, "users", user.uid, "historicalBoqItems", catalogId);
-      
-      await setDoc(catalogRef, {
-        name: item.name,
-        unit: item.unit,
-        unitPrice: item.unitPrice,
-        type: item.type,
-        vendorName: item.vendorName || "",
-        lastUsed: serverTimestamp()
-      }, { merge: true });
+
+      const { error } = await supabase
+        .from('historical_boq_items')
+        .upsert({
+          id: catalogId,
+          user_id: user.id,
+          name: item.name,
+          unit: item.unit,
+          unit_price: item.unitPrice,
+          type: item.type,
+          vendor_name: item.vendorName || "",
+          last_used: new Date().toISOString()
+        });
+
+      if (error) throw error;
     } catch (e) {
       console.error("Gagal menyimpan ke katalog:", e);
     }
@@ -115,22 +118,22 @@ export function BoqTable({
     return item.quantity * item.unitPrice;
   };
 
-  const totalPerangkat = categories.reduce((sum, cat) => 
+  const totalPerangkat = categories.reduce((sum, cat) =>
     sum + cat.items.filter(i => i.type === 'perangkat').reduce((s, i) => s + calculateItemTotal(i), 0), 0);
-  
-  const totalJasa = categories.reduce((sum, cat) => 
+
+  const totalJasa = categories.reduce((sum, cat) =>
     sum + cat.items.filter(i => i.type === 'jasa').reduce((s, i) => s + calculateItemTotal(i), 0), 0);
 
-  const totalCost = categories.reduce((sum, cat) => 
+  const totalCost = categories.reduce((sum, cat) =>
     sum + cat.items.reduce((s, i) => s + calculateItemCost(i), 0), 0);
 
   const subTotal = totalPerangkat + totalJasa;
   const totalProfit = subTotal - totalCost;
   const contingencyAmount = (subTotal * contingencyRate) / 100;
   const totalBeforeTax = subTotal + contingencyAmount;
-  
+
   const vatAmount = includeVat ? (totalBeforeTax * 11) / 100 : 0;
-  
+
   const grandTotal = totalBeforeTax + vatAmount;
 
   const formatCurrency = (val: number) => {
@@ -154,11 +157,39 @@ export function BoqTable({
 
     setLoadingPriceId(item.id);
     try {
-      const result = await suggestItemPrice({
-        itemName: item.name,
-        itemType: item.type
-      });
-      
+      // @ts-ignore
+      if (!window.puter) {
+        throw new Error("Layanan Puter.js tidak tersedia. Coba refresh halaman.");
+      }
+
+      const currentDate = new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+      const prompt = `
+        Saya adalah estimator proyek konstruksi di Indonesia. Berikan estimasi harga satuan tertinggi (high-end) untuk item berikut dalam Rupiah (IDR).
+        
+        Item: "${item.name}"
+        Tipe: ${item.type} (perangkat/jasa)
+        Konteks Waktu: ${currentDate}
+        
+        Instruksi:
+        1. Jika perangkat, cari harga dari Official Store atau penjual bereputasi tinggi di marketplace Indonesia (Tokopedia/Shopee/Bhinneka). PRIORITASKAN penjual di JABODETABEK (Jakarta, Bogor, Depok, Tangerang, Bekasi).
+        2. Jika jasa, estimasi biaya profesional di area Jabodetabek.
+        3. PENTING: Harga harus relevan dengan kondisi pasar bulan ${currentDate}.
+        4. Output WAJIB dalam format JSON murni tanpa markdown block.
+        
+        Format JSON:
+        {
+          "suggestedPrice": number (harga dalam angka, contoh: 1500000),
+          "sourceName": string (contoh: "Tokopedia - Toko Abadi Jakarta"),
+          "sourceUrl": string (URL contoh atau link pencarian yang relevan),
+          "notes": string (alasan harga dan referensi waktu)
+        }
+      `;
+
+      // @ts-ignore
+      const response = await window.puter.ai.chat(prompt, { model: 'gpt-4o-mini' });
+      const text = response.message.content.trim().replace(/```json/g, '').replace(/```/g, ''); // Clean markdown if any
+      const result = JSON.parse(text);
+
       onUpdateItem(categoryId, item.id, {
         unitPrice: result.suggestedPrice,
         sourceUrl: result.sourceUrl,
@@ -175,12 +206,22 @@ export function BoqTable({
         unitPrice: result.suggestedPrice,
         vendorName: result.sourceName
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Gagal mendapatkan saran harga:", error);
+
+      let errorMessage = "Terjadi kesalahan saat menghubungi AI.";
+      if (typeof error === 'string') {
+        errorMessage = error;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'object') {
+        errorMessage = JSON.stringify(error);
+      }
+
       toast({
         variant: "destructive",
         title: "Gagal",
-        description: "Terjadi kesalahan saat menghubungi AI.",
+        description: errorMessage,
       });
     } finally {
       setLoadingPriceId(null);
@@ -191,9 +232,9 @@ export function BoqTable({
     onUpdateItem(categoryId, itemId, {
       name: catalogItem.name,
       unit: catalogItem.unit,
-      unitPrice: catalogItem.unitPrice,
+      unitPrice: catalogItem.unit_price,
       type: catalogItem.type,
-      vendorName: catalogItem.vendorName
+      vendorName: catalogItem.vendor_name
     });
     toast({
       title: "Item Dimuat dari Katalog",
@@ -211,7 +252,7 @@ export function BoqTable({
               <Building2 className="h-5 w-5" />
               <span className="text-xs font-bold uppercase tracking-wider">Informasi Klien</span>
             </div>
-            <Input 
+            <Input
               className="text-3xl font-bold bg-transparent border-none focus:ring-0 p-0 h-auto placeholder:text-muted-foreground/30"
               placeholder="Nama Klien / Perusahaan"
               value={project.clientName}
@@ -220,7 +261,7 @@ export function BoqTable({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex items-center gap-2 text-sm text-muted-foreground bg-slate-50 p-2 rounded-lg border border-slate-100">
                 <MapPin className="h-4 w-4 shrink-0" />
-                <Input 
+                <Input
                   className="bg-transparent border-none focus:ring-0 p-0 h-auto text-sm"
                   placeholder="Lokasi Proyek"
                   value={project.projectLocation}
@@ -229,7 +270,7 @@ export function BoqTable({
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground bg-slate-50 p-2 rounded-lg border border-slate-100">
                 <FileText className="h-4 w-4 shrink-0" />
-                <Input 
+                <Input
                   className="bg-transparent border-none focus:ring-0 p-0 h-auto text-sm font-medium"
                   placeholder="Nama Proyek"
                   value={project.title}
@@ -246,7 +287,7 @@ export function BoqTable({
             </div>
             <div className="space-y-2">
               <Label className="text-[10px] text-muted-foreground uppercase font-bold">Nomor Dokumen</Label>
-              <Input 
+              <Input
                 className="text-sm border-slate-200 focus:border-primary transition-colors h-11"
                 placeholder="RAB/2024/001"
                 value={project.documentNumber}
@@ -257,7 +298,7 @@ export function BoqTable({
               <Label className="text-[10px] text-muted-foreground uppercase font-bold">Tanggal</Label>
               <div className="flex items-center gap-2 bg-slate-50 border rounded-md px-3 h-11 border-slate-200">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                <input 
+                <input
                   type="date"
                   className="bg-transparent border-none focus:ring-0 text-sm flex-1 outline-none"
                   value={project.documentDate}
@@ -269,7 +310,7 @@ export function BoqTable({
               <Label className="text-[10px] text-muted-foreground uppercase font-bold">Pembuat RAB</Label>
               <div className="flex items-center gap-2 bg-white border rounded-md px-3 h-11 border-slate-200 focus-within:border-primary transition-colors">
                 <User className="h-4 w-4 text-primary" />
-                <Input 
+                <Input
                   className="bg-transparent border-none focus:ring-0 p-0 h-auto text-sm font-semibold"
                   placeholder="Nama Penyusun"
                   value={project.creatorName || ""}
@@ -297,16 +338,16 @@ export function BoqTable({
                 Sub-total: {formatCurrency(category.items.reduce((s, i) => s + calculateItemTotal(i), 0))}
               </Badge>
             </div>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               className="text-destructive hover:text-destructive hover:bg-destructive/10 shrink-0"
               onClick={() => onDeleteCategory(category.id)}
             >
               <Trash2 className="h-5 w-5" />
             </Button>
           </div>
-          
+
           <div className="overflow-x-auto">
             <Table className="table-auto w-full min-w-[1500px]">
               <TableHeader>
@@ -365,7 +406,7 @@ export function BoqTable({
                                     >
                                       <span className="font-bold text-sm text-primary">{c.name}</span>
                                       <div className="flex items-center justify-between text-[10px] text-muted-foreground">
-                                        <span>{formatCurrency(c.unitPrice)} / {c.unit}</span>
+                                        <span>{formatCurrency(c.unit_price)} / {c.unit}</span>
                                         <span className="bg-slate-200 px-1.5 py-0.5 rounded uppercase">{c.type}</span>
                                       </div>
                                     </button>
@@ -415,7 +456,7 @@ export function BoqTable({
                       <div className="flex items-center gap-2">
                         <Store className="h-4 w-4 text-muted-foreground shrink-0" />
                         <Input
-                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-sm text-slate-700 px-3 -ml-1 w-full font-medium"
+                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-sm sm:text-sm text-slate-700 px-3 -ml-1 w-full font-medium"
                           value={item.vendorName || ""}
                           placeholder="Nama Toko / Vendor..."
                           onChange={(e) => onUpdateItem(category.id, item.id, { vendorName: e.target.value })}
@@ -455,7 +496,7 @@ export function BoqTable({
               </TableBody>
             </Table>
           </div>
-          
+
           <div className="p-6 border-t bg-slate-50/30">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -465,14 +506,14 @@ export function BoqTable({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="center" className="w-80 p-3">
                 <DropdownMenuItem className="cursor-pointer py-3" onClick={() => onAddItem(category.id, 'perangkat')}>
-                  <Package className="mr-4 h-6 w-6 text-primary" /> 
+                  <Package className="mr-4 h-6 w-6 text-primary" />
                   <div className="flex flex-col">
                     <span className="font-bold">Baris Perangkat</span>
                     <span className="text-xs text-muted-foreground">Material, Hardware, Barang Fisik</span>
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer py-3" onClick={() => onAddItem(category.id, 'jasa')}>
-                  <UserCog className="mr-4 h-6 w-6 text-accent" /> 
+                  <UserCog className="mr-4 h-6 w-6 text-accent" />
                   <div className="flex flex-col">
                     <span className="font-bold">Baris Jasa</span>
                     <span className="text-xs text-muted-foreground">Instalasi, Konfigurasi, Tenaga Kerja</span>
@@ -489,7 +530,7 @@ export function BoqTable({
         <h3 className="text-2xl font-bold text-primary flex items-center gap-3">
           <Calculator className="h-7 w-7" /> Rekapitulasi Anggaran (Saran Harga Tertinggi)
         </h3>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div className="space-y-6">
             <div className="space-y-4">
@@ -522,14 +563,14 @@ export function BoqTable({
                   <span className="font-bold text-destructive">-{formatCurrency(includePph23 ? (totalJasa * 2) / 100 : 0)}</span>
                 </div>
               </div>
-              
+
               <div className="flex items-center justify-between p-3 border-b border-slate-100">
                 <div className="flex items-center gap-3">
                   <span className="text-slate-600 font-medium">Cadangan Tak Terduga (Contingency)</span>
                   <div className="flex items-center gap-1 bg-slate-100 px-3 py-1 rounded-full border">
-                    <Input 
-                      type="number" 
-                      className="w-12 h-6 p-1 text-sm border-none bg-transparent font-bold text-center" 
+                    <Input
+                      type="number"
+                      className="w-12 h-6 p-1 text-sm border-none bg-transparent font-bold text-center"
                       value={contingencyRate}
                       onChange={(e) => setContingencyRate(parseFloat(e.target.value) || 0)}
                     />

@@ -41,10 +41,10 @@ Item: {{{itemName}}}
 Tipe: {{{itemType}}}
 
 Instruksi:
-1. Jika perangkat, cari harga dari Official Store atau penjual bereputasi tinggi di Tokopedia/Shopee/Bhinneka. Ambil harga tertingginya.
-2. Jika jasa, gunakan standar harga jasa profesional atau vendor kelas atas.
+1. Jika perangkat, cari harga dari Official Store atau penjual bereputasi tinggi di Tokopedia/Shopee/Bhinneka. **Prioritaskan sumber atau toko yang berlokasi di wilayah Jabodetabek (Jakarta, Bogor, Depok, Tangerang, Bekasi).** Ambil harga tertingginya.
+2. Jika jasa, gunakan standar harga jasa profesional atau vendor kelas atas di wilayah Indonesia, dengan preferensi Jabodetabek jika tersedia.
 3. Berikan URL asli yang merujuk pada harga tersebut.
-4. Berikan catatan singkat mengapa harga tersebut diambil (misal: "Harga varian tertinggi dengan garansi resmi").
+4. Berikan catatan singkat mengapa harga tersebut diambil (misal: "Harga varian tertinggi dari Official Store di Jakarta").
 
 Output harus dalam format JSON.`,
 });

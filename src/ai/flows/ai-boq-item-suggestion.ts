@@ -64,7 +64,7 @@ const boqItemSuggestionPrompt = ai.definePrompt({
 
 PENTING: Kelompokkan item ke dalam kategori yang logis. Setiap item HARUS ditentukan tipenya: "perangkat" untuk barang/material atau "jasa" untuk instalasi/konfigurasi/upah.
 
-Gunakan Bahasa Indonesia yang formal. Berikan harga pasar yang wajar di Indonesia dalam Rupiah.
+Gunakan Bahasa Indonesia yang formal. Berikan harga pasar yang wajar di Indonesia dalam Rupiah, dengan memprioritaskan referensi harga dari wilayah Jabodetabek (Jakarta, Bogor, Depok, Tangerang, Bekasi) jika memungkinkan.
 
 Tipe Proyek: {{{projectType}}}
 Spesifikasi: {{{specifications}}}

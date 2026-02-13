@@ -1,35 +1,4 @@
 {
-  "node": {
-    "40996c20394d481bcc16968a68c35f8ccb7320a733": {
-      "workers": {
-        "app/builder/page": {
-          "moduleId": "[project]/.next-internal/server/app/builder/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/ai/flows/ai-price-suggestion.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/ai/flows/ai-boq-item-suggestion.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
-          "async": false,
-          "exportedName": "suggestItemPrice",
-          "filename": "src/ai/flows/ai-price-suggestion.ts"
-        }
-      },
-      "layer": {
-        "app/builder/page": "action-browser"
-      },
-      "exportedName": "suggestItemPrice",
-      "filename": "src/ai/flows/ai-price-suggestion.ts"
-    },
-    "4073b239b9a4ce7a5467b12a516eb4d03da7355cc6": {
-      "workers": {
-        "app/builder/page": {
-          "moduleId": "[project]/.next-internal/server/app/builder/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/ai/flows/ai-price-suggestion.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/src/ai/flows/ai-boq-item-suggestion.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
-          "async": false,
-          "exportedName": "suggestBoqItems",
-          "filename": "src/ai/flows/ai-boq-item-suggestion.ts"
-        }
-      },
-      "layer": {
-        "app/builder/page": "action-browser"
-      },
-      "exportedName": "suggestBoqItems",
-      "filename": "src/ai/flows/ai-boq-item-suggestion.ts"
-    }
-  },
+  "node": {},
   "edge": {}
 }

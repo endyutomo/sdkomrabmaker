@@ -1,7 +1,7 @@
-import type {Metadata} from 'next';
+import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
-import { FirebaseClientProvider } from "@/firebase/client-provider";
+import { SupabaseProvider } from "@/components/providers/supabase-provider";
 
 export const metadata: Metadata = {
   title: 'SDKOM RAB MAker | RAB Berbasis AI',
@@ -16,15 +16,14 @@ export default function RootLayout({
   return (
     <html lang="id">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+        <script src="https://js.puter.com/v2/"></script>
       </head>
       <body className="font-body antialiased">
-        <FirebaseClientProvider>
+        <SupabaseProvider>
           {children}
           <Toaster />
-        </FirebaseClientProvider>
+        </SupabaseProvider>
       </body>
     </html>
   );

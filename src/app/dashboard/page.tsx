@@ -3,48 +3,49 @@
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { 
-  Plus, 
-  Calendar, 
-  ChevronRight, 
-  LayoutDashboard, 
+import {
+  Plus,
+  Calendar,
+  ChevronRight,
+  LayoutDashboard,
   Loader2,
   Trash2,
   Building2,
   MapPin,
   Clock
 } from "lucide-react";
-import { useFirestore, useUser, useCollection, useMemoFirebase } from "@/firebase";
-import { collection, deleteDoc, doc, query, orderBy } from "firebase/firestore";
-import { format } from "date-fns";
+import { useSupabase } from "@/components/providers/supabase-provider";
+import { useSupabaseQuery } from "@/hooks/use-supabase-query";
+import { format, parseISO } from "date-fns";
 import { id as localeId } from "date-fns/locale";
 import { useToast } from "@/hooks/use-toast";
 import { Logo } from "@/components/ui/logo";
 
 export default function DashboardPage() {
-  const { user, isUserLoading } = useUser();
-  const db = useFirestore();
+  const { supabase, user, isLoading: isAuthLoading } = useSupabase();
   const { toast } = useToast();
 
-  const projectsQuery = useMemoFirebase(() => {
-    if (!db || !user) return null;
-    return query(
-      collection(db, "users", user.uid, "projects"),
-      orderBy("updatedAt", "desc")
-    );
-  }, [db, user]);
-
-  const { data: projects, isLoading: isProjectsLoading } = useCollection(projectsQuery);
+  const { data: projects, isLoading: isProjectsLoading } = useSupabaseQuery<any>(
+    'projects',
+    (q) => q.order('updated_at', { ascending: false })
+  );
 
   const handleDelete = async (e: React.MouseEvent, projectId: string) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    if (!db || !user) return;
-    
+
+    if (!supabase || !user) return;
+
     if (confirm("Apakah Anda yakin ingin menghapus proyek ini?")) {
       try {
-        await deleteDoc(doc(db, "users", user.uid, "projects", projectId));
+        const { error } = await supabase
+          .from('projects')
+          .delete()
+          .eq('id', projectId)
+          .eq('user_id', user.id);
+
+        if (error) throw error;
+
         toast({
           title: "Proyek Dihapus",
           description: "Data RAB telah berhasil dihapus dari database.",
@@ -59,7 +60,7 @@ export default function DashboardPage() {
     }
   };
 
-  if (isUserLoading || isProjectsLoading) {
+  if (isAuthLoading || isProjectsLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -113,33 +114,33 @@ export default function DashboardPage() {
                     <div className="h-12 w-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center group-hover:boq-accent-gradient group-hover:text-white transition-colors">
                       <Logo className="h-8 w-8" />
                     </div>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       className="text-slate-300 hover:text-destructive hover:bg-destructive/10"
                       onClick={(e) => handleDelete(e, project.id)}
                     >
                       <Trash2 className="h-5 w-5" />
                     </Button>
                   </div>
-                  
+
                   <div className="space-y-3">
                     <h3 className="text-xl font-bold text-primary group-hover:text-accent transition-colors line-clamp-1">
                       {project.title || "Draft Tanpa Nama"}
                     </h3>
-                    
+
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm text-slate-600">
                         <Building2 className="h-4 w-4 opacity-50" />
-                        <span className="line-clamp-1">{project.clientName || "Klien belum diisi"}</span>
+                        <span className="line-clamp-1">{project.client_name || "Klien belum diisi"}</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-slate-600">
                         <MapPin className="h-4 w-4 opacity-50" />
-                        <span className="line-clamp-1">{project.projectLocation || "Lokasi belum diisi"}</span>
+                        <span className="line-clamp-1">{project.project_location || "Lokasi belum diisi"}</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-slate-400 pt-4 border-t">
                         <Clock className="h-4 w-4" />
-                        <span>Update: {project.updatedAt ? format(project.updatedAt.toDate(), "dd MMM yyyy, HH:mm", { locale: localeId }) : "Baru saja"}</span>
+                        <span>Update: {project.updated_at ? format(parseISO(project.updated_at), "dd MMM yyyy, HH:mm", { locale: localeId }) : "Baru saja"}</span>
                       </div>
                     </div>
                   </div>

@@ -655,7 +655,7 @@ const FirebaseProvider = (param)=>{
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
-_s(FirebaseProvider, "OHe6bVjVSw9ThvW0Yh4MUWnvKSA=");
+_s(FirebaseProvider, "52IF9MCA7AiodNrCM5JSqw906xQ=");
 _c = FirebaseProvider;
 const useFirebase = ()=>{
     _s1();

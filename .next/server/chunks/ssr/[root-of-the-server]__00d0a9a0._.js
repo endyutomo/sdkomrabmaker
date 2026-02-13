@@ -466,12 +466,12 @@ function Home() {
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/page.tsx",
                                             lineNumber: 87,
-                                            columnNumber: 19
+                                            columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/page.tsx",
                                         lineNumber: 86,
-                                        columnNumber: 16
+                                        columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.tsx",
@@ -645,7 +645,7 @@ function Home() {
                                         columnNumber: 21
                                     }, void 0),
                                     title: "Penyimpanan Cloud Aman",
-                                    description: "Data RAB Anda tersimpan aman di cloud Firebase, dapat diakses kapan saja dari perangkat mana pun."
+                                    description: "Data RAB Anda tersimpan aman di cloud Supabase, dapat diakses kapan saja dari perangkat mana pun."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.tsx",
                                     lineNumber: 139,

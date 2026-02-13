@@ -1,12 +1,12 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { 
-  Sparkles, 
-  Calculator, 
-  ShieldCheck, 
-  ArrowRight, 
-  Download, 
+import {
+  Sparkles,
+  Calculator,
+  ShieldCheck,
+  ArrowRight,
+  Download,
   LayoutTemplate,
   CheckCircle2,
   LayoutDashboard
@@ -52,7 +52,7 @@ export default function Home() {
               Buat RAB Akurat <span className="text-accent">dalam Menit</span>, Bukan Hari.
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed max-w-lg">
-              Alat Estimasi & Rencana Anggaran Biaya (RAB) profesional yang didukung oleh AI Generatif. 
+              Alat Estimasi & Rencana Anggaran Biaya (RAB) profesional yang didukung oleh AI Generatif.
               Dibuat untuk quantity surveyor, kontraktor, dan manajer proyek.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
@@ -79,18 +79,18 @@ export default function Home() {
               </div>
             </div>
           </div>
-          
+
           <div className="relative animate-fade-in-up">
             <div className="absolute -inset-4 bg-accent/20 blur-3xl rounded-full -z-10" />
             <div className="bg-white rounded-2xl shadow-2xl border p-2 transform rotate-2">
-               <div className="bg-slate-50 rounded-xl overflow-hidden aspect-[4/3] flex items-center justify-center">
-                  <img 
-                    src="https://picsum.photos/seed/boq/800/600" 
-                    alt="Antarmuka SDKOM RAB MAker" 
-                    className="w-full h-full object-cover opacity-80"
-                    data-ai-hint="construction dashboard"
-                  />
-               </div>
+              <div className="bg-slate-50 rounded-xl overflow-hidden aspect-[4/3] flex items-center justify-center">
+                <img
+                  src="https://picsum.photos/seed/boq/800/600"
+                  alt="Antarmuka SDKOM RAB MAker"
+                  className="w-full h-full object-cover opacity-80"
+                  data-ai-hint="construction dashboard"
+                />
+              </div>
             </div>
             <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl border flex items-center gap-4 animate-bounce">
               <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center">
@@ -114,34 +114,34 @@ export default function Home() {
               Fitur profesional yang dirancang untuk mempercepat proses pembuatan RAB dengan tetap menjaga akurasi maksimal.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <FeatureCard 
+            <FeatureCard
               icon={<Sparkles className="h-6 w-6" />}
               title="Saran Item Berbasis AI"
               description="Cukup masukkan tipe proyek dan spesifikasi, AI kami akan menyarankan item dan kategori yang relevan secara otomatis."
             />
-            <FeatureCard 
+            <FeatureCard
               icon={<LayoutTemplate className="h-6 w-6" />}
               title="Katalog Otomatis"
               description="Setiap item yang Anda masukkan akan direkam ke dalam katalog pribadi untuk digunakan kembali di proyek mendatang."
             />
-            <FeatureCard 
+            <FeatureCard
               icon={<Calculator className="h-6 w-6" />}
               title="Kalkulasi Otomatis"
               description="Rumus cerdas menangani perkalian volume/harga, margin profit, dan rekapitulasi PPN secara real-time."
             />
-            <FeatureCard 
+            <FeatureCard
               icon={<Download className="h-6 w-6" />}
               title="Ekspor Sekali Klik"
               description="Hasilkan laporan PDF profesional atau file Excel terstruktur yang siap untuk presentasi klien atau tender."
             />
-            <FeatureCard 
+            <FeatureCard
               icon={<ShieldCheck className="h-6 w-6" />}
               title="Penyimpanan Cloud Aman"
-              description="Data RAB Anda tersimpan aman di cloud Firebase, dapat diakses kapan saja dari perangkat mana pun."
+              description="Data RAB Anda tersimpan aman di cloud Supabase, dapat diakses kapan saja dari perangkat mana pun."
             />
-            <FeatureCard 
+            <FeatureCard
               icon={<LayoutTemplate className="h-6 w-6" />}
               title="Kop Surat Kustom"
               description="Kelola informasi klien, nomor dokumen, dan data proyek lainnya dalam format kop surat profesional."
