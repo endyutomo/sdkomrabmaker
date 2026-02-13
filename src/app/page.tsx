@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { 
@@ -8,7 +9,8 @@ import {
   ArrowRight, 
   Download, 
   LayoutTemplate,
-  CheckCircle2
+  CheckCircle2,
+  LayoutDashboard
 } from "lucide-react";
 
 export default function Home() {
@@ -26,11 +28,18 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
             <a href="#features" className="hover:text-primary transition-colors">Fitur</a>
             <a href="#workflow" className="hover:text-primary transition-colors">Alur Kerja</a>
-            <a href="#pricing" className="hover:text-primary transition-colors">Harga</a>
+            <Link href="/dashboard" className="hover:text-primary transition-colors flex items-center gap-1">
+              <LayoutDashboard className="h-4 w-4" /> Proyek Saya
+            </Link>
           </div>
-          <Link href="/builder">
-            <Button className="boq-accent-gradient h-9">Mulai Gratis</Button>
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard" className="hidden sm:block">
+              <Button variant="ghost" className="text-primary font-bold">Masuk Dashboard</Button>
+            </Link>
+            <Link href="/builder">
+              <Button className="boq-accent-gradient h-10 px-6 font-bold">Mulai Sekarang</Button>
+            </Link>
+          </div>
         </div>
       </nav>
 
@@ -45,25 +54,27 @@ export default function Home() {
               Buat RAB Akurat <span className="text-accent">dalam Menit</span>, Bukan Hari.
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed max-w-lg">
-              Alat Estimasi & Rencana Anggaran Biaya (RAB) konstruksi profesional yang didukung oleh AI Generatif. 
+              Alat Estimasi & Rencana Anggaran Biaya (RAB) profesional yang didukung oleh AI Generatif. 
               Dibuat untuk quantity surveyor, kontraktor, dan manajer proyek.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/builder">
-                <Button size="lg" className="boq-accent-gradient text-white h-14 px-8 text-lg font-semibold rounded-xl w-full sm:w-auto">
+                <Button size="lg" className="boq-accent-gradient text-white h-14 px-8 text-lg font-semibold rounded-xl w-full sm:w-auto shadow-lg shadow-primary/20">
                   Mulai Susun Sekarang <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-semibold rounded-xl border-2 w-full sm:w-auto">
-                Tonton Demo
-              </Button>
+              <Link href="/dashboard">
+                <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-semibold rounded-xl border-2 w-full sm:w-auto">
+                  Lihat Proyek Saya
+                </Button>
+              </Link>
             </div>
             <div className="flex items-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-500" /> Tanpa kartu kredit
+                <CheckCircle2 className="h-4 w-4 text-green-500" /> Cloud Sync Otomatis
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-500" /> Item tak terbatas
+                <CheckCircle2 className="h-4 w-4 text-green-500" /> Katalog Harga Historis
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-green-500" /> Ekspor ke Excel
@@ -114,13 +125,13 @@ export default function Home() {
             />
             <FeatureCard 
               icon={<LayoutTemplate className="h-6 w-6" />}
-              title="Perpustakaan Template"
-              description="Impor struktur RAB umum dari pustaka kami atau unggah template Excel/CSV Anda sendiri untuk memulai lebih cepat."
+              title="Katalog Otomatis"
+              description="Setiap item yang Anda masukkan akan direkam ke dalam katalog pribadi untuk digunakan kembali di proyek mendatang."
             />
             <FeatureCard 
               icon={<Calculator className="h-6 w-6" />}
               title="Kalkulasi Otomatis"
-              description="Rumus cerdas menangani perkalian volume/harga dan ringkasan bagian secara real-time saat Anda mengetik."
+              description="Rumus cerdas menangani perkalian volume/harga, margin profit, dan rekapitulasi PPN secara real-time."
             />
             <FeatureCard 
               icon={<Download className="h-6 w-6" />}
@@ -129,13 +140,13 @@ export default function Home() {
             />
             <FeatureCard 
               icon={<ShieldCheck className="h-6 w-6" />}
-              title="Jejak Audit"
-              description="Pantau setiap perubahan dengan riwayat versi otomatis dan log pengeditan kolaboratif."
+              title="Penyimpanan Cloud Aman"
+              description="Data RAB Anda tersimpan aman di cloud Firebase, dapat diakses kapan saja dari perangkat mana pun."
             />
             <FeatureCard 
               icon={<FileText className="h-6 w-6" />}
-              title="Kontrol Dokumen"
-              description="Kelola spesifikasi proyek, halaman sampul, dan syarat ketentuan langsung di dalam antarmuka penyusun."
+              title="Kop Surat Kustom"
+              description="Kelola informasi klien, nomor dokumen, dan data proyek lainnya dalam format kop surat profesional."
             />
           </div>
         </div>
@@ -155,9 +166,11 @@ export default function Home() {
                 Buat RAB Pertama Saya
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="h-14 px-10 text-lg font-bold border-white text-white hover:bg-white/10">
-              Jadwalkan Demo
-            </Button>
+            <Link href="/dashboard">
+              <Button size="lg" variant="outline" className="h-14 px-10 text-lg font-bold border-white text-white hover:bg-white/10">
+                Buka Dashboard Saya
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

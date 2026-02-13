@@ -1,6 +1,8 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { BoqTable } from "@/components/builder/boq-table";
 import { AiGenerator } from "@/components/builder/ai-generator";
 import { Button } from "@/components/ui/button";
@@ -21,11 +23,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
-import { useFirestore, useUser, useAuth } from "@/firebase";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { useFirestore, useUser, useAuth, useDoc, useMemoFirebase } from "@/firebase";
+import { doc, setDoc, serverTimestamp, getDoc } from "firebase/firestore";
 import { signInAnonymously } from "firebase/auth";
 
 export default function BuilderPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const projectIdFromUrl = searchParams.get("id");
+  
   const [project, setProject] = useState<ProjectBoq>({
     id: `proj-${Date.now()}`,
     title: "Draft RAB Baru",
@@ -40,17 +46,49 @@ export default function BuilderPage() {
   });
   
   const [isSaving, setIsSaving] = useState(false);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
   const { toast } = useToast();
   const db = useFirestore();
   const { user, isUserLoading } = useUser();
   const auth = useAuth();
 
-  // Ensure user is signed in to satisfy security rules
+  // Ensure user is signed in
   useEffect(() => {
     if (!isUserLoading && !user && auth) {
       signInAnonymously(auth).catch(err => console.error("Anonymous sign-in failed:", err));
     }
   }, [user, isUserLoading, auth]);
+
+  // Load project if ID is provided
+  useEffect(() => {
+    const loadProject = async () => {
+      if (!db || !user || !projectIdFromUrl || isDataLoaded) return;
+      
+      try {
+        const projectRef = doc(db, "users", user.uid, "projects", projectIdFromUrl);
+        const projectSnap = await getDoc(projectRef);
+        
+        if (projectSnap.exists()) {
+          const data = projectSnap.data() as ProjectBoq;
+          setProject(data);
+          setIsDataLoaded(true);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Proyek Tidak Ditemukan",
+            description: "Data proyek yang Anda cari tidak tersedia.",
+          });
+          router.push("/dashboard");
+        }
+      } catch (error) {
+        console.error("Error loading project:", error);
+      }
+    };
+
+    if (user && db && projectIdFromUrl) {
+      loadProject();
+    }
+  }, [db, user, projectIdFromUrl, isDataLoaded, router, toast]);
 
   const handleUpdateProjectInfo = (updates: Partial<ProjectBoq>) => {
     setProject(prev => ({ ...prev, ...updates }));
@@ -98,6 +136,7 @@ export default function BuilderPage() {
       quantity: 1,
       unitPrice: 0,
       type: type,
+      margin: 0
     };
     setProject(prev => ({
       ...prev,
@@ -152,7 +191,6 @@ export default function BuilderPage() {
     
     setIsSaving(true);
     try {
-      // Align path with firestore.rules: /users/{userId}/projects/{projectId}
       const projectRef = doc(db, "users", user.uid, "projects", project.id);
       await setDoc(projectRef, {
         ...project,
@@ -163,6 +201,11 @@ export default function BuilderPage() {
         title: "Proyek Berhasil Disimpan",
         description: `Proyek "${project.title}" telah direkam di database.`,
       });
+      
+      // Update URL if it was a new project
+      if (!projectIdFromUrl) {
+        router.replace(`/builder?id=${project.id}`);
+      }
     } catch (error) {
       console.error("Gagal menyimpan proyek:", error);
       toast({
@@ -182,10 +225,13 @@ export default function BuilderPage() {
     });
   };
 
-  if (isUserLoading) {
+  if (isUserLoading || (projectIdFromUrl && !isDataLoaded)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+          <p className="text-slate-500 font-medium animate-pulse">Memuat data proyek...</p>
+        </div>
       </div>
     );
   }
@@ -194,17 +240,20 @@ export default function BuilderPage() {
     <div className="min-h-screen flex flex-col bg-background">
       <header className="h-16 border-b bg-white flex items-center justify-between px-6 sticky top-0 z-30 shadow-sm">
         <div className="flex items-center gap-4">
-          <Link href="/">
+          <Link href="/dashboard">
             <Button variant="ghost" size="icon" className="text-muted-foreground">
               <ChevronLeft className="h-5 w-5" />
             </Button>
           </Link>
           <div className="h-8 w-px bg-border" />
-          <input 
-            className="text-lg font-bold bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-primary/20 px-2 rounded min-w-[300px]"
-            value={project.title}
-            onChange={(e) => setProject(prev => ({ ...prev, title: e.target.value }))}
-          />
+          <div className="flex items-center gap-2">
+            <FileText className="h-5 w-5 text-primary opacity-50" />
+            <input 
+              className="text-lg font-bold bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-primary/20 px-2 rounded min-w-[300px] text-primary"
+              value={project.title}
+              onChange={(e) => setProject(prev => ({ ...prev, title: e.target.value }))}
+            />
+          </div>
         </div>
         
         <div className="flex items-center gap-2">
@@ -212,7 +261,7 @@ export default function BuilderPage() {
             <FileDown className="h-4 w-4 mr-2" /> Ekspor
           </Button>
           <Button 
-            className="boq-accent-gradient h-9 text-white font-semibold"
+            className="boq-accent-gradient h-9 text-white font-bold"
             onClick={handleSaveProject}
             disabled={isSaving}
           >
@@ -229,35 +278,37 @@ export default function BuilderPage() {
           <div className="space-y-4">
             <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Tambah Cepat Kategori</h3>
             <div className="grid grid-cols-1 gap-2">
-              <Button variant="outline" className="justify-start border-dashed hover:border-primary" onClick={() => handleAddCategory("Perangkat & Hardware")}>
+              <Button variant="outline" className="justify-start border-dashed hover:border-primary font-bold" onClick={() => handleAddCategory("Perangkat & Hardware")}>
                 <HardDrive className="h-4 w-4 mr-2 text-primary" /> Perangkat Utama
               </Button>
-              <Button variant="outline" className="justify-start border-dashed hover:border-primary" onClick={() => handleAddCategory("Jasa Instalasi & Konfigurasi")}>
+              <Button variant="outline" className="justify-start border-dashed hover:border-primary font-bold" onClick={() => handleAddCategory("Jasa Instalasi & Konfigurasi")}>
                 <Wrench className="h-4 w-4 mr-2 text-accent" /> Jasa Instalasi
               </Button>
-              <Button variant="outline" className="justify-start border-dashed hover:border-primary" onClick={() => handleAddCategory("Mobilisasi & Alat Kerja")}>
+              <Button variant="outline" className="justify-start border-dashed hover:border-primary font-bold" onClick={() => handleAddCategory("Mobilisasi & Alat Kerja")}>
                 <Truck className="h-4 w-4 mr-2 text-amber-500" /> Mobilisasi
               </Button>
-              <Button variant="outline" className="justify-start" onClick={() => handleAddCategory()}>
+              <Button variant="outline" className="justify-start font-bold" onClick={() => handleAddCategory()}>
                 <Plus className="h-4 w-4 mr-2" /> Bagian Kustom
               </Button>
             </div>
           </div>
 
           <div className="pt-6 border-t space-y-2">
-            <Button variant="ghost" className="w-full justify-start text-muted-foreground">
+            <Link href="/dashboard">
+              <Button variant="ghost" className="w-full justify-start text-muted-foreground font-bold">
+                <LayoutDashboard className="h-4 w-4 mr-2" /> Proyek Saya
+              </Button>
+            </Link>
+            <Button variant="ghost" className="w-full justify-start text-muted-foreground font-bold">
               <History className="h-4 w-4 mr-2" /> Riwayat Versi
             </Button>
-            <Button variant="ghost" className="w-full justify-start text-muted-foreground">
+            <Button variant="ghost" className="w-full justify-start text-muted-foreground font-bold">
               <Printer className="h-4 w-4 mr-2" /> Pratinjau Cetak
-            </Button>
-            <Button variant="ghost" className="w-full justify-start text-muted-foreground">
-              <Settings className="h-4 w-4 mr-2" /> Pengaturan Global
             </Button>
           </div>
         </aside>
 
-        <main className="flex-1 overflow-y-auto p-8 lg:p-12">
+        <main className="flex-1 overflow-y-auto p-8 lg:p-12 bg-slate-50/50">
           <div className="max-w-6xl mx-auto">
             {project.categories.length === 0 ? (
               <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6 animate-fade-in-up">
@@ -271,7 +322,7 @@ export default function BuilderPage() {
                   </p>
                 </div>
                 <div className="flex gap-4">
-                  <Button size="lg" className="boq-accent-gradient h-12 px-8" onClick={() => handleAddCategory("Perangkat Utama")}>
+                  <Button size="lg" className="boq-accent-gradient h-12 px-8 font-bold" onClick={() => handleAddCategory("Perangkat Utama")}>
                     <Plus className="h-5 w-5 mr-2" /> Mulai Input Manual
                   </Button>
                 </div>
