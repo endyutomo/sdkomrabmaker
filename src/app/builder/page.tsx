@@ -29,9 +29,17 @@ export default function BuilderPage() {
     specifications: "",
     categories: [],
     createdAt: new Date().toISOString(),
+    clientName: "Nama Klien / Perusahaan",
+    documentNumber: `RAB/${new Date().getFullYear()}/001`,
+    projectLocation: "Lokasi Proyek",
+    documentDate: new Date().toISOString().split('T')[0],
   });
   
   const { toast } = useToast();
+
+  const handleUpdateProjectInfo = (updates: Partial<ProjectBoq>) => {
+    setProject(prev => ({ ...prev, ...updates }));
+  };
 
   const handleAddCategory = (name = "Bagian Baru") => {
     const newCategory: BoqCategory = {
@@ -187,7 +195,7 @@ export default function BuilderPage() {
         </aside>
 
         <main className="flex-1 overflow-y-auto p-8 lg:p-12">
-          <div className="max-w-5xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             {project.categories.length === 0 ? (
               <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6 animate-fade-in-up">
                 <div className="w-20 h-20 bg-primary/5 rounded-2xl flex items-center justify-center text-primary rotate-3">
@@ -207,7 +215,8 @@ export default function BuilderPage() {
               </div>
             ) : (
               <BoqTable 
-                categories={project.categories}
+                project={project}
+                onUpdateProjectInfo={handleUpdateProjectInfo}
                 onUpdateCategory={handleUpdateCategory}
                 onUpdateItem={handleUpdateItem}
                 onDeleteItem={handleDeleteItem}

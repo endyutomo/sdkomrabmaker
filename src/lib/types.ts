@@ -22,4 +22,9 @@ export interface ProjectBoq {
   specifications: string;
   categories: BoqCategory[];
   createdAt: string;
+  // Fields untuk Kop Surat
+  clientName?: string;
+  documentNumber?: string;
+  projectLocation?: string;
+  documentDate?: string;
 }

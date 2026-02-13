@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { BoqCategory, BoqItem } from "@/lib/types";
+import { BoqCategory, BoqItem, ProjectBoq } from "@/lib/types";
 import { 
   Trash2, 
   Plus, 
@@ -16,7 +16,12 @@ import {
   Calculator, 
   Sparkles, 
   Loader2, 
-  ExternalLink 
+  ExternalLink,
+  Building2,
+  Calendar,
+  MapPin,
+  Hash,
+  FileText
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -31,7 +36,8 @@ import { suggestItemPrice } from "@/ai/flows/ai-price-suggestion";
 import { useToast } from "@/hooks/use-toast";
 
 interface BoqTableProps {
-  categories: BoqCategory[];
+  project: ProjectBoq;
+  onUpdateProjectInfo: (updates: Partial<ProjectBoq>) => void;
   onUpdateCategory: (categoryId: string, updates: Partial<BoqCategory>) => void;
   onUpdateItem: (categoryId: string, itemId: string, updates: Partial<BoqItem>) => void;
   onDeleteItem: (categoryId: string, itemId: string) => void;
@@ -40,7 +46,8 @@ interface BoqTableProps {
 }
 
 export function BoqTable({ 
-  categories, 
+  project,
+  onUpdateProjectInfo,
   onUpdateCategory, 
   onUpdateItem, 
   onDeleteItem, 
@@ -52,6 +59,8 @@ export function BoqTable({
   const [contingencyRate, setContingencyRate] = useState(5);
   const [loadingPriceId, setLoadingPriceId] = useState<string | null>(null);
   const { toast } = useToast();
+
+  const categories = project.categories;
 
   // Perhitungan Subtotals
   const totalPerangkat = categories.reduce((sum, cat) => 
@@ -118,155 +127,237 @@ export function BoqTable({
   };
 
   return (
-    <div className="space-y-8 animate-fade-in-up">
+    <div className="space-y-10 animate-fade-in-up">
+      {/* Kop Surat / Header Dokumen */}
+      <div className="bg-white rounded-2xl shadow-sm border p-8 space-y-6">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-6 border-b pb-8">
+          <div className="space-y-4 flex-1 w-full">
+            <div className="flex items-center gap-2 text-primary">
+              <Building2 className="h-5 w-5" />
+              <span className="text-xs font-bold uppercase tracking-wider">Informasi Klien</span>
+            </div>
+            <Input 
+              className="text-2xl font-bold bg-transparent border-none focus:ring-0 p-0 h-auto placeholder:text-muted-foreground/30"
+              placeholder="Nama Klien / Perusahaan"
+              value={project.clientName}
+              onChange={(e) => onUpdateProjectInfo({ clientName: e.target.value })}
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-slate-50 p-2 rounded-lg border border-slate-100">
+                <MapPin className="h-4 w-4 shrink-0" />
+                <Input 
+                  className="bg-transparent border-none focus:ring-0 p-0 h-auto text-sm"
+                  placeholder="Lokasi Proyek"
+                  value={project.projectLocation}
+                  onChange={(e) => onUpdateProjectInfo({ projectLocation: e.target.value })}
+                />
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-slate-50 p-2 rounded-lg border border-slate-100">
+                <FileText className="h-4 w-4 shrink-0" />
+                <Input 
+                  className="bg-transparent border-none focus:ring-0 p-0 h-auto text-sm font-medium"
+                  placeholder="Nama Proyek"
+                  value={project.title}
+                  onChange={(e) => onUpdateProjectInfo({ title: e.target.value })}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4 w-full md:w-64">
+            <div className="flex items-center gap-2 text-primary">
+              <Hash className="h-5 w-5" />
+              <span className="text-xs font-bold uppercase tracking-wider">Data Dokumen</span>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-[10px] text-muted-foreground uppercase font-bold">Nomor Dokumen</Label>
+              <Input 
+                className="text-sm border-slate-200 focus:border-primary transition-colors"
+                placeholder="RAB/2024/001"
+                value={project.documentNumber}
+                onChange={(e) => onUpdateProjectInfo({ documentNumber: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-[10px] text-muted-foreground uppercase font-bold">Tanggal</Label>
+              <div className="flex items-center gap-2 bg-slate-50 border rounded-md px-3 h-10 border-slate-200">
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+                <input 
+                  type="date"
+                  className="bg-transparent border-none focus:ring-0 text-sm flex-1 outline-none"
+                  value={project.documentDate}
+                  onChange={(e) => onUpdateProjectInfo({ documentDate: e.target.value })}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <p className="text-[10px] text-muted-foreground italic">
+          * Seluruh isian di atas akan muncul sebagai Kop Surat resmi saat dokumen RAB ini diekspor atau dicetak.
+        </p>
+      </div>
+
       {categories.map((category) => (
         <div key={category.id} className="bg-white rounded-xl shadow-sm border overflow-hidden">
-          <div className="bg-muted/30 p-4 flex items-center justify-between border-b">
-            <div className="flex items-center gap-3 flex-1">
+          <div className="bg-slate-50 p-6 flex flex-col sm:flex-row items-center justify-between border-b gap-4">
+            <div className="flex items-center gap-4 flex-1 w-full">
+              <div className="h-10 w-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center font-bold">
+                {categories.indexOf(category) + 1}
+              </div>
               <Input
-                className="font-semibold text-lg bg-transparent border-transparent hover:border-input focus:border-input h-8 w-auto min-w-[300px]"
+                className="font-bold text-xl bg-transparent border-transparent hover:border-slate-200 focus:border-primary h-10 w-full max-w-md transition-all"
                 value={category.name}
                 onChange={(e) => onUpdateCategory(category.id, { name: e.target.value })}
               />
-              <span className="text-sm font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded">
+              <Badge variant="outline" className="hidden lg:inline-flex bg-white px-3 py-1 text-sm shadow-sm">
                 Sub-total: {formatCurrency(category.items.reduce((s, i) => s + (i.quantity * i.unitPrice), 0))}
-              </span>
+              </Badge>
             </div>
             <Button 
               variant="ghost" 
               size="icon" 
-              className="text-destructive hover:text-destructive hover:bg-destructive/10"
+              className="text-destructive hover:text-destructive hover:bg-destructive/10 shrink-0"
               onClick={() => onDeleteCategory(category.id)}
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-5 w-5" />
             </Button>
           </div>
           
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-muted/50 hover:bg-muted/50">
-                <TableHead className="w-[60px]"></TableHead>
-                <TableHead className="w-[340px]">Uraian Pekerjaan</TableHead>
-                <TableHead className="w-[100px]">Satuan</TableHead>
-                <TableHead className="w-[120px] text-right">Vol</TableHead>
-                <TableHead className="w-[150px] text-right">Harga Satuan</TableHead>
-                <TableHead className="w-[150px] text-right">Total</TableHead>
-                <TableHead className="w-[100px] text-center">AI Ref</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {category.items.map((item) => (
-                <TableRow key={item.id} className="group transition-colors hover:bg-accent/5">
-                  <TableCell className="text-center">
-                    {item.type === 'perangkat' ? (
-                      <Package className="h-4 w-4 text-primary opacity-60" title="Perangkat" />
-                    ) : (
-                      <UserCog className="h-4 w-4 text-accent opacity-60" title="Jasa" />
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col gap-1">
-                      <Input
-                        className="bg-transparent border-transparent hover:border-input focus:border-input h-8"
-                        value={item.name}
-                        placeholder="Nama Item..."
-                        onChange={(e) => onUpdateItem(category.id, item.id, { name: e.target.value })}
-                      />
-                      <div className="flex gap-2 pl-3">
-                        <Badge variant={item.type === 'perangkat' ? 'outline' : 'secondary'} className="text-[10px] h-4 px-1 uppercase">
-                          {item.type}
-                        </Badge>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      className="bg-transparent border-transparent hover:border-input focus:border-input h-8"
-                      value={item.unit}
-                      placeholder="Unit/Lot"
-                      onChange={(e) => onUpdateItem(category.id, item.id, { unit: e.target.value })}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      type="number"
-                      className="bg-transparent border-transparent hover:border-input focus:border-input h-8 text-right"
-                      value={item.quantity}
-                      onChange={(e) => onUpdateItem(category.id, item.id, { quantity: parseFloat(e.target.value) || 0 })}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      type="number"
-                      className="bg-transparent border-transparent hover:border-input focus:border-input h-8 text-right"
-                      value={item.unitPrice}
-                      onChange={(e) => onUpdateItem(category.id, item.id, { unitPrice: parseFloat(e.target.value) || 0 })}
-                    />
-                  </TableCell>
-                  <TableCell className="text-right font-medium">
-                    {formatCurrency(item.quantity * item.unitPrice)}
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <div className="flex items-center justify-center gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-accent hover:text-accent hover:bg-accent/10"
-                        onClick={() => handleSuggestPrice(category.id, item)}
-                        disabled={loadingPriceId === item.id}
-                      >
-                        {loadingPriceId === item.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <Sparkles className="h-4 w-4" />
-                        )}
-                      </Button>
-                      {item.sourceUrl && (
-                        <a 
-                          href={item.sourceUrl} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-muted-foreground hover:text-primary transition-colors"
-                          title="Lihat Sumber Harga"
-                        >
-                          <ExternalLink className="h-3 w-3" />
-                        </a>
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="opacity-0 group-hover:opacity-100 transition-opacity text-destructive h-8 w-8"
-                      onClick={() => onDeleteItem(category.id, item.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </TableCell>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-50/50 hover:bg-slate-50/50">
+                  <TableHead className="w-[50px] text-center">Tipe</TableHead>
+                  <TableHead className="min-w-[400px]">Uraian Pekerjaan & Spesifikasi</TableHead>
+                  <TableHead className="w-[120px]">Satuan</TableHead>
+                  <TableHead className="w-[100px] text-right">Vol</TableHead>
+                  <TableHead className="w-[180px] text-right">Harga Satuan (Rp)</TableHead>
+                  <TableHead className="w-[180px] text-right">Total (Rp)</TableHead>
+                  <TableHead className="w-[80px] text-center">AI</TableHead>
+                  <TableHead className="w-[50px]"></TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {category.items.map((item) => (
+                  <TableRow key={item.id} className="group transition-colors hover:bg-slate-50/80">
+                    <TableCell className="text-center">
+                      {item.type === 'perangkat' ? (
+                        <Package className="h-5 w-5 text-primary opacity-60 mx-auto" title="Perangkat" />
+                      ) : (
+                        <UserCog className="h-5 w-5 text-accent opacity-60 mx-auto" title="Jasa" />
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex flex-col gap-1 pr-4">
+                        <Input
+                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 font-medium text-slate-900 transition-all px-2 -ml-2"
+                          value={item.name}
+                          placeholder="Ketik nama item atau deskripsi pekerjaan..."
+                          onChange={(e) => onUpdateItem(category.id, item.id, { name: e.target.value })}
+                        />
+                        <div className="flex gap-2">
+                          <Badge variant={item.type === 'perangkat' ? 'outline' : 'secondary'} className="text-[9px] h-4 px-1.5 uppercase tracking-tighter font-bold">
+                            {item.type}
+                          </Badge>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Input
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 text-slate-600 px-2 -ml-2"
+                        value={item.unit}
+                        placeholder="Unit/Lot/Titik"
+                        onChange={(e) => onUpdateItem(category.id, item.id, { unit: e.target.value })}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Input
+                        type="number"
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 text-right font-medium px-2 -ml-2"
+                        value={item.quantity}
+                        onChange={(e) => onUpdateItem(category.id, item.id, { quantity: parseFloat(e.target.value) || 0 })}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Input
+                        type="number"
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 text-right font-bold text-slate-800 px-2 -ml-2"
+                        value={item.unitPrice}
+                        onChange={(e) => onUpdateItem(category.id, item.id, { unitPrice: parseFloat(e.target.value) || 0 })}
+                      />
+                    </TableCell>
+                    <TableCell className="text-right font-bold text-primary text-sm whitespace-nowrap">
+                      {formatCurrency(item.quantity * item.unitPrice)}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <div className="flex items-center justify-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-accent hover:text-accent hover:bg-accent/10 transition-colors"
+                          onClick={() => handleSuggestPrice(category.id, item)}
+                          disabled={loadingPriceId === item.id}
+                        >
+                          {loadingPriceId === item.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Sparkles className="h-4 w-4" />
+                          )}
+                        </Button>
+                        {item.sourceUrl && (
+                          <a 
+                            href={item.sourceUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-muted-foreground hover:text-primary transition-colors"
+                            title="Lihat Sumber Harga"
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="opacity-0 group-hover:opacity-100 transition-opacity text-destructive h-8 w-8"
+                        onClick={() => onDeleteItem(category.id, item.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
           
-          <div className="p-2 border-t bg-muted/5 flex gap-2">
+          <div className="p-4 border-t bg-slate-50/30 flex gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button 
-                  variant="ghost" 
+                  variant="outline" 
                   size="sm" 
-                  className="w-full h-8 text-primary hover:bg-primary/10 border border-dashed hover:border-primary/50"
+                  className="w-full h-10 text-primary border-primary/20 hover:border-primary/50 hover:bg-primary/5 font-semibold bg-white"
                 >
-                  <Plus className="h-3 w-3 mr-2" /> Tambah Baris <ChevronDown className="h-3 w-3 ml-2" />
+                  <Plus className="h-4 w-4 mr-2" /> Tambah Item Pekerjaan <ChevronDown className="h-3 w-3 ml-2 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="w-56">
-                <DropdownMenuItem onClick={() => onAddItem(category.id, 'perangkat')}>
-                  <Package className="mr-2 h-4 w-4" /> Perangkat / Barang
+              <DropdownMenuContent align="center" className="w-64 p-2">
+                <DropdownMenuItem className="cursor-pointer py-2" onClick={() => onAddItem(category.id, 'perangkat')}>
+                  <Package className="mr-3 h-5 w-5 text-primary" /> 
+                  <div className="flex flex-col">
+                    <span className="font-bold">Baris Perangkat</span>
+                    <span className="text-[10px] text-muted-foreground">Material, Hardware, atau Barang Fisik</span>
+                  </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onAddItem(category.id, 'jasa')}>
-                  <UserCog className="mr-2 h-4 w-4" /> Jasa Instalasi / Upah
+                <DropdownMenuItem className="cursor-pointer py-2" onClick={() => onAddItem(category.id, 'jasa')}>
+                  <UserCog className="mr-3 h-5 w-5 text-accent" /> 
+                  <div className="flex flex-col">
+                    <span className="font-bold">Baris Jasa</span>
+                    <span className="text-[10px] text-muted-foreground">Instalasi, Konfigurasi, atau Tenaga Kerja</span>
+                  </div>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -275,93 +366,105 @@ export function BoqTable({
       ))}
 
       {/* Rekapitulasi Akhir */}
-      <div className="bg-white rounded-2xl shadow-lg border p-8 space-y-6">
-        <h3 className="text-xl font-bold text-primary flex items-center gap-2">
-          <Info className="h-5 w-5" /> Rekapitulasi Akhir (Rupiah)
+      <div className="bg-white rounded-2xl shadow-xl border p-10 space-y-8">
+        <h3 className="text-2xl font-bold text-primary flex items-center gap-3">
+          <Calculator className="h-7 w-7" /> Rekapitulasi Akhir Anggaran
         </h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-2 border-b">
-              <span className="text-muted-foreground flex items-center gap-2">
-                <Package className="h-4 w-4" /> Total Barang/Perangkat
-              </span>
-              <span className="font-semibold">{formatCurrency(totalPerangkat)}</span>
-            </div>
-            
-            <div className="flex items-center justify-between p-2 border-b">
-              <span className="text-muted-foreground flex items-center gap-2">
-                <UserCog className="h-4 w-4" /> Total Jasa
-              </span>
-              <span className="font-semibold">{formatCurrency(totalJasa)}</span>
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-3 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                <span className="text-slate-600 flex items-center gap-3 font-medium">
+                  <Package className="h-5 w-5 text-primary opacity-70" /> Total Barang/Perangkat
+                </span>
+                <span className="font-bold text-slate-900">{formatCurrency(totalPerangkat)}</span>
+              </div>
+              
+              <div className="flex items-center justify-between p-3 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                <span className="text-slate-600 flex items-center gap-3 font-medium">
+                  <UserCog className="h-5 w-5 text-accent opacity-70" /> Total Jasa Instalasi
+                </span>
+                <span className="font-bold text-slate-900">{formatCurrency(totalJasa)}</span>
+              </div>
 
-            <div className="flex items-center justify-between p-2 border-b bg-muted/20">
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2">
+              <div className="p-4 bg-slate-50 rounded-xl space-y-4 border border-slate-100">
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <div className="flex items-center gap-3">
+                      <Checkbox 
+                        id="include-pph23" 
+                        className="h-5 w-5"
+                        checked={includePph23} 
+                        onCheckedChange={(checked) => setIncludePph23(!!checked)} 
+                      />
+                      <Label htmlFor="include-pph23" className="text-slate-700 cursor-pointer font-bold">
+                        PPh 23 (Potongan Jasa 2%)
+                      </Label>
+                    </div>
+                    <p className="text-[10px] text-slate-500 ml-8 italic">Pajak penghasilan atas jasa yang wajib dipotong.</p>
+                  </div>
+                  <span className="font-bold text-destructive">-{formatCurrency(pph23Amount)}</span>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between p-3 border-b border-slate-100">
+                <div className="flex items-center gap-3">
+                  <span className="text-slate-600 font-medium">Biaya Tak Terduga (Contingency)</span>
+                  <div className="flex items-center gap-1 bg-slate-100 px-3 py-1 rounded-full border">
+                    <Input 
+                      type="number" 
+                      className="w-12 h-6 p-1 text-sm border-none bg-transparent font-bold text-center" 
+                      value={contingencyRate}
+                      onChange={(e) => setContingencyRate(parseFloat(e.target.value) || 0)}
+                    />
+                    <Percent className="h-3 w-3 text-slate-500" />
+                  </div>
+                </div>
+                <span className="font-bold text-amber-600">{formatCurrency(contingencyAmount)}</span>
+              </div>
+
+              <div className="p-4 bg-primary/5 rounded-xl space-y-4 border border-primary/10">
+                <div className="flex items-center space-x-3">
                   <Checkbox 
-                    id="include-pph23" 
-                    checked={includePph23} 
-                    onCheckedChange={(checked) => setIncludePph23(!!checked)} 
+                    id="include-vat" 
+                    className="h-5 w-5"
+                    checked={includeVat} 
+                    onCheckedChange={(checked) => setIncludeVat(!!checked)} 
                   />
-                  <Label htmlFor="include-pph23" className="text-muted-foreground cursor-pointer font-medium">
-                    PPh 23 (Potongan Jasa 2%)
+                  <Label htmlFor="include-vat" className="text-slate-700 cursor-pointer font-bold">
+                    Sertakan PPN 11% (Standard Pajak Indonesia)
                   </Label>
                 </div>
-                <p className="text-[10px] text-muted-foreground ml-6 italic">Potongan pajak penghasilan atas jasa</p>
+                {includeVat && (
+                  <div className="flex items-center justify-between pl-8">
+                    <span className="text-slate-600 text-sm">Nilai PPN 11%</span>
+                    <span className="font-bold text-slate-900">{formatCurrency(vatAmount)}</span>
+                  </div>
+                )}
               </div>
-              <span className="font-semibold text-destructive">-{formatCurrency(pph23Amount)}</span>
             </div>
-            
-            <div className="flex items-center justify-between p-2 border-b">
-              <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">Biaya Tak Terduga</span>
-                <div className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded">
-                  <Input 
-                    type="number" 
-                    className="w-10 h-6 p-1 text-xs border-none bg-transparent" 
-                    value={contingencyRate}
-                    onChange={(e) => setContingencyRate(parseFloat(e.target.value) || 0)}
-                  />
-                  <Percent className="h-3 w-3" />
-                </div>
-              </div>
-              <span className="font-semibold text-amber-600">{formatCurrency(contingencyAmount)}</span>
-            </div>
-
-            <div className="flex items-center space-x-2 p-2">
-              <Checkbox 
-                id="include-vat" 
-                checked={includeVat} 
-                onCheckedChange={(checked) => setIncludeVat(!!checked)} 
-              />
-              <Label htmlFor="include-vat" className="text-muted-foreground cursor-pointer">
-                Sertakan PPN 11% (Standard Pajak)
-              </Label>
-            </div>
-            
-            {includeVat && (
-              <div className="flex items-center justify-between p-2 border-b">
-                <span className="text-muted-foreground font-medium">PPN 11% (dari Subtotal + BTT)</span>
-                <span className="font-semibold">{formatCurrency(vatAmount)}</span>
-              </div>
-            )}
           </div>
 
-          <div className="boq-accent-gradient rounded-xl p-8 text-white flex flex-col items-center justify-center text-center space-y-2 relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-4 opacity-10">
-              <Calculator className="h-24 w-24" />
-            </div>
-            <span className="text-sm opacity-80 uppercase tracking-widest font-semibold">Total Anggaran Keseluruhan</span>
-            <div className="text-4xl font-extrabold tracking-tight">
-              {formatCurrency(grandTotal)}
-            </div>
-            <div className="mt-6 pt-4 border-t border-white/20 w-full text-xs opacity-70">
-              <div className="flex justify-between">
-                <span>Netto ke Vendor Jasa (setelah PPh 23):</span>
-                <span>{formatCurrency(totalJasa - pph23Amount)}</span>
+          <div className="flex flex-col justify-center gap-4">
+            <div className="boq-accent-gradient rounded-3xl p-10 text-white flex flex-col items-center justify-center text-center space-y-4 relative overflow-hidden shadow-2xl">
+              <div className="absolute top-0 right-0 p-6 opacity-10">
+                <Calculator className="h-32 w-32" />
+              </div>
+              <span className="text-xs opacity-80 uppercase tracking-[0.2em] font-black">Total Anggaran Keseluruhan</span>
+              <div className="text-5xl font-black tracking-tight drop-shadow-lg">
+                {formatCurrency(grandTotal)}
+              </div>
+              <div className="mt-8 pt-6 border-t border-white/20 w-full text-sm opacity-80">
+                <div className="flex justify-between font-medium">
+                  <span>Netto Transfer Vendor Jasa:</span>
+                  <span className="font-bold">{formatCurrency(totalJasa - pph23Amount)}</span>
+                </div>
               </div>
             </div>
+            <p className="text-[10px] text-center text-muted-foreground uppercase tracking-widest font-bold">
+              Dokumen ini dihasilkan secara otomatis oleh Pembuat RAB AI
+            </p>
           </div>
         </div>
       </div>
