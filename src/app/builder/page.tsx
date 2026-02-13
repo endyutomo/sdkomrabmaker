@@ -1,7 +1,6 @@
-
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BoqTable } from "@/components/builder/boq-table";
 import { AiGenerator } from "@/components/builder/ai-generator";
 import { Button } from "@/components/ui/button";
@@ -22,8 +21,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
-import { useFirestore } from "@/firebase";
+import { useFirestore, useUser, useAuth } from "@/firebase";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { signInAnonymously } from "firebase/auth";
 
 export default function BuilderPage() {
   const [project, setProject] = useState<ProjectBoq>({
@@ -42,6 +42,15 @@ export default function BuilderPage() {
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
   const db = useFirestore();
+  const { user, isUserLoading } = useUser();
+  const auth = useAuth();
+
+  // Ensure user is signed in to satisfy security rules
+  useEffect(() => {
+    if (!isUserLoading && !user && auth) {
+      signInAnonymously(auth).catch(err => console.error("Anonymous sign-in failed:", err));
+    }
+  }, [user, isUserLoading, auth]);
 
   const handleUpdateProjectInfo = (updates: Partial<ProjectBoq>) => {
     setProject(prev => ({ ...prev, ...updates }));
@@ -132,10 +141,19 @@ export default function BuilderPage() {
   };
 
   const handleSaveProject = async () => {
-    if (!db) return;
+    if (!db || !user) {
+      toast({
+        variant: "destructive",
+        title: "Gagal Menyimpan",
+        description: "Anda harus masuk untuk menyimpan proyek.",
+      });
+      return;
+    }
+    
     setIsSaving(true);
     try {
-      const projectRef = doc(db, "projects", project.id);
+      // Align path with firestore.rules: /users/{userId}/projects/{projectId}
+      const projectRef = doc(db, "users", user.uid, "projects", project.id);
       await setDoc(projectRef, {
         ...project,
         updatedAt: serverTimestamp()
@@ -163,6 +181,14 @@ export default function BuilderPage() {
       description: "Menyiapkan file PDF dan Excel...",
     });
   };
+
+  if (isUserLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">

@@ -1,7 +1,6 @@
-
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -25,8 +24,7 @@ import {
   Store,
   Coins,
   Search,
-  History,
-  Check
+  History
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -45,7 +43,7 @@ import {
 import { suggestItemPrice } from "@/ai/flows/ai-price-suggestion";
 import { useToast } from "@/hooks/use-toast";
 import { collection, serverTimestamp, setDoc, doc } from "firebase/firestore";
-import { useFirestore, useCollection, useMemoFirebase } from "@/firebase";
+import { useFirestore, useCollection, useMemoFirebase, useUser } from "@/firebase";
 
 interface BoqTableProps {
   project: ProjectBoq;
@@ -72,22 +70,24 @@ export function BoqTable({
   const [loadingPriceId, setLoadingPriceId] = useState<string | null>(null);
   const { toast } = useToast();
   const db = useFirestore();
+  const { user } = useUser();
 
-  // Fetch catalog items for autocomplete
+  // Fetch catalog items for autocomplete from path /users/{userId}/historicalBoqItems
   const catalogQuery = useMemoFirebase(() => {
-    if (!db) return null;
-    return collection(db, "item_catalog");
-  }, [db]);
+    if (!db || !user) return null;
+    return collection(db, "users", user.uid, "historicalBoqItems");
+  }, [db, user]);
   const { data: catalogItems } = useCollection(catalogQuery);
 
   const categories = project.categories;
 
   const recordToCatalog = async (item: BoqItem) => {
-    if (!db || !item.name || item.name.includes("Baru") || item.unitPrice <= 0) return;
+    if (!db || !user || !item.name || item.name.includes("Baru") || item.unitPrice <= 0) return;
     
     try {
       const catalogId = item.name.toLowerCase().trim().replace(/\s+/g, '-');
-      const catalogRef = doc(db, "item_catalog", catalogId);
+      // Align path with firestore.rules: /users/{userId}/historicalBoqItems/{id}
+      const catalogRef = doc(db, "users", user.uid, "historicalBoqItems", catalogId);
       
       await setDoc(catalogRef, {
         name: item.name,
@@ -130,7 +130,6 @@ export function BoqTable({
   const totalBeforeTax = subTotal + contingencyAmount;
   
   const vatAmount = includeVat ? (totalBeforeTax * 11) / 100 : 0;
-  const pph23Amount = includePph23 ? (totalJasa * 2) / 100 : 0;
   
   const grandTotal = totalBeforeTax + vatAmount;
 
@@ -508,7 +507,7 @@ export function BoqTable({
                     <Checkbox id="include-pph23" checked={includePph23} onCheckedChange={(checked) => setIncludePph23(!!checked)} />
                     <Label htmlFor="include-pph23" className="text-slate-700 font-bold">PPh 23 (Potongan Jasa 2%)</Label>
                   </div>
-                  <span className="font-bold text-destructive">-{formatCurrency(pph23Amount)}</span>
+                  <span className="font-bold text-destructive">-{formatCurrency(includePph23 ? (totalJasa * 2) / 100 : 0)}</span>
                 </div>
               </div>
               
