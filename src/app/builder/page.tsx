@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -18,7 +17,9 @@ import {
   HardDrive,
   Wrench,
   Truck,
-  Loader2
+  Loader2,
+  FileSpreadsheet,
+  FileText
 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
@@ -26,6 +27,12 @@ import { useFirestore, useUser, useAuth } from "@/firebase";
 import { doc, setDoc, serverTimestamp, getDoc } from "firebase/firestore";
 import { signInAnonymously } from "firebase/auth";
 import { Logo } from "@/components/ui/logo";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function BuilderPage() {
   const searchParams = useSearchParams();
@@ -202,7 +209,6 @@ export default function BuilderPage() {
         description: `Proyek "${project.title}" telah direkam di database.`,
       });
       
-      // Update URL if it was a new project
       if (!projectIdFromUrl) {
         router.replace(`/builder?id=${project.id}`);
       }
@@ -218,10 +224,17 @@ export default function BuilderPage() {
     }
   };
 
-  const handleExport = () => {
+  const handlePrintPdf = () => {
+    // Memberikan jeda sedikit agar UI stabil sebelum dialog print muncul
+    setTimeout(() => {
+      window.print();
+    }, 500);
+  };
+
+  const handleExportExcel = () => {
     toast({
-      title: "Mengekspor RAB",
-      description: "Menyiapkan file PDF dan Excel...",
+      title: "Mengekspor ke Excel",
+      description: "Fitur ini sedang dalam pengembangan. Untuk saat ini silakan gunakan opsi PDF.",
     });
   };
 
@@ -238,7 +251,7 @@ export default function BuilderPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <header className="h-16 border-b bg-white flex items-center justify-between px-6 sticky top-0 z-30 shadow-sm">
+      <header className="h-16 border-b bg-white flex items-center justify-between px-6 sticky top-0 z-30 shadow-sm no-print">
         <div className="flex items-center gap-4">
           <Link href="/dashboard">
             <Button variant="ghost" size="icon" className="text-muted-foreground">
@@ -257,9 +270,22 @@ export default function BuilderPage() {
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={handleExport}>
-            <FileDown className="h-4 w-4 mr-2" /> Ekspor
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <FileDown className="h-4 w-4 mr-2" /> Ekspor RAB
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuItem onClick={handlePrintPdf} className="cursor-pointer">
+                <FileText className="h-4 w-4 mr-2 text-red-500" /> Simpan sebagai PDF
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleExportExcel} className="cursor-pointer">
+                <FileSpreadsheet className="h-4 w-4 mr-2 text-green-600" /> Ekspor ke Excel (.xlsx)
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <Button 
             className="boq-accent-gradient h-9 text-white font-bold"
             onClick={handleSaveProject}
@@ -272,7 +298,7 @@ export default function BuilderPage() {
       </header>
 
       <div className="flex-1 flex overflow-hidden">
-        <aside className="w-80 border-r bg-white p-6 space-y-8 overflow-y-auto hidden lg:block">
+        <aside className="w-80 border-r bg-white p-6 space-y-8 overflow-y-auto hidden lg:block no-print">
           <AiGenerator onSuggest={handleAiSuggest} />
           
           <div className="space-y-4">
@@ -299,19 +325,16 @@ export default function BuilderPage() {
                 <LayoutDashboard className="h-4 w-4 mr-2" /> Proyek Saya
               </Button>
             </Link>
-            <Button variant="ghost" className="w-full justify-start text-muted-foreground font-bold">
-              <History className="h-4 w-4 mr-2" /> Riwayat Versi
-            </Button>
-            <Button variant="ghost" className="w-full justify-start text-muted-foreground font-bold">
+            <Button variant="ghost" className="w-full justify-start text-muted-foreground font-bold" onClick={handlePrintPdf}>
               <Printer className="h-4 w-4 mr-2" /> Pratinjau Cetak
             </Button>
           </div>
         </aside>
 
-        <main className="flex-1 overflow-y-auto p-8 lg:p-12 bg-slate-50/50">
+        <main className="flex-1 overflow-y-auto p-8 lg:p-12 bg-slate-50/50 print:p-0 print:bg-white">
           <div className="max-w-6xl mx-auto">
             {project.categories.length === 0 ? (
-              <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6 animate-fade-in-up">
+              <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6 animate-fade-in-up no-print">
                 <div className="w-20 h-20 bg-primary/5 rounded-2xl flex items-center justify-center text-primary rotate-3">
                   <Logo className="h-10 w-10 opacity-40" />
                 </div>

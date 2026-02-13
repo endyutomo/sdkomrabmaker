@@ -85,3 +85,64 @@
 .boq-accent-gradient {
   background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
 }
+
+@media print {
+  /* Sembunyikan semua elemen UI kecuali konten utama */
+  header, aside, .no-print, button, .dropdown-menu, .popover, [role="combobox"] {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    padding: 0 !important;
+  }
+
+  main {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .max-w-6xl {
+    max-width: 100% !important;
+  }
+
+  /* Hilangkan border radius dan bayangan untuk penghematan tinta & kebersihan */
+  .rounded-2xl, .rounded-xl, .shadow-sm, .shadow-xl {
+    border-radius: 0 !important;
+    shadow: none !important;
+    border-color: #eee !important;
+  }
+
+  /* Pastikan tabel memenuhi halaman */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  th, td {
+    border: 1px solid #ddd !important;
+    color: black !important;
+  }
+
+  /* Warna aksen untuk cetakan agar tidak terlalu boros tinta */
+  .bg-slate-50, .bg-primary\/5, .bg-emerald-50 {
+    background-color: transparent !important;
+    border-bottom: 2px solid #333 !important;
+  }
+
+  .text-primary, .text-accent {
+    color: black !important;
+  }
+
+  .boq-accent-gradient {
+    background: #f8f8f8 !important;
+    color: black !important;
+    border: 1px solid #000 !important;
+  }
+
+  /* Pastikan input tidak terlihat seperti box input */
+  input {
+    border: none !important;
+    padding: 0 !important;
+  }
+}
