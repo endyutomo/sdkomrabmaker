@@ -85,7 +85,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between mb-10">
           <div>
             <h1 className="text-4xl font-black text-primary mb-2">Proyek Saya</h1>
-            <p className="text-muted-foreground">Kelola dan buka kembali dokumen RAB yang telah Anda buat.</p>
+            <p className="text-muted-foreground">Kelola dan buka kembali dokumen RAB yang telah Anda buat dengan SDKOM RAB MAker.</p>
           </div>
         </div>
 
@@ -96,7 +96,7 @@ export default function DashboardPage() {
             </div>
             <div className="space-y-2">
               <h3 className="text-xl font-bold text-slate-900">Belum ada proyek</h3>
-              <p className="text-slate-500 max-w-sm">Mulai buat Rencana Anggaran Biaya (RAB) pertama Anda menggunakan bantuan AI.</p>
+              <p className="text-slate-500 max-w-sm">Mulai buat Rencana Anggaran Biaya (RAB) pertama Anda menggunakan bantuan AI SDKOM RAB MAker.</p>
             </div>
             <Link href="/builder">
               <Button size="lg" className="boq-accent-gradient px-10 h-12 text-lg font-bold">

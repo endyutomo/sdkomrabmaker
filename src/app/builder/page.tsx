@@ -206,7 +206,7 @@ export default function BuilderPage() {
       
       toast({
         title: "Proyek Berhasil Disimpan",
-        description: `Proyek "${project.title}" telah direkam di database.`,
+        description: `Proyek "${project.title}" telah direkam di database SDKOM RAB MAker.`,
       });
       
       if (!projectIdFromUrl) {
@@ -234,7 +234,7 @@ export default function BuilderPage() {
   const handleExportExcel = () => {
     toast({
       title: "Mengekspor ke Excel",
-      description: "Fitur ini sedang dalam pengembangan. Untuk saat ini silakan gunakan opsi PDF.",
+      description: "Fitur ini sedang dalam pengembangan. Untuk saat ini silakan gunakan opsi PDF SDKOM RAB MAker.",
     });
   };
 
@@ -243,7 +243,7 @@ export default function BuilderPage() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-10 w-10 animate-spin text-primary" />
-          <p className="text-slate-500 font-medium animate-pulse">Memuat data proyek...</p>
+          <p className="text-slate-500 font-medium animate-pulse">Memuat data SDKOM RAB MAker...</p>
         </div>
       </div>
     );
@@ -341,7 +341,7 @@ export default function BuilderPage() {
                 <div className="space-y-2">
                   <h2 className="text-2xl font-bold text-primary">Siap Menyusun RAB?</h2>
                   <p className="text-muted-foreground max-w-sm">
-                    Gunakan panel samping untuk menambah kategori perangkat dan jasa secara cepat, atau biarkan AI kami memberikan saran item yang relevan.
+                    Gunakan panel samping untuk menambah kategori perangkat dan jasa secara cepat, atau biarkan AI SDKOM RAB MAker memberikan saran item yang relevan.
                   </p>
                 </div>
                 <div className="flex gap-4">
