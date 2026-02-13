@@ -1,0 +1,287 @@
+{
+  "entities": {
+    "Project": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Project",
+      "type": "object",
+      "description": "Represents a single Bill of Quantities (BOQ) project, containing general information and metadata.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Project entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the BOQ project."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the BOQ project."
+        },
+        "projectType": {
+          "type": "string",
+          "description": "The type or category of the project (e.g., 'Residential', 'Commercial', 'Infrastructure'), useful for AI suggestions."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the project was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the project was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "projectType",
+        "createdAt"
+      ]
+    },
+    "Vendor": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Vendor",
+      "type": "object",
+      "description": "Stores information about material or service vendors that can be referenced by historical BOQ items.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Vendor entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The official name of the vendor company."
+        },
+        "contactPerson": {
+          "type": "string",
+          "description": "The name of the primary contact person at the vendor."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address for vendor correspondence.",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "description": "The primary phone number for the vendor."
+        },
+        "address": {
+          "type": "string",
+          "description": "The physical address of the vendor."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Any additional internal notes or remarks about the vendor."
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "HistoricalBoqItemReference": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "HistoricalBoqItemReference",
+      "type": "object",
+      "description": "A master catalog of frequently used Bill of Quantities items, storing historical pricing and vendor information for reuse in new projects.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the HistoricalBoqItemReference entity."
+        },
+        "standardDescription": {
+          "type": "string",
+          "description": "The standard description of the BOQ item (e.g., 'Concrete K-250', 'Ceramic Tile 30x30')."
+        },
+        "standardUnit": {
+          "type": "string",
+          "description": "The standard unit of measure for this item (e.g., 'm3', 'pcs', 'kg')."
+        },
+        "category": {
+          "type": "string",
+          "description": "A broader category for the item, helping with organization and filtering in the master catalog."
+        },
+        "lastUnitPrice": {
+          "type": "number",
+          "description": "The most recently recorded unit price for this item."
+        },
+        "lastUpdatedAt": {
+          "type": "string",
+          "description": "Timestamp when the last unit price was recorded or updated.",
+          "format": "date-time"
+        },
+        "vendorId": {
+          "type": "string",
+          "description": "Reference to the Vendor associated with the last known unit price for this item. (Relationship: Vendor 1:N HistoricalBoqItemReference)"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Any additional notes or common usage information for this historical item."
+        }
+      },
+      "required": [
+        "id",
+        "standardDescription",
+        "standardUnit",
+        "lastUnitPrice",
+        "lastUpdatedAt",
+        "vendorId"
+      ]
+    },
+    "BoqItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "BoqItem",
+      "type": "object",
+      "description": "Represents a single line item within a specific Bill of Quantities project, including its details, cost, and potential links to historical data.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the BoqItem entity."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Reference to the Project this BOQ item belongs to. (Relationship: Project 1:N BoqItem)"
+        },
+        "itemGroup": {
+          "type": "string",
+          "description": "The category or group this item belongs to within the project's BOQ (e.g., 'Foundation', 'Structure'). Can be AI-suggested."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the BOQ item as it appears in the current project."
+        },
+        "unit": {
+          "type": "string",
+          "description": "The unit of measure for this item (e.g., 'm2', 'pcs')."
+        },
+        "quantity": {
+          "type": "number",
+          "description": "The quantity required for this item."
+        },
+        "unitPrice": {
+          "type": "number",
+          "description": "The price per unit for this item in the current project."
+        },
+        "totalCost": {
+          "type": "number",
+          "description": "The calculated total cost for this item (quantity * unitPrice)."
+        },
+        "historicalBoqItemReferenceId": {
+          "type": "string",
+          "description": "Optional reference to a HistoricalBoqItemReference if this item was selected or derived from the master catalog. (Relationship: HistoricalBoqItemReference 1:N BoqItem)"
+        },
+        "isSuggestedByAI": {
+          "type": "boolean",
+          "description": "Indicates whether this BOQ item was initially suggested by the AI-Powered Item Suggestion feature."
+        }
+      },
+      "required": [
+        "id",
+        "projectId",
+        "itemGroup",
+        "description",
+        "unit",
+        "quantity",
+        "unitPrice",
+        "totalCost"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}/projects/{projectId}",
+        "definition": {
+          "entityName": "Project",
+          "schema": {
+            "$ref": "#/backend/entities/Project"
+          },
+          "description": "Represents a single Bill of Quantities (BOQ) project, owned by a specific user. Includes denormalized 'ownerId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns this project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique identifier for the Project entity."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/projects/{projectId}/boqItems/{boqItemId}",
+        "definition": {
+          "entityName": "BoqItem",
+          "schema": {
+            "$ref": "#/backend/entities/BoqItem"
+          },
+          "description": "Represents a single line item within a specific BOQ project. Includes denormalized 'ownerId' (from parent project) and 'projectId' for authorization independence and QAPs.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the parent project."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique identifier of the parent Project this BOQ item belongs to."
+            },
+            {
+              "name": "boqItemId",
+              "description": "The unique identifier for the BoqItem entity."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/vendors/{vendorId}",
+        "definition": {
+          "entityName": "Vendor",
+          "schema": {
+            "$ref": "#/backend/entities/Vendor"
+          },
+          "description": "Stores information about material or service vendors specific to a user. Includes denormalized 'ownerId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns this vendor record."
+            },
+            {
+              "name": "vendorId",
+              "description": "The unique identifier for the Vendor entity."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/historicalBoqItems/{historicalBoqItemId}",
+        "definition": {
+          "entityName": "HistoricalBoqItemReference",
+          "schema": {
+            "$ref": "#/backend/entities/HistoricalBoqItemReference"
+          },
+          "description": "A master catalog of frequently used Bill of Quantities items, storing historical pricing and vendor information for reuse in new projects, specific to a user. Includes denormalized 'ownerId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns this historical BOQ item reference."
+            },
+            {
+              "name": "historicalBoqItemId",
+              "description": "The unique identifier for the HistoricalBoqItemReference entity."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to fulfill the user's request for a quickly generatable Bill of Quantities (BOQ) while adhering to strict security, scalability, and debuggability principles. The core of the design revolves around user-scoped data and the creation of a 'historical' master catalog for each user.\n\n**Authorization Independence (CRITICAL):**\n1.  **User-Scoped Collections:** All primary data (Projects, Vendors, Historical BOQ Items) are nested directly under `/users/{userId}/`. This immediately ties ownership to the authenticated user (`request.auth.uid`), eliminating the need for complex `get()` calls to determine access for top-level entities. For example, a user can only access their own `/users/{userId}/projects/{projectId}` if `request.auth.uid == userId`.\n2.  **Denormalized Ownership for Subcollections:** For `BoqItem` documents, which are nested under `Project` (e.g., `/users/{userId}/projects/{projectId}/boqItems/{boqItemId}`), the `ownerId` (copied from the parent `Project`'s owner) is explicitly stored within each `BoqItem` document. Additionally, the `projectId` is also stored within each `BoqItem`. This means security rules for `BoqItem` can directly check `resource.data.ownerId == request.auth.uid` and `resource.data.projectId == projectId` (from the path wildcards), without needing to perform a `get()` operation on the parent `Project` document. This allows atomic creation of projects and their initial items and greatly simplifies security rules and debugging.\n\n**Queryable Authorization Paths (QAPs):**\n1.  **Direct User Access:** By scoping all main collections under `/users/{userId}/`, a user can directly query for all their projects (`/users/{userId}/projects`), vendors (`/users/{userId}/vendors`), or historical BOQ items (`/users/{userId}/historicalBoqItems`). Firebase security rules can enforce that `userId` in the path must match `request.auth.uid`, ensuring that `list` operations implicitly filter for the authenticated user's data.\n2.  **Efficient Subcollection Queries:** When viewing items within a specific project, querying `/users/{userId}/projects/{projectId}/boqItems` automatically restricts results to the current user and project. The denormalized `ownerId` and `projectId` within `BoqItem` documents further reinforce security and enable efficient indexing and filtering without relying on `get()` in rules.\n3.  **Historical Item Catalog:** The `/users/{userId}/historicalBoqItems` collection directly addresses the user's need to "
+  }
+}

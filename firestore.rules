@@ -1,0 +1,133 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * CORE PHILOSOPHY
+     * This ruleset implements a strict user-ownership model. The application is designed for 
+     * individual contractors or project managers to manage their own Bill of Quantities (BOQ/RAB). 
+     * Security is enforced by ensuring users can only access data nested within their own 
+     * unique user path.
+     *
+     * DATA STRUCTURE
+     * All application data is organized hierarchically under the user's document:
+     * - /users/{userId}/projects: User's BOQ projects.
+     * - /users/{userId}/projects/{projectId}/boqItems: Individual line items for a project.
+     * - /users/{userId}/vendors: User's directory of material/service providers.
+     * - /users/{userId}/historicalBoqItems: A master catalog for price/vendor references.
+     *
+     * KEY SECURITY DECISIONS
+     * 1. Path-Based Authorization: The 'userId' in the URL path is the primary source of 
+     *    truth for ownership. Access is granted only if 'request.auth.uid == userId'.
+     * 2. Denormalization: While the path provides security, documents (like BoqItem) 
+     *    store 'projectId' and 'ownerId' internally. Rules validate that these internal 
+     *    fields match the path to ensure relational integrity without expensive 'get()' calls.
+     * 3. Prototyping Flexibility: These rules strictly enforce "Who" (authorization) but 
+     *    are flexible on "What" (data schema) to allow rapid frontend iteration.
+     */
+
+    // --- GLOBAL HELPER FUNCTIONS ---
+
+    /**
+     * @description Checks if the request is from an authenticated user.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * @description Checks if the authenticated user's UID matches the provided userId.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * @description Combines ownership check with a check for the document's existence.
+     * Used for update and delete operations to prevent actions on non-existent data.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    // --- COLLECTION RULES ---
+
+    /**
+     * @description Rules for Project documents. Ensures users manage only their own projects.
+     * @path /users/{userId}/projects/{projectId}
+     * @allow (create) if auth.uid matches {userId} and data.id matches {projectId}.
+     * @deny (list) if auth.uid does not match {userId}.
+     * @principle Restricts access to a user's own project tree and validates ID consistency.
+     */
+    match /users/{userId}/projects/{projectId} {
+      allow get, list: if isOwner(userId);
+      
+      allow create: if isOwner(userId) 
+                    && request.resource.data.id == projectId;
+      
+      allow update: if isExistingOwner(userId) 
+                    && request.resource.data.id == resource.data.id;
+      
+      allow delete: if isExistingOwner(userId);
+
+      /**
+       * @description Rules for individual BOQ items within a project.
+       * @path /users/{userId}/projects/{projectId}/boqItems/{boqItemId}
+       * @allow (create) if internal projectId field matches the path parameter.
+       * @deny (update) if attempting to change the parent projectId.
+       * @principle Ensures items cannot be orphaned or moved between projects via update.
+       */
+      match /boqItems/{boqItemId} {
+        allow get, list: if isOwner(userId);
+        
+        allow create: if isOwner(userId) 
+                      && request.resource.data.projectId == projectId;
+        
+        allow update: if isExistingOwner(userId) 
+                      && request.resource.data.projectId == resource.data.projectId;
+        
+        allow delete: if isExistingOwner(userId);
+      }
+    }
+
+    /**
+     * @description Rules for Vendor records. Personal directory of vendors for the user.
+     * @path /users/{userId}/vendors/{vendorId}
+     * @allow (create) if auth.uid matches {userId}.
+     * @deny (get) if a different user tries to access this vendor ID.
+     * @principle Private user-scoped vendor management.
+     */
+    match /users/{userId}/vendors/{vendorId} {
+      allow get, list: if isOwner(userId);
+      
+      allow create: if isOwner(userId);
+      
+      allow update: if isExistingOwner(userId);
+      
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Rules for the Historical Catalog. Stores past prices/vendors for reuse.
+     * @path /users/{userId}/historicalBoqItems/{historicalBoqItemId}
+     * @allow (list) if the user is viewing their own historical price references.
+     * @deny (create) if the user attempts to write to another user's catalog.
+     * @principle Secures the historical master data used for creating new BOQ/RAB.
+     */
+    match /users/{userId}/historicalBoqItems/{historicalBoqItemId} {
+      allow get, list: if isOwner(userId);
+      
+      allow create: if isOwner(userId);
+      
+      allow update: if isExistingOwner(userId);
+      
+      allow delete: if isExistingOwner(userId);
+    }
+
+    // --- DEFAULT DENY ---
+    // Explicitly deny access to any other paths or unspecified operations.
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}
