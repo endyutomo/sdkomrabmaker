@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { BoqTable } from "@/components/builder/boq-table";
 import { AiGenerator } from "@/components/builder/ai-generator";
@@ -41,7 +41,7 @@ import {
 } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 
-export default function BuilderPage() {
+function BuilderContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const projectIdFromUrl = searchParams.get("id");
