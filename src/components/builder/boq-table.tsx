@@ -231,9 +231,9 @@ export function BoqTable({
                   <TableHead className="w-[50px] text-center">Tipe</TableHead>
                   <TableHead className="min-w-[300px]">Uraian Pekerjaan & Spesifikasi</TableHead>
                   <TableHead className="w-[120px]">Satuan</TableHead>
-                  <TableHead className="w-[100px] text-right">Vol</TableHead>
-                  <TableHead className="w-[180px] text-right">Harga Satuan (Rp)</TableHead>
-                  <TableHead className="w-[180px] text-right">Total (Rp)</TableHead>
+                  <TableHead className="w-[140px] text-right">Volume (Qty)</TableHead>
+                  <TableHead className="w-[200px] text-right">Harga Satuan (Rp)</TableHead>
+                  <TableHead className="w-[200px] text-right">Total (Rp)</TableHead>
                   <TableHead className="w-[200px]">Referensi Vendor</TableHead>
                   <TableHead className="w-[80px] text-center">AI</TableHead>
                   <TableHead className="w-[50px]"></TableHead>
@@ -275,7 +275,7 @@ export function BoqTable({
                     <TableCell>
                       <Input
                         type="number"
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 text-right font-medium px-2 -ml-2"
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 text-right font-medium px-2 -ml-2 w-full"
                         value={item.quantity}
                         onChange={(e) => onUpdateItem(category.id, item.id, { quantity: parseFloat(e.target.value) || 0 })}
                       />
@@ -283,7 +283,7 @@ export function BoqTable({
                     <TableCell>
                       <Input
                         type="number"
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 text-right font-bold text-slate-800 px-2 -ml-2"
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-9 text-right font-bold text-slate-800 px-2 -ml-2 w-full"
                         value={item.unitPrice}
                         onChange={(e) => onUpdateItem(category.id, item.id, { unitPrice: parseFloat(e.target.value) || 0 })}
                       />
