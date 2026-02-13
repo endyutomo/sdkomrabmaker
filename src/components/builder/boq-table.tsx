@@ -210,7 +210,7 @@ export function BoqTable({
                 value={category.name}
                 onChange={(e) => onUpdateCategory(category.id, { name: e.target.value })}
               />
-              <Badge variant="outline" className="hidden lg:inline-flex bg-white px-4 py-2 text-base font-bold shadow-sm text-primary">
+              <Badge variant="outline" className="hidden lg:inline-flex bg-white px-4 py-2 text-base font-bold shadow-sm text-primary whitespace-nowrap">
                 Sub-total: {formatCurrency(category.items.reduce((s, i) => s + (i.quantity * i.unitPrice), 0))}
               </Badge>
             </div>
@@ -225,16 +225,16 @@ export function BoqTable({
           </div>
           
           <div className="overflow-x-auto">
-            <Table>
+            <Table className="table-auto w-full">
               <TableHeader>
                 <TableRow className="bg-slate-50/50 hover:bg-slate-50/50">
-                  <TableHead className="w-[60px] text-center">Tipe</TableHead>
-                  <TableHead className="min-w-[600px]">Uraian Pekerjaan & Spesifikasi</TableHead>
-                  <TableHead className="w-[120px]">Satuan</TableHead>
-                  <TableHead className="w-[140px] text-right">Vol (Qty)</TableHead>
-                  <TableHead className="w-[320px] text-right">Harga Satuan (Rp)</TableHead>
-                  <TableHead className="w-[280px] text-right">Total (Rp)</TableHead>
-                  <TableHead className="w-[250px]">Referensi Vendor</TableHead>
+                  <TableHead className="w-[60px] text-center whitespace-nowrap">Tipe</TableHead>
+                  <TableHead className="min-w-[400px]">Uraian Pekerjaan & Spesifikasi</TableHead>
+                  <TableHead className="w-auto whitespace-nowrap">Satuan</TableHead>
+                  <TableHead className="w-auto text-right whitespace-nowrap">Vol (Qty)</TableHead>
+                  <TableHead className="w-auto text-right whitespace-nowrap">Harga Satuan (Rp)</TableHead>
+                  <TableHead className="w-auto text-right whitespace-nowrap">Total (Rp)</TableHead>
+                  <TableHead className="min-w-[200px]">Referensi Vendor</TableHead>
                   <TableHead className="w-[80px] text-center">AI</TableHead>
                   <TableHead className="w-[50px]"></TableHead>
                 </TableRow>
@@ -250,9 +250,9 @@ export function BoqTable({
                       )}
                     </TableCell>
                     <TableCell>
-                      <div className="flex flex-col gap-1 pr-4">
+                      <div className="flex flex-col gap-1">
                         <Input
-                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 font-medium text-slate-900 transition-all px-3 -ml-2 text-base"
+                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 font-medium text-slate-900 transition-all px-3 -ml-2 text-base w-full"
                           value={item.name}
                           placeholder="Ketik nama item atau deskripsi pekerjaan..."
                           onChange={(e) => onUpdateItem(category.id, item.id, { name: e.target.value })}
@@ -266,16 +266,16 @@ export function BoqTable({
                     </TableCell>
                     <TableCell>
                       <Input
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-slate-600 px-3 -ml-2"
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-slate-600 px-3 -ml-2 w-full min-w-[80px]"
                         value={item.unit}
-                        placeholder="Unit/Lot/Titik"
+                        placeholder="Satuan"
                         onChange={(e) => onUpdateItem(category.id, item.id, { unit: e.target.value })}
                       />
                     </TableCell>
                     <TableCell>
                       <Input
                         type="number"
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-medium px-3 -ml-2 w-full text-base"
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-medium px-3 -ml-2 w-full text-base min-w-[80px]"
                         value={item.quantity}
                         onChange={(e) => onUpdateItem(category.id, item.id, { quantity: parseFloat(e.target.value) || 0 })}
                       />
@@ -283,19 +283,19 @@ export function BoqTable({
                     <TableCell>
                       <Input
                         type="number"
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-bold text-slate-800 px-3 -ml-2 w-full text-base"
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-bold text-slate-800 px-3 -ml-2 w-full text-base min-w-[150px]"
                         value={item.unitPrice}
                         onChange={(e) => onUpdateItem(category.id, item.id, { unitPrice: parseFloat(e.target.value) || 0 })}
                       />
                     </TableCell>
-                    <TableCell className="text-right font-bold text-primary text-base whitespace-nowrap px-4">
+                    <TableCell className="text-right font-bold text-primary text-base whitespace-nowrap px-4 min-w-[150px]">
                       {formatCurrency(item.quantity * item.unitPrice)}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Store className="h-4 w-4 text-muted-foreground shrink-0" />
                         <Input
-                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-sm text-slate-600 px-3 -ml-1"
+                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-sm text-slate-600 px-3 -ml-1 w-full"
                           value={item.vendorName || ""}
                           placeholder="Nama Toko / Vendor..."
                           onChange={(e) => onUpdateItem(category.id, item.id, { vendorName: e.target.value })}
