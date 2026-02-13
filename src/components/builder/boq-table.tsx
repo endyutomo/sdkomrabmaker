@@ -229,11 +229,11 @@ export function BoqTable({
               <TableHeader>
                 <TableRow className="bg-slate-50/50 hover:bg-slate-50/50">
                   <TableHead className="w-[60px] text-center">Tipe</TableHead>
-                  <TableHead className="min-w-[500px]">Uraian Pekerjaan & Spesifikasi</TableHead>
+                  <TableHead className="min-w-[600px]">Uraian Pekerjaan & Spesifikasi</TableHead>
                   <TableHead className="w-[120px]">Satuan</TableHead>
-                  <TableHead className="w-[140px] text-right">Volume (Qty)</TableHead>
-                  <TableHead className="w-[250px] text-right">Harga Satuan (Rp)</TableHead>
-                  <TableHead className="w-[220px] text-right">Total (Rp)</TableHead>
+                  <TableHead className="w-[140px] text-right">Vol (Qty)</TableHead>
+                  <TableHead className="w-[320px] text-right">Harga Satuan (Rp)</TableHead>
+                  <TableHead className="w-[280px] text-right">Total (Rp)</TableHead>
                   <TableHead className="w-[250px]">Referensi Vendor</TableHead>
                   <TableHead className="w-[80px] text-center">AI</TableHead>
                   <TableHead className="w-[50px]"></TableHead>
@@ -288,7 +288,7 @@ export function BoqTable({
                         onChange={(e) => onUpdateItem(category.id, item.id, { unitPrice: parseFloat(e.target.value) || 0 })}
                       />
                     </TableCell>
-                    <TableCell className="text-right font-bold text-primary text-base whitespace-nowrap">
+                    <TableCell className="text-right font-bold text-primary text-base whitespace-nowrap px-4">
                       {formatCurrency(item.quantity * item.unitPrice)}
                     </TableCell>
                     <TableCell>
