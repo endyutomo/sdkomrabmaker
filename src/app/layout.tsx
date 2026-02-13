@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { FirebaseClientProvider } from "@/firebase/client-provider";
 
 export const metadata: Metadata = {
-  title: 'Pembuat RAB | RAB Berbasis AI',
+  title: 'SDKOM RAB MAker | RAB Berbasis AI',
   description: 'Buat Rencana Anggaran Biaya (RAB) profesional dengan cepat menggunakan AI Generatif. Alat estimasi konstruksi profesional.',
 };
 

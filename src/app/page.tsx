@@ -21,7 +21,7 @@ export default function Home() {
             <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
               <FileText className="h-5 w-5 text-white" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-primary">Pembuat RAB</span>
+            <span className="text-xl font-bold tracking-tight text-primary">SDKOM RAB MAker</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
             <a href="#features" className="hover:text-primary transition-colors">Fitur</a>
@@ -77,7 +77,7 @@ export default function Home() {
                <div className="bg-slate-50 rounded-xl overflow-hidden aspect-[4/3] flex items-center justify-center">
                   <img 
                     src="https://picsum.photos/seed/boq/800/600" 
-                    alt="Antarmuka Pembuat RAB" 
+                    alt="Antarmuka SDKOM RAB MAker" 
                     className="w-full h-full object-cover opacity-80"
                     data-ai-hint="construction dashboard"
                   />
@@ -147,7 +147,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-6 text-center space-y-8 relative z-10">
           <h2 className="text-4xl font-bold">Siap untuk mempercepat alur kerja Anda?</h2>
           <p className="text-primary-foreground/80 text-lg">
-            Bergabunglah dengan ribuan profesional yang telah beralih dari spreadsheet manual ke efisiensi Pembuat RAB.
+            Bergabunglah dengan ribuan profesional yang telah beralih dari spreadsheet manual ke efisiensi SDKOM RAB MAker.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link href="/builder">
@@ -169,7 +169,7 @@ export default function Home() {
             <div className="h-6 w-6 bg-primary rounded flex items-center justify-center">
               <FileText className="h-4 w-4 text-white" />
             </div>
-            <span className="text-lg font-bold text-primary">Pembuat RAB</span>
+            <span className="text-lg font-bold text-primary">SDKOM RAB MAker</span>
           </div>
           <div className="flex gap-8 text-sm text-muted-foreground">
             <a href="#" className="hover:text-primary">Syarat & Ketentuan</a>
@@ -178,7 +178,7 @@ export default function Home() {
             <a href="#" className="hover:text-primary">Kontak</a>
           </div>
           <p className="text-sm text-muted-foreground">
-            © 2024 Pembuat RAB. Hak cipta dilindungi undang-undang.
+            © 2024 SDKOM RAB MAker. Hak cipta dilindungi undang-undang.
           </p>
         </div>
       </footer>
