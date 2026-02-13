@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState } from "react";
@@ -16,26 +17,31 @@ import {
   History,
   HardDrive,
   Wrench,
-  Truck
+  Truck,
+  Loader2
 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
+import { useFirestore } from "@/firebase";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export default function BuilderPage() {
   const [project, setProject] = useState<ProjectBoq>({
-    id: "draft",
+    id: `proj-${Date.now()}`,
     title: "Draft RAB Baru",
     type: "",
     specifications: "",
     categories: [],
     createdAt: new Date().toISOString(),
-    clientName: "Nama Klien / Perusahaan",
+    clientName: "",
     documentNumber: `RAB/${new Date().getFullYear()}/001`,
-    projectLocation: "Lokasi Proyek",
+    projectLocation: "",
     documentDate: new Date().toISOString().split('T')[0],
   });
   
+  const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
+  const db = useFirestore();
 
   const handleUpdateProjectInfo = (updates: Partial<ProjectBoq>) => {
     setProject(prev => ({ ...prev, ...updates }));
@@ -125,6 +131,32 @@ export default function BuilderPage() {
     });
   };
 
+  const handleSaveProject = async () => {
+    if (!db) return;
+    setIsSaving(true);
+    try {
+      const projectRef = doc(db, "projects", project.id);
+      await setDoc(projectRef, {
+        ...project,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      
+      toast({
+        title: "Proyek Berhasil Disimpan",
+        description: `Proyek "${project.title}" telah direkam di database.`,
+      });
+    } catch (error) {
+      console.error("Gagal menyimpan proyek:", error);
+      toast({
+        variant: "destructive",
+        title: "Gagal Menyimpan",
+        description: "Terjadi kesalahan saat menyimpan ke database.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const handleExport = () => {
     toast({
       title: "Mengekspor RAB",
@@ -153,8 +185,13 @@ export default function BuilderPage() {
           <Button variant="outline" size="sm" onClick={handleExport}>
             <FileDown className="h-4 w-4 mr-2" /> Ekspor
           </Button>
-          <Button className="boq-accent-gradient h-9 text-white font-semibold">
-            <Save className="h-4 w-4 mr-2" /> Simpan Proyek
+          <Button 
+            className="boq-accent-gradient h-9 text-white font-semibold"
+            onClick={handleSaveProject}
+            disabled={isSaving}
+          >
+            {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+            Simpan Proyek
           </Button>
         </div>
       </header>

@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,9 +23,10 @@ import {
   FileText,
   Percent,
   Store,
-  TrendingUp,
   Coins,
-  History
+  Search,
+  History,
+  Check
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -36,10 +37,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { suggestItemPrice } from "@/ai/flows/ai-price-suggestion";
 import { useToast } from "@/hooks/use-toast";
-import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp, setDoc, doc } from "firebase/firestore";
-import { useFirestore } from "@/firebase";
+import { collection, serverTimestamp, setDoc, doc } from "firebase/firestore";
+import { useFirestore, useCollection, useMemoFirebase } from "@/firebase";
 
 interface BoqTableProps {
   project: ProjectBoq;
@@ -67,15 +73,20 @@ export function BoqTable({
   const { toast } = useToast();
   const db = useFirestore();
 
+  // Fetch catalog items for autocomplete
+  const catalogQuery = useMemoFirebase(() => {
+    if (!db) return null;
+    return collection(db, "item_catalog");
+  }, [db]);
+  const { data: catalogItems } = useCollection(catalogQuery);
+
   const categories = project.categories;
 
-  // Fungsi untuk merekam item ke katalog Firestore (Upsert berdasarkan nama)
   const recordToCatalog = async (item: BoqItem) => {
-    if (!db || !item.name || item.unitPrice <= 0) return;
+    if (!db || !item.name || item.name.includes("Baru") || item.unitPrice <= 0) return;
     
     try {
-      // Kita gunakan ID yang stabil atau slug nama untuk katalog agar tidak duplikat
-      const catalogId = item.name.toLowerCase().replace(/\s+/g, '-');
+      const catalogId = item.name.toLowerCase().trim().replace(/\s+/g, '-');
       const catalogRef = doc(db, "item_catalog", catalogId);
       
       await setDoc(catalogRef, {
@@ -160,7 +171,6 @@ export function BoqTable({
         description: `Menggunakan harga aman (high-end) dari ${result.sourceName}.`
       });
 
-      // Simpan otomatis ke katalog setelah dapat harga AI
       recordToCatalog({
         ...item,
         unitPrice: result.suggestedPrice,
@@ -176,6 +186,20 @@ export function BoqTable({
     } finally {
       setLoadingPriceId(null);
     }
+  };
+
+  const handleSelectFromCatalog = (categoryId: string, itemId: string, catalogItem: any) => {
+    onUpdateItem(categoryId, itemId, {
+      name: catalogItem.name,
+      unit: catalogItem.unit,
+      unitPrice: catalogItem.unitPrice,
+      type: catalogItem.type,
+      vendorName: catalogItem.vendorName
+    });
+    toast({
+      title: "Item Dimuat dari Katalog",
+      description: `${catalogItem.name} berhasil diterapkan.`
+    });
   };
 
   return (
@@ -284,7 +308,7 @@ export function BoqTable({
                   <TableHead className="w-[120px] text-right">Margin (%)</TableHead>
                   <TableHead className="w-[280px] text-right">Total Jual (Rp)</TableHead>
                   <TableHead className="min-w-[250px]">Referensi Vendor</TableHead>
-                  <TableHead className="w-[100px] text-center">Saran AI</TableHead>
+                  <TableHead className="w-[100px] text-center">Aksi</TableHead>
                   <TableHead className="w-[50px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -298,14 +322,48 @@ export function BoqTable({
                         <UserCog className="h-5 w-5 text-accent opacity-60 mx-auto" />
                       )}
                     </TableCell>
-                    <TableCell>
-                      <Input
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 font-medium text-slate-900 transition-all px-3 -ml-2 text-base w-full"
-                        value={item.name}
-                        placeholder="Ketik nama item..."
-                        onChange={(e) => onUpdateItem(category.id, item.id, { name: e.target.value })}
-                        onBlur={() => recordToCatalog(item)} // Simpan ke katalog saat selesai edit
-                      />
+                    <TableCell className="relative">
+                      <div className="flex items-center gap-2">
+                        <Input
+                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 font-medium text-slate-900 transition-all px-3 -ml-2 text-base w-full"
+                          value={item.name}
+                          placeholder="Ketik nama item..."
+                          onChange={(e) => onUpdateItem(category.id, item.id, { name: e.target.value })}
+                          onBlur={() => setTimeout(() => recordToCatalog(item), 500)}
+                        />
+                        {catalogItems && catalogItems.filter(c => c.name.toLowerCase().includes(item.name.toLowerCase()) && item.name.length > 2).length > 0 && (
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-8 w-8 text-primary shrink-0">
+                                <History className="h-4 w-4" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-80 p-0" align="start">
+                              <div className="p-2 border-b bg-slate-50 flex items-center gap-2">
+                                <Search className="h-4 w-4 text-muted-foreground" />
+                                <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Item dari Katalog</span>
+                              </div>
+                              <div className="max-h-60 overflow-y-auto">
+                                {catalogItems
+                                  .filter(c => c.name.toLowerCase().includes(item.name.toLowerCase()))
+                                  .map((c, idx) => (
+                                    <button
+                                      key={idx}
+                                      className="w-full text-left p-3 hover:bg-slate-100 flex flex-col gap-1 border-b last:border-0 transition-colors"
+                                      onClick={() => handleSelectFromCatalog(category.id, item.id, c)}
+                                    >
+                                      <span className="font-bold text-sm text-primary">{c.name}</span>
+                                      <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                                        <span>{formatCurrency(c.unitPrice)} / {c.unit}</span>
+                                        <span className="bg-slate-200 px-1.5 py-0.5 rounded uppercase">{c.type}</span>
+                                      </div>
+                                    </button>
+                                  ))}
+                              </div>
+                            </PopoverContent>
+                          </Popover>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell>
                       <Input
@@ -332,14 +390,12 @@ export function BoqTable({
                       />
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-1">
-                        <Input
-                          type="number"
-                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-medium text-accent px-3 -ml-2 w-full text-base"
-                          value={item.margin || 0}
-                          onChange={(e) => onUpdateItem(category.id, item.id, { margin: parseFloat(e.target.value) || 0 })}
-                        />
-                      </div>
+                      <Input
+                        type="number"
+                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-medium text-accent px-3 -ml-2 w-full text-base"
+                        value={item.margin || 0}
+                        onChange={(e) => onUpdateItem(category.id, item.id, { margin: parseFloat(e.target.value) || 0 })}
+                      />
                     </TableCell>
                     <TableCell className="text-right font-bold text-primary text-base whitespace-nowrap px-4">
                       {formatCurrency(calculateItemTotal(item))}
