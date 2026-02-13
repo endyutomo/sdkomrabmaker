@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview This file implements a Genkit flow for suggesting Bill of Quantities (BOQ) items.
+ * @fileOverview This file implements a Genkit flow for suggesting Bill of Quantities (BOQ) items in Indonesian.
  *
  * - suggestBoqItems - A function that suggests BOQ items based on project type and specifications.
  * - BoqItemSuggestionInput - The input type for the suggestBoqItems function.
@@ -23,35 +23,31 @@ export type BoqItemSuggestionInput = z.infer<typeof BoqItemSuggestionInputSchema
 const BoqItemSchema = z.object({
   name: z
     .string()
-    .describe('The name or description of the BOQ item (e.g., "Concrete footing", "Brickwork to walls").'),
+    .describe('The name or description of the item in Indonesian (e.g., "Pondasi beton", "Pasangan bata dinding").'),
   unit: z
     .string()
-    .describe('The unit of measurement for the item (e.g., "m3", "m2", "ls", "nr").'),
+    .describe('The Indonesian unit of measurement (e.g., "m3", "m2", "ls", "titik").'),
   quantity: z
     .number()
-    .describe(
-      'A suggested quantity for the item. Provide a reasonable estimate if no specific details are given, otherwise default to 1 if estimation is impossible.'
-    )
+    .describe('A suggested quantity estimate.')
     .default(1),
   unitPrice: z
     .number()
-    .describe(
-      'A suggested unit price for the item. Provide a reasonable estimate if no specific details are given, otherwise default to 0.'
-    )
+    .describe('A suggested unit price in IDR.')
     .default(0),
 });
 
 const BoqCategorySchema = z.object({
   name: z
     .string()
-    .describe('The name of the category (e.g., "Foundations", "Superstructure", "Finishes").'),
-  items: z.array(BoqItemSchema).describe('A list of BOQ items within this category.'),
+    .describe('The name of the category in Indonesian (e.g., "Pekerjaan Tanah", "Pekerjaan Struktur").'),
+  items: z.array(BoqItemSchema).describe('A list of items within this category.'),
 });
 
 const BoqItemSuggestionOutputSchema = z.object({
   categories: z
     .array(BoqCategorySchema)
-    .describe('A list of categorized BOQ items for the project.'),
+    .describe('A list of categorized items for the project.'),
 });
 export type BoqItemSuggestionOutput = z.infer<typeof BoqItemSuggestionOutputSchema>;
 
@@ -65,14 +61,16 @@ const boqItemSuggestionPrompt = ai.definePrompt({
   name: 'boqItemSuggestionPrompt',
   input: { schema: BoqItemSuggestionInputSchema },
   output: { schema: BoqItemSuggestionOutputSchema },
-  prompt: `You are an expert Quantity Surveyor. Your task is to generate a comprehensive Bill of Quantities (BOQ) for a construction project based on the provided project type and specifications.
+  prompt: `Anda adalah seorang Ahli Quantity Surveyor profesional di Indonesia. Tugas Anda adalah menghasilkan Rencana Anggaran Biaya (RAB) yang komprehensif berdasarkan tipe proyek dan spesifikasi yang diberikan.
 
-Categorize the BOQ items logically and for each item, provide a name, a suitable unit of measurement, a suggested quantity, and a suggested unit price.
+Gunakan Bahasa Indonesia yang formal dan teknis untuk semua nama item, kategori, dan satuan (misalnya m3, m2, kg, m', ls).
 
-Project Type: {{{projectType}}}
-Specifications: {{{specifications}}}
+Kategorikan item RAB secara logis (Pekerjaan Persiapan, Tanah, Struktur, Arsitektur, dll). Berikan nama item, satuan, estimasi volume yang masuk akal, dan estimasi harga satuan dalam Rupiah.
 
-Please provide the output in JSON format, strictly adhering to the following schema:`,
+Tipe Proyek: {{{projectType}}}
+Spesifikasi: {{{specifications}}}
+
+Mohon berikan output dalam format JSON sesuai skema berikut:`,
 });
 
 const boqItemSuggestionFlow = ai.defineFlow(
@@ -84,7 +82,7 @@ const boqItemSuggestionFlow = ai.defineFlow(
   async (input) => {
     const { output } = await boqItemSuggestionPrompt(input);
     if (!output) {
-      throw new Error('No output received from the BOQ item suggestion prompt.');
+      throw new Error('Gagal menerima output dari AI.');
     }
     return output;
   }

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sparkles, Loader2, X } from "lucide-react";
+import { Sparkles, Loader2 } from "lucide-react";
 import { suggestBoqItems } from "@/ai/flows/ai-boq-item-suggestion";
 import { BoqCategory } from "@/lib/types";
 
@@ -48,25 +48,25 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
     <div className="bg-white rounded-xl p-6 shadow-sm border border-primary/20 space-y-4">
       <div className="flex items-center gap-2 text-primary font-semibold">
         <Sparkles className="h-5 w-5 text-accent" />
-        AI-Powered BOQ Builder
+        Penyusun RAB Berbasis AI
       </div>
       
       <div className="grid gap-4">
         <div className="space-y-2">
-          <Label htmlFor="project-type">Project Type</Label>
+          <Label htmlFor="project-type">Tipe Proyek</Label>
           <Input 
             id="project-type" 
-            placeholder="e.g. Residential Villa, Highway Construction, Office Renovation"
+            placeholder="misal: Villa Mewah, Jalan Tol, Renovasi Kantor"
             value={projectType}
             onChange={(e) => setProjectType(e.target.value)}
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="specs">Specific Requirements (Optional)</Label>
+          <Label htmlFor="specs">Persyaratan Khusus (Opsional)</Label>
           <Textarea 
             id="specs" 
-            placeholder="Describe specifics like site conditions, materials preferred, or number of floors..."
+            placeholder="Jelaskan spesifikasi seperti kondisi lahan, material yang diinginkan, atau jumlah lantai..."
             value={specifications}
             onChange={(e) => setSpecifications(e.target.value)}
             className="min-h-[100px]"
@@ -82,17 +82,17 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
         {loading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Generating BOQ Items...
+            Menghasilkan Item RAB...
           </>
         ) : (
           <>
             <Sparkles className="mr-2 h-4 w-4" />
-            Generate Suggestions
+            Hasilkan Saran
           </>
         )}
       </Button>
       <p className="text-[10px] text-center text-muted-foreground uppercase tracking-wider">
-        Powered by Advanced Generative AI
+        Didukung oleh AI Generatif Canggih
       </p>
     </div>
   );

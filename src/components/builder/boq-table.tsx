@@ -5,8 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BoqCategory, BoqItem } from "@/lib/types";
-import { Trash2, Plus, GripVertical, ChevronDown, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Trash2, Plus } from "lucide-react";
 
 interface BoqTableProps {
   categories: BoqCategory[];
@@ -32,6 +31,15 @@ export function BoqTable({
 
   const grandTotal = categories.reduce((sum, cat) => sum + calculateCategoryTotal(cat), 0);
 
+  const formatCurrency = (val: number) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(val);
+  };
+
   return (
     <div className="space-y-8 animate-fade-in-up">
       {categories.map((category) => (
@@ -44,7 +52,7 @@ export function BoqTable({
                 onChange={(e) => onUpdateCategory(category.id, { name: e.target.value })}
               />
               <span className="text-sm font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded">
-                Section Total: ${calculateCategoryTotal(category).toLocaleString()}
+                Total Bagian: {formatCurrency(calculateCategoryTotal(category))}
               </span>
             </div>
             <Button 
@@ -60,10 +68,10 @@ export function BoqTable({
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50 hover:bg-muted/50">
-                <TableHead className="w-[400px]">Item Description</TableHead>
-                <TableHead className="w-[100px]">Unit</TableHead>
-                <TableHead className="w-[120px] text-right">Quantity</TableHead>
-                <TableHead className="w-[150px] text-right">Unit Price</TableHead>
+                <TableHead className="w-[400px]">Deskripsi Pekerjaan</TableHead>
+                <TableHead className="w-[100px]">Satuan</TableHead>
+                <TableHead className="w-[120px] text-right">Volume</TableHead>
+                <TableHead className="w-[150px] text-right">Harga Satuan</TableHead>
                 <TableHead className="w-[150px] text-right">Total</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
@@ -102,7 +110,7 @@ export function BoqTable({
                     />
                   </TableCell>
                   <TableCell className="text-right font-medium">
-                    ${(item.quantity * item.unitPrice).toLocaleString()}
+                    {formatCurrency(item.quantity * item.unitPrice)}
                   </TableCell>
                   <TableCell>
                     <Button 
@@ -119,7 +127,7 @@ export function BoqTable({
               {category.items.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={6} className="h-24 text-center text-muted-foreground italic">
-                    No items in this section yet.
+                    Belum ada item di bagian ini.
                   </TableCell>
                 </TableRow>
               )}
@@ -133,7 +141,7 @@ export function BoqTable({
               className="w-full h-8 text-primary hover:bg-primary/10 border border-dashed hover:border-primary/50"
               onClick={() => onAddItem(category.id)}
             >
-              <Plus className="h-3 w-3 mr-2" /> Add Item
+              <Plus className="h-3 w-3 mr-2" /> Tambah Item
             </Button>
           </div>
         </div>
@@ -141,9 +149,9 @@ export function BoqTable({
 
       <div className="p-8 border-2 border-dashed rounded-xl flex flex-col items-center justify-center text-muted-foreground bg-white/50">
         <div className="text-3xl font-bold text-primary mb-2">
-          Grand Total: ${grandTotal.toLocaleString()}
+          Total Keseluruhan: {formatCurrency(grandTotal)}
         </div>
-        <p className="text-sm">Summary of all section costs</p>
+        <p className="text-sm">Ringkasan seluruh biaya dari semua bagian</p>
       </div>
     </div>
   );

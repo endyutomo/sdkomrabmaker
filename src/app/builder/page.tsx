@@ -23,7 +23,7 @@ import { useToast } from "@/hooks/use-toast";
 export default function BuilderPage() {
   const [project, setProject] = useState<ProjectBoq>({
     id: "draft",
-    title: "Untitled Project",
+    title: "Proyek Tanpa Judul",
     type: "",
     specifications: "",
     categories: [],
@@ -35,7 +35,7 @@ export default function BuilderPage() {
   const handleAddCategory = () => {
     const newCategory: BoqCategory = {
       id: `cat-${Date.now()}`,
-      name: "New Section",
+      name: "Bagian Baru",
       items: [],
     };
     setProject(prev => ({
@@ -69,7 +69,7 @@ export default function BuilderPage() {
   const handleAddItem = (categoryId: string) => {
     const newItem: BoqItem = {
       id: `item-${Date.now()}`,
-      name: "New Item",
+      name: "Item Pekerjaan Baru",
       unit: "m2",
       quantity: 1,
       unitPrice: 0,
@@ -110,15 +110,15 @@ export default function BuilderPage() {
       categories: [...prev.categories, ...suggestedCategories]
     }));
     toast({
-      title: "Success",
-      description: `Added ${suggestedCategories.length} sections from AI suggestions.`,
+      title: "Berhasil",
+      description: `Menambahkan ${suggestedCategories.length} bagian dari saran AI.`,
     });
   };
 
   const handleExport = () => {
     toast({
-      title: "Export Started",
-      description: "Your BOQ report is being generated...",
+      title: "Ekspor Dimulai",
+      description: "Laporan RAB Anda sedang dibuat...",
     });
     // Implementation for CSV/Excel/PDF would go here
   };
@@ -145,13 +145,13 @@ export default function BuilderPage() {
         
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={handleExport}>
-            <FileDown className="h-4 w-4 mr-2" /> Export
+            <FileDown className="h-4 w-4 mr-2" /> Ekspor
           </Button>
           <Button variant="outline" size="sm" className="hidden sm:flex">
-            <Printer className="h-4 w-4 mr-2" /> Print
+            <Printer className="h-4 w-4 mr-2" /> Cetak
           </Button>
           <Button className="boq-accent-gradient h-9">
-            <Save className="h-4 w-4 mr-2" /> Save Project
+            <Save className="h-4 w-4 mr-2" /> Simpan Proyek
           </Button>
         </div>
       </header>
@@ -160,24 +160,24 @@ export default function BuilderPage() {
         {/* Sidebar Controls */}
         <aside className="w-80 border-r bg-white p-6 space-y-8 overflow-y-auto hidden lg:block">
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Builder Toolbox</h3>
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Kotak Peralatan</h3>
             <AiGenerator onSuggest={handleAiSuggest} />
           </div>
           
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Quick Actions</h3>
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Tindakan Cepat</h3>
             <div className="grid grid-cols-1 gap-2">
               <Button variant="outline" className="justify-start" onClick={handleAddCategory}>
-                <Plus className="h-4 w-4 mr-2" /> Add Section
+                <Plus className="h-4 w-4 mr-2" /> Tambah Bagian
               </Button>
               <Button variant="outline" className="justify-start">
-                <FileUp className="h-4 w-4 mr-2" /> Import Template
+                <FileUp className="h-4 w-4 mr-2" /> Impor Template
               </Button>
               <Button variant="outline" className="justify-start">
-                <History className="h-4 w-4 mr-2" /> Version History
+                <History className="h-4 w-4 mr-2" /> Riwayat Versi
               </Button>
               <Button variant="outline" className="justify-start">
-                <Settings className="h-4 w-4 mr-2" /> BOQ Settings
+                <Settings className="h-4 w-4 mr-2" /> Pengaturan RAB
               </Button>
             </div>
           </div>
@@ -192,19 +192,18 @@ export default function BuilderPage() {
                   <LayoutDashboard className="h-12 w-12 opacity-50" />
                 </div>
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-bold">Start Building Your BOQ</h2>
+                  <h2 className="text-2xl font-bold">Mulai Susun RAB Anda</h2>
                   <p className="text-muted-foreground max-w-sm">
-                    Add a section manually or use our AI builder to generate suggestions based on your project type.
+                    Tambah bagian secara manual atau gunakan penyusun AI kami untuk menghasilkan saran berdasarkan tipe proyek Anda.
                   </p>
                 </div>
                 <div className="flex gap-4">
                   <Button size="lg" onClick={handleAddCategory}>
-                    <Plus className="h-5 w-5 mr-2" /> Add First Section
+                    <Plus className="h-5 w-5 mr-2" /> Tambah Bagian Pertama
                   </Button>
                   <div className="lg:hidden">
-                     {/* For mobile, show AI button directly since sidebar is hidden */}
                      <Button size="lg" variant="outline" className="boq-accent-gradient text-white border-none">
-                       <Sparkles className="h-5 w-5 mr-2" /> Use AI Builder
+                       <Sparkles className="h-5 w-5 mr-2" /> Gunakan Penyusun AI
                      </Button>
                   </div>
                 </div>
