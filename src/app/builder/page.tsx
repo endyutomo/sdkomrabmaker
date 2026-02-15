@@ -3,14 +3,11 @@ import { Loader2 } from "lucide-react";
 import { BuilderClient } from "@/components/builder/builder-client";
 import { Metadata, Viewport } from "next";
 
-// ✅ Gunakan object constant untuk data statis
-import { Metadata, Viewport } from "next"; // Pastikan Viewport diimport
-
-export const viewport: Viewport = {
+export const generateViewport = () => ({
   themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
-};
+});
 
 export const metadata: Metadata = {
   title: "Builder | SDKOM RAB MAKER",
