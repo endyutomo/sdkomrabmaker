@@ -3,11 +3,11 @@ import { Loader2 } from "lucide-react";
 import { BuilderClient } from "@/components/builder/builder-client";
 import { Metadata, Viewport } from "next";
 
-export const viewport: Viewport = {
+export const generateViewport = () => ({
   themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
-};
+});
 
 export const metadata: Metadata = {
   title: "Builder | SDKOM RAB MAker",

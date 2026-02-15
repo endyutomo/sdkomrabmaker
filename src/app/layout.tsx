@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { SupabaseProvider } from "@/components/providers/supabase-provider";
@@ -6,6 +6,12 @@ import { SupabaseProvider } from "@/components/providers/supabase-provider";
 export const metadata: Metadata = {
   title: 'SDKOM RAB MAker | RAB Berbasis AI',
   description: 'Buat Rencana Anggaran Biaya (RAB) profesional dengan cepat menggunakan AI Generatif. Alat estimasi konstruksi profesional.',
+};
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
