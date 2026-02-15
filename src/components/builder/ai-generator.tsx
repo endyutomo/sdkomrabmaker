@@ -33,22 +33,25 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
         Konteks Waktu: ${currentDate}
         
         Instruksi Penting:
-        1. HARGA WAJIB berdasarkan data SHOPEE MALL dan toko Shopee dengan rating 4.5-5 bintang
-        2. Prioritaskan Shopee Mall untuk material bangunan dan peralatan
-        3. Untuk toko biasa, gunakan yang memiliki rating minimal 4.5 bintang dan minimal 100+ ulasan
-        4. Jangan gunakan harga terendah (murah/kualitas rendah) atau harga tertinggi (overprice)
-        5. Gunakan harga rata-rata dari seller Shopee terpercaya
-        6. Kelompokkan item pekerjaan ke dalam kategori logis (misal: "Pekerjaan Persiapan", "Pekerjaan Pondasi", "Pekerjaan Lantai", dll)
-        7. Berikan estimasi volume yang realistis untuk proyek jenis ini
-        8. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi)
-        9. Output WAJIB dalam format JSON murni array of objects
+        1. HARGA WAJIB berdasarkan estimasi harga PASARAN yang umum di marketplace seperti Shopee
+        2. Jangan memberikan link toko spesifik atau nama toko yang tidak valid
+        3. Gunakan harga estimasi yang realistis berdasarkan pengalaman pasar
+        4. Untuk material bangunan: gunakan harga rata-rata yang umum di toko bangunan
+        5. Untuk peralatan: gunakan harga pasaran yang wajar
+        6. Jangan gunakan harga terendah (kualitas rendah) atau harga tertinggi (overprice)
+        7. Kelompokkan item pekerjaan ke dalam kategori logis (misal: "Pekerjaan Persiapan", "Pekerjaan Pondasi", "Pekerjaan Lantai", dll)
+        8. Berikan estimasi volume yang realistis untuk proyek jenis ini
+        9. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi)
+        10. Output WAJIB dalam format JSON murni array of objects
 
-        Panduan Pricing SHOPEE:
-        - Material Bangunan: Cari di Shopee Mall (official store) atau toko rating 4.5+ bintang
-        - Peralatan: Gunakan harga dari Shopee Mall atau seller dengan rating 4.8+ bintang
+        Panduan Pricing Realistis:
+        - Material Bangunan: Harga rata-rata pasaran (estimasi berdasarkan pengalaman)
+        - Peralatan: Harga pasaran yang wajar untuk kualitas baik
         - Jasa: Harga pasaran tukang profesional (bukan yang termurah)
-        - Include biaya ongkir dan handling untuk material dari Shopee
-        - Untuk jasa, gunakan upah harian tukang bersertifikat/berpengalaman
+        - Include estimasi ongkir dan handling untuk material
+        - Untuk jasa, gunakan upah harian tukang berpengalaman
+
+        PENTING: Jangan membuat link toko atau nama toko spesifik. Gunakan harga estimasi yang realistis.
 
         Format JSON Output:
         {
@@ -60,7 +63,7 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
                   "name": "Nama Item Pekerjaan",
                   "unit": "Satuan (m2/m3/unit/ls)",
                   "quantity": number,
-                  "unitPrice": number (harga satuan dari Shopee Mall/seller rating 4.5+ bintang),
+                  "unitPrice": number (harga satuan estimasi pasaran yang wajar),
                   "type": "perangkat" | "jasa"
                 }
               ]
@@ -103,10 +106,10 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
         Penyusun RAB Berbasis AI
       </div>
 
-      <div className="bg-orange-50 rounded-lg p-3 text-sm text-orange-800">
-        <div className="font-medium mb-1">🛒 Harga Berdasarkan Shopee</div>
+      <div className="bg-yellow-50 rounded-lg p-3 text-sm text-yellow-800">
+        <div className="font-medium mb-1">💰 Estimasi Harga Pasaran</div>
         <div className="text-xs">
-          AI akan memberikan harga yang wajar berdasarkan data dari Shopee Mall dan toko Shopee dengan rating 4.5-5 bintang. Harga tidak terlalu murah (kualitas rendah) dan tidak terlalu tinggi (overprice). Include ongkir dan handling.
+          AI memberikan estimasi harga berdasarkan pasaran umum marketplace. Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di toko terpercaya sebelum membeli.
         </div>
       </div>
 

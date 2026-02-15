@@ -64,15 +64,14 @@ const boqItemSuggestionPrompt = ai.definePrompt({
 
 PENTING: 
 1. Kelompokkan item ke dalam kategori yang logis. Setiap item HARUS ditentukan tipenya: "perangkat" untuk barang/material atau "jasa" untuk instalasi/konfigurasi/upah.
-2. HARGA WAJIB berdasarkan SHOPEE MALL dan toko Shopee dengan rating 4.5-5 bintang
-3. Prioritaskan Shopee Mall untuk material bangunan dan peralatan
-4. Untuk toko biasa, gunakan yang memiliki rating minimal 4.5 bintang dan minimal 100+ ulasan
+2. HARGA WAJIB berdasarkan ESTIMASI PASARAN UMUM marketplace Indonesia
+3. Jangan memberikan link toko spesifik atau nama toko yang tidak valid
+4. Gunakan harga estimasi yang realistis berdasarkan pengalaman pasar
 5. Jangan gunakan harga terendah (kualitas rendah) atau harga tertinggi (overprice)
-6. Gunakan harga rata-rata dari seller Shopee terpercaya
-7. Untuk material: harga dari Shopee Mall atau seller rating 4.5+ bintang
-8. Untuk jasa: harga pasaran tukang profesional (bukan yang termurah)
+6. Untuk material: harga rata-rata pasaran yang umum di toko bangunan
+7. Untuk jasa: harga pasaran tukang profesional (bukan yang termurah)
 
-Gunakan Bahasa Indonesia yang formal. Berikan harga pasar yang WAJAR di Indonesia dalam Rupiah, dengan memprioritaskan referensi harga dari Shopee Mall dan seller rating 4.5+ bintang di wilayah Jabodetabek jika memungkinkan.
+Gunakan Bahasa Indonesia yang formal. Berikan harga estimasi yang WAJAR di Indonesia dalam Rupiah, berdasarkan pengalaman pasar umum.
 
 Tipe Proyek: {{{projectType}}}
 Spesifikasi: {{{specifications}}}
