@@ -41,6 +41,10 @@ import {
 } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 
+// User Requested Components
+import { PageHeader } from "@/components/page-header";
+import { Section } from "@/components/section";
+
 export function BuilderClient() {
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -477,7 +481,8 @@ export function BuilderClient() {
     );
 
     return (
-        <div className="min-h-screen flex flex-col bg-background">
+        <Section className="min-h-screen flex flex-col bg-background p-0 md:p-0 lg:p-0">
+            {/* Header / Config Bar */}
             <header className="h-16 border-b bg-white flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30 shadow-sm no-print">
                 <div className="flex items-center gap-4">
                     <div className="lg:hidden">
@@ -563,7 +568,14 @@ export function BuilderClient() {
 
                 {/* Main Content */}
                 <main className="flex-1 overflow-y-auto p-4 lg:p-12 bg-slate-50/50 print:p-0 print:bg-white w-full">
-                    <div className="max-w-6xl mx-auto">
+                    <div className="max-w-6xl mx-auto space-y-6">
+                        {/* Integrated User's PageHeader */}
+                        <PageHeader
+                            title="Builder"
+                            description="Kelola dan susun Rencana Anggaran Biaya (RAB) proyek Anda di sini."
+                            className="lg:hidden" // Only show on mobile since sidebar/header covers this info on desktop
+                        />
+
                         {project.categories.length === 0 ? (
                             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6 animate-fade-in-up no-print px-4">
                                 <div className="w-16 h-16 lg:w-20 lg:h-20 bg-primary/5 rounded-2xl flex items-center justify-center text-primary rotate-3">
@@ -595,6 +607,6 @@ export function BuilderClient() {
                     </div>
                 </main>
             </div>
-        </div>
+        </Section>
     );
 }
