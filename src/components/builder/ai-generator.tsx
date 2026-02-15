@@ -28,15 +28,24 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
 
       const currentDate = new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
       const prompt = `
-        Saya estimator konstruksi. Buatkan daftar Rencana Anggaran Biaya (RAB) untuk proyek: "${projectType}".
+        Saya estimator konstruksi profesional. Buatkan daftar Rencana Anggaran Biaya (RAB) untuk proyek: "${projectType}".
         Spesifikasi/Kondisi: "${specifications || 'Standar umum'}".
         Konteks Waktu: ${currentDate}
         
-        Instruksi:
-        1. Kelompokkan item pekerjaan ke dalam kategori logis (misal: "Pekerjaan Persiapan", "Pekerjaan Pondasi", "Pekerjaan Lantai", dll).
-        2. Berikan estimasi volume dan harga satuan yang WAJAR dan TERUPDATE untuk wilayah Indonesia (Rupiah) per ${currentDate}.
-        3. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi).
-        4. Output WAJIB dalam format JSON murni array of objects.
+        Instruksi Penting:
+        1. HARGA WAJIB berdasarkan data marketplace Indonesia (Tokopedia, Bukalapak, Shopee) dari toko dengan rating 4-5 bintang
+        2. Jangan gunakan harga terendah (murah/tidak berkualitas) atau harga tertinggi (overprice)
+        3. Gunakan harga rata-rata dari penjual terpercaya dengan rating 4-5 bintang
+        4. Kelompokkan item pekerjaan ke dalam kategori logis (misal: "Pekerjaan Persiapan", "Pekerjaan Pondasi", "Pekerjaan Lantai", dll)
+        5. Berikan estimasi volume yang realistis untuk proyek jenis ini
+        6. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi)
+        7. Output WAJIB dalam format JSON murni array of objects
+
+        Panduan Pricing:
+        - Material: Harga dari toko bangunan online terpercaya (rating 4-5 bintang)
+        - Jasa: Harga pasaran tukang profesional di Indonesia (bukan yang termurah)
+        - Include biaya transport dan handling untuk material
+        - Untuk jasa, gunakan upah harian tukang bersertifikat/berpengalaman
 
         Format JSON Output:
         {
@@ -48,7 +57,7 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
                   "name": "Nama Item Pekerjaan",
                   "unit": "Satuan (m2/m3/unit/ls)",
                   "quantity": number,
-                  "unitPrice": number (harga satuan),
+                  "unitPrice": number (harga satuan reasonable dari marketplace 4-5 bintang),
                   "type": "perangkat" | "jasa"
                 }
               ]
@@ -89,6 +98,13 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
       <div className="flex items-center gap-2 text-primary font-semibold">
         <Sparkles className="h-5 w-5 text-accent" />
         Penyusun RAB Berbasis AI
+      </div>
+
+      <div className="bg-blue-50 rounded-lg p-3 text-sm text-blue-800">
+        <div className="font-medium mb-1">💡 Harga Berdasarkan Marketplace</div>
+        <div className="text-xs">
+          AI akan memberikan harga yang wajar berdasarkan data dari toko bangunan online dengan rating 4-5 bintang (Tokopedia, Bukalapak, Shopee). Harga tidak terlalu murah (kualitas rendah) dan tidak terlalu tinggi (overprice).
+        </div>
       </div>
 
       <div className="grid gap-4">

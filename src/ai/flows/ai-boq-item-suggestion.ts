@@ -62,9 +62,15 @@ const boqItemSuggestionPrompt = ai.definePrompt({
   output: { schema: BoqItemSuggestionOutputSchema },
   prompt: `Anda adalah seorang Ahli Estimator Proyek profesional di Indonesia. Tugas Anda adalah menghasilkan Rencana Anggaran Biaya (RAB) yang detail.
 
-PENTING: Kelompokkan item ke dalam kategori yang logis. Setiap item HARUS ditentukan tipenya: "perangkat" untuk barang/material atau "jasa" untuk instalasi/konfigurasi/upah.
+PENTING: 
+1. Kelompokkan item ke dalam kategori yang logis. Setiap item HARUS ditentukan tipenya: "perangkat" untuk barang/material atau "jasa" untuk instalasi/konfigurasi/upah.
+2. HARGA WAJIB berdasarkan marketplace Indonesia (Tokopedia, Bukalapak, Shopee) dari toko dengan rating 4-5 bintang
+3. Jangan gunakan harga terendah (kualitas rendah) atau harga tertinggi (overprice)
+4. Gunakan harga rata-rata dari penjual terpercaya dengan rating 4-5 bintang
+5. Untuk material: harga dari toko bangunan online terpercaya (rating 4-5 bintang)
+6. Untuk jasa: harga pasaran tukang profesional (bukan yang termurah)
 
-Gunakan Bahasa Indonesia yang formal. Berikan harga pasar yang wajar di Indonesia dalam Rupiah, dengan memprioritaskan referensi harga dari wilayah Jabodetabek (Jakarta, Bogor, Depok, Tangerang, Bekasi) jika memungkinkan.
+Gunakan Bahasa Indonesia yang formal. Berikan harga pasar yang WAJAR di Indonesia dalam Rupiah, dengan memprioritaskan referensi harga dari seller rating 4-5 bintang di wilayah Jabodetabek jika memungkinkan.
 
 Tipe Proyek: {{{projectType}}}
 Spesifikasi: {{{specifications}}}

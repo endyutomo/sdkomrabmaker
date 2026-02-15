@@ -1,7 +1,7 @@
 
 'use server';
 /**
- * @fileOverview Genkit flow untuk menyarankan harga item berdasarkan harga tertinggi di pasar.
+ * @fileOverview Genkit flow untuk menyarankan harga item berdasarkan marketplace rating 4-5 bintang.
  */
 
 import { ai } from '@/ai/genkit';
@@ -14,10 +14,10 @@ const PriceSuggestionInputSchema = z.object({
 export type PriceSuggestionInput = z.infer<typeof PriceSuggestionInputSchema>;
 
 const PriceSuggestionOutputSchema = z.object({
-  suggestedPrice: z.number().describe('Estimasi harga TERTINGGI dalam Rupiah.'),
-  sourceUrl: z.string().url().describe('Tautan referensi harga tertinggi.'),
-  sourceName: z.string().describe('Nama sumber harga tertinggi (misal: "Official Store Tokopedia").'),
-  priceRangeNote: z.string().describe('Catatan singkat tentang rentang harga pasar.'),
+  suggestedPrice: z.number().describe('Estimasi harga WAJAR dalam Rupiah dari toko rating 4-5 bintang.'),
+  sourceUrl: z.string().url().describe('Tautan referensi harga.'),
+  sourceName: z.string().describe('Nama sumber harga (misal: "Toko Bangunan Terpercaya Tokopedia").'),
+  priceRangeNote: z.string().describe('Catatan singkat tentang rentang harga pasar dari seller rating 4-5 bintang.'),
 });
 export type PriceSuggestionOutput = z.infer<typeof PriceSuggestionOutputSchema>;
 
@@ -32,19 +32,20 @@ const priceSuggestionPrompt = ai.definePrompt({
   input: { schema: PriceSuggestionInputSchema },
   output: { schema: PriceSuggestionOutputSchema },
   prompt: `Anda adalah ahli riset pasar untuk estimasi proyek di Indonesia.
-Tugas Anda adalah menemukan referensi harga pasar terbaru untuk item berikut.
+Tugas Anda adalah menemukan referensi harga pasar yang WAJAR untuk item berikut.
 
-PENTING: Berikan harga TERTINGGI (Upper Bound/High-End) yang masuk akal di marketplace atau standar industri. 
-Ini bertujuan agar user memiliki cadangan anggaran (budget safety margin) yang cukup.
+PENTING: Berikan harga yang WAJAR dari toko dengan rating 4-5 bintang di marketplace Indonesia.
+Jangan gunakan harga terendah (kualitas rendah) atau harga tertinggi (overprice).
+Gunakan harga rata-rata dari penjual terpercaya.
 
 Item: {{{itemName}}}
 Tipe: {{{itemType}}}
 
 Instruksi:
-1. Jika perangkat, cari harga dari Official Store atau penjual bereputasi tinggi di Tokopedia/Shopee/Bhinneka. **Prioritaskan sumber atau toko yang berlokasi di wilayah Jabodetabek (Jakarta, Bogor, Depok, Tangerang, Bekasi).** Ambil harga tertingginya.
-2. Jika jasa, gunakan standar harga jasa profesional atau vendor kelas atas di wilayah Indonesia, dengan preferensi Jabodetabek jika tersedia.
+1. Jika perangkat, cari harga dari toko bangunan online dengan rating 4-5 bintang di Tokopedia/Shopee/Bukalapak. **Prioritaskan seller dengan rating 4-5 bintang dan lokasi Jabodetabek.** Ambil harga yang wajar (rata-rata, bukan yang termahal atau termurah).
+2. Jika jasa, gunakan standar harga jasa profesional di Indonesia dengan rating/reputasi baik (bukan tukang murah). Preferensi wilayah Jabodetabek.
 3. Berikan URL asli yang merujuk pada harga tersebut.
-4. Berikan catatan singkat mengapa harga tersebut diambil (misal: "Harga varian tertinggi dari Official Store di Jakarta").
+4. Berikan catatan singkat mengapa harga tersebut diambil (misal: "Harga rata-rata dari seller rating 4.8 bintang di Jakarta").
 
 Output harus dalam format JSON.`,
 });
@@ -58,7 +59,7 @@ const priceSuggestionFlow = ai.defineFlow(
   async (input) => {
     const { output } = await priceSuggestionPrompt(input);
     if (!output) {
-      throw new Error('Gagal mendapatkan saran harga tertinggi.');
+      throw new Error('Gagal mendapatkan saran harga yang wajar.');
     }
     return output;
   }
