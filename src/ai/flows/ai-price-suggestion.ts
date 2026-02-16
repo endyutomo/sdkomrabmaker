@@ -14,7 +14,7 @@ const PriceSuggestionInputSchema = z.object({
 export type PriceSuggestionInput = z.infer<typeof PriceSuggestionInputSchema>;
 
 const PriceSuggestionOutputSchema = z.object({
-  suggestedPrice: z.number().describe('Estimasi harga TERMURAH/MINIMUM dalam Rupiah dari seller terpercaya di multiple marketplace.'),
+  suggestedPrice: z.number().describe('Estimasi harga TERTINGGI/MAKSIMUM dalam Rupiah dari seller terpercaya di multiple marketplace untuk RAB yang aman.'),
   priceRange: z.object({
     min: z.number().describe('Harga terendah dari seller rating 4-5 bintang.'),
     max: z.number().describe('Harga tertinggi dari seller rating 4-5 bintang.'),
@@ -40,9 +40,9 @@ const priceSuggestionPrompt = ai.definePrompt({
   input: { schema: PriceSuggestionInputSchema },
   output: { schema: PriceSuggestionOutputSchema },
   prompt: `Anda adalah ahli estimasi harga untuk proyek di Indonesia dengan pengetahuan mendalam tentang brand premium dan generik.
-Tugas Anda adalah memberikan estimasi harga yang AKURAT untuk item berikut berdasarkan MULTIPLE MARKETPLACE TERPERCAYA.
+Tugas Anda adalah memberikan estimasi harga yang AMAN untuk item berikut berdasarkan MULTIPLE MARKETPLACE TERPERCAYA.
 
-PENTING: Berikan harga TERMURAH yang REALISTIS dari marketplace Indonesia berikut:
+PENTING: Berikan harga TERTINGGI/MAKSIMUM yang REALISTIS dari marketplace Indonesia berikut:
 - Tokopedia (seller rating 4-5 bintang)
 - Shopee (seller rating 4-5 bintang)  
 - Bukalapak (seller rating 4-5 bintang)
@@ -92,9 +92,9 @@ Instruksi:
    - Set brandDetected = nama brand (misal: "Belden")
    - Berikan brandNote yang menjelaskan kenapa harga lebih tinggi
 3. Jika TIDAK ADA BRAND atau brand GENERIK:
-   - Gunakan harga termurah dari seller rating 4-5 bintang
+   - Gunakan harga TERTINGGI/MAKSIMUM dari seller rating 4-5 bintang
    - Set isPremiumBrand = false
-   - Harga kompetitif untuk RAB
+   - Harga aman untuk RAB (dengan buffer)
 4. Berikan RANGE HARGA (min dan max) yang akurat
 5. Jika jasa, gunakan standar harga jasa profesional di Indonesia
 6. Berikan URL referensi umum (bukan toko spesifik)
@@ -104,10 +104,10 @@ Instruksi:
 
 CONTOH:
 - Input: "Kabel UTP Cat6 Belden 305m"
-  Output: suggestedPrice: 2000000, isPremiumBrand: true, brandDetected: "Belden"
+  Output: suggestedPrice: 2500000, isPremiumBrand: true, brandDetected: "Belden"
   
 - Input: "Kabel UTP Cat6 305m" (tanpa brand)
-  Output: suggestedPrice: 350000, isPremiumBrand: false
+  Output: suggestedPrice: 500000, isPremiumBrand: false (gunakan harga maksimum dari range)
 
 Output harus dalam format JSON.`,
 });

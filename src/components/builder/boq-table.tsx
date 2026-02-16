@@ -203,11 +203,11 @@ export function BoqTable({
 
       const toastTitle = result.isPremiumBrand
         ? `Harga Brand Premium: ${result.brandDetected}`
-        : "Saran Harga Termurah Berhasil";
+        : "Saran Harga Teraman Berhasil";
 
       const toastDescription = result.isPremiumBrand
         ? `${result.brandNote || `Brand premium terdeteksi. Harga dari ${result.marketplaceSources?.join(', ') || result.sourceName}.`}`
-        : `Menggunakan harga termurah dari ${result.marketplaceSources?.join(', ') || result.sourceName}.`;
+        : `Menggunakan harga tertinggi (aman) dari ${result.marketplaceSources?.join(', ') || result.sourceName}.`;
 
       toast({
         title: toastTitle,

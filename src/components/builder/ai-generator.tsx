@@ -44,8 +44,8 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
            - Pipe: Rucika, Wavin, Pralon Premium (harga 1.5-3x dari generik)
            - Paint: Nippon, Dulux, Jotun, Avian (harga 2-4x dari generik)
            - Sanitary: TOTO, American Standard, Kohler (harga 2-5x dari generik)
-        3. Jika BRAND PREMIUM terdeteksi: gunakan harga premium yang sesuai
-        4. Jika TIDAK ADA BRAND: gunakan harga TERMURAH/MINIMUM untuk RAB kompetitif
+        3. Jika BRAND PREMIUM terdeteksi: gunakan harga premium yang sesuai (maksimum dari range)
+        4. Jika TIDAK ADA BRAND: gunakan harga TERTINGGI/MAKSIMUM untuk RAB yang aman dengan buffer
         5. Berikan RANGE HARGA (harga terendah dan tertinggi) dari seller terpercaya
         6. Fokus pada seller dengan rating tinggi (4-5 bintang) dan review positif
         7. Jangan memberikan link toko spesifik atau nama toko yang tidak valid
@@ -58,14 +58,14 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
         14. Output WAJIB dalam format JSON murni array of objects
 
         Panduan Pricing Brand-Aware:
-        - BRAND PREMIUM: Gunakan harga premium sesuai brand (contoh: Kabel Belden 305m = Rp 2-2.5 juta)
-        - GENERIK/TANPA BRAND: Harga TERMURAH dari marketplace (contoh: Kabel UTP Cat6 305m = Rp 300-500 ribu)
+        - BRAND PREMIUM: Gunakan harga premium maksimum (contoh: Kabel Belden 305m = Rp 2.5 juta)
+        - GENERIK/TANPA BRAND: Harga TERTINGGI dari marketplace (contoh: Kabel UTP Cat6 305m = Rp 500 ribu)
         - Jasa: Standar upah profesional Indonesia (update ${currentDate})
         - Pertimbangkan ongkir rata-rata untuk material
-        - Hindari harga yang tidak realistis (terlalu murah = kualitas rendah)
+        - Gunakan harga maksimum untuk buffer keamanan RAB
         - Prioritaskan seller dengan banyak review positif
 
-        PENTING: Jika item menyebutkan brand premium (Belden, Rucika, Nippon, TOTO, dll), WAJIB gunakan harga premium. Jangan berikan harga generik untuk brand premium!
+        PENTING: Jika item menyebutkan brand premium (Belden, Rucika, Nippon, TOTO, dll), WAJIB gunakan harga premium maksimum. Untuk item generik, gunakan harga tertinggi dari range untuk RAB yang aman!
 
         Format JSON Output:
         {
@@ -121,9 +121,9 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
       </div>
 
       <div className="bg-yellow-50 rounded-lg p-3 text-sm text-yellow-800">
-        <div className="font-medium mb-1">💰 Estimasi Harga Termurah Multi-Marketplace</div>
+        <div className="font-medium mb-1">💰 Estimasi Harga Teraman Multi-Marketplace</div>
         <div className="text-xs">
-          AI memberikan estimasi harga <strong>termurah yang realistis</strong> dari <strong>Tokopedia, Shopee, Bukalapak, dan Lazada</strong> (seller rating 4-5 bintang). Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di marketplace terpercaya sebelum membeli.
+          AI memberikan estimasi harga <strong>tertinggi yang realistis</strong> dari <strong>Tokopedia, Shopee, Bukalapak, dan Lazada</strong> (seller rating 4-5 bintang) untuk RAB yang aman dengan buffer harga. Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di marketplace terpercaya sebelum membeli.
         </div>
       </div>
 

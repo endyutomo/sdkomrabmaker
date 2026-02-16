@@ -825,8 +825,8 @@ function BoqTable({ project, onUpdateProjectInfo, onUpdateCategory, onUpdateItem
                 isPremiumBrand: result.isPremiumBrand,
                 brandNote: result.brandNote
             });
-            const toastTitle = result.isPremiumBrand ? `Harga Brand Premium: ${result.brandDetected}` : "Saran Harga Termurah Berhasil";
-            const toastDescription = result.isPremiumBrand ? `${result.brandNote || `Brand premium terdeteksi. Harga dari ${result.marketplaceSources?.join(', ') || result.sourceName}.`}` : `Menggunakan harga termurah dari ${result.marketplaceSources?.join(', ') || result.sourceName}.`;
+            const toastTitle = result.isPremiumBrand ? `Harga Brand Premium: ${result.brandDetected}` : "Saran Harga Teraman Berhasil";
+            const toastDescription = result.isPremiumBrand ? `${result.brandNote || `Brand premium terdeteksi. Harga dari ${result.marketplaceSources?.join(', ') || result.sourceName}.`}` : `Menggunakan harga tertinggi (aman) dari ${result.marketplaceSources?.join(', ') || result.sourceName}.`;
             toast({
                 title: toastTitle,
                 description: toastDescription
@@ -2429,8 +2429,8 @@ function AiGenerator({ onSuggest }) {
            - Pipe: Rucika, Wavin, Pralon Premium (harga 1.5-3x dari generik)
            - Paint: Nippon, Dulux, Jotun, Avian (harga 2-4x dari generik)
            - Sanitary: TOTO, American Standard, Kohler (harga 2-5x dari generik)
-        3. Jika BRAND PREMIUM terdeteksi: gunakan harga premium yang sesuai
-        4. Jika TIDAK ADA BRAND: gunakan harga TERMURAH/MINIMUM untuk RAB kompetitif
+        3. Jika BRAND PREMIUM terdeteksi: gunakan harga premium yang sesuai (maksimum dari range)
+        4. Jika TIDAK ADA BRAND: gunakan harga TERTINGGI/MAKSIMUM untuk RAB yang aman dengan buffer
         5. Berikan RANGE HARGA (harga terendah dan tertinggi) dari seller terpercaya
         6. Fokus pada seller dengan rating tinggi (4-5 bintang) dan review positif
         7. Jangan memberikan link toko spesifik atau nama toko yang tidak valid
@@ -2443,14 +2443,14 @@ function AiGenerator({ onSuggest }) {
         14. Output WAJIB dalam format JSON murni array of objects
 
         Panduan Pricing Brand-Aware:
-        - BRAND PREMIUM: Gunakan harga premium sesuai brand (contoh: Kabel Belden 305m = Rp 2-2.5 juta)
-        - GENERIK/TANPA BRAND: Harga TERMURAH dari marketplace (contoh: Kabel UTP Cat6 305m = Rp 300-500 ribu)
+        - BRAND PREMIUM: Gunakan harga premium maksimum (contoh: Kabel Belden 305m = Rp 2.5 juta)
+        - GENERIK/TANPA BRAND: Harga TERTINGGI dari marketplace (contoh: Kabel UTP Cat6 305m = Rp 500 ribu)
         - Jasa: Standar upah profesional Indonesia (update ${currentDate})
         - Pertimbangkan ongkir rata-rata untuk material
-        - Hindari harga yang tidak realistis (terlalu murah = kualitas rendah)
+        - Gunakan harga maksimum untuk buffer keamanan RAB
         - Prioritaskan seller dengan banyak review positif
 
-        PENTING: Jika item menyebutkan brand premium (Belden, Rucika, Nippon, TOTO, dll), WAJIB gunakan harga premium. Jangan berikan harga generik untuk brand premium!
+        PENTING: Jika item menyebutkan brand premium (Belden, Rucika, Nippon, TOTO, dll), WAJIB gunakan harga premium maksimum. Untuk item generik, gunakan harga tertinggi dari range untuk RAB yang aman!
 
         Format JSON Output:
         {
@@ -2521,7 +2521,7 @@ function AiGenerator({ onSuggest }) {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "font-medium mb-1",
-                        children: "💰 Estimasi Harga Termurah Multi-Marketplace"
+                        children: "💰 Estimasi Harga Teraman Multi-Marketplace"
                     }, void 0, false, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
                         lineNumber: 124,
@@ -2532,7 +2532,7 @@ function AiGenerator({ onSuggest }) {
                         children: [
                             "AI memberikan estimasi harga ",
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                children: "termurah yang realistis"
+                                children: "tertinggi yang realistis"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
                                 lineNumber: 126,
@@ -2544,9 +2544,9 @@ function AiGenerator({ onSuggest }) {
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
                                 lineNumber: 126,
-                                columnNumber: 86
+                                columnNumber: 87
                             }, this),
-                            " (seller rating 4-5 bintang). Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di marketplace terpercaya sebelum membeli."
+                            " (seller rating 4-5 bintang) untuk RAB yang aman dengan buffer harga. Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di marketplace terpercaya sebelum membeli."
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
