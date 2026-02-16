@@ -44,6 +44,7 @@ import { Menu } from "lucide-react";
 // User Requested Components
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
+import { AIProviderSelector } from "@/components/builder/ai-provider-selector";
 
 export function BuilderClient() {
     const searchParams = useSearchParams();
@@ -521,6 +522,8 @@ export function BuilderClient() {
                 </div>
 
                 <div className="flex items-center gap-2">
+                    <AIProviderSelector />
+
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" size="sm" className="hidden sm:flex">
