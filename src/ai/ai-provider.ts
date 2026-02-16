@@ -1,7 +1,11 @@
 // AI Provider Types and Manager
 export enum AIProvider {
     GEMINI = 'gemini',
-    PUTER = 'puter'
+    PUTER = 'puter',
+    OPENAI = 'openai',
+    CLAUDE = 'claude',
+    GROK = 'grok',
+    GEMINI_3_PRO = 'gemini_3_pro'
 }
 
 export interface AIProviderConfig {
@@ -20,8 +24,32 @@ export const AI_PROVIDERS: Record<AIProvider, AIProviderConfig> = {
     },
     [AIProvider.PUTER]: {
         name: 'puter',
-        displayName: 'Puter AI',
+        displayName: 'Puter AI (Gemini 2.5)',
         icon: '🚀',
+        available: typeof window !== 'undefined' && 'puter' in window
+    },
+    [AIProvider.OPENAI]: {
+        name: 'openai',
+        displayName: 'OpenAI (GPT-4o)',
+        icon: '🧠',
+        available: typeof window !== 'undefined' && 'puter' in window
+    },
+    [AIProvider.CLAUDE]: {
+        name: 'claude',
+        displayName: 'Claude (Sonnet 4.5)',
+        icon: '🎭',
+        available: typeof window !== 'undefined' && 'puter' in window
+    },
+    [AIProvider.GROK]: {
+        name: 'grok',
+        displayName: 'Grok (4.1 Fast)',
+        icon: '⚡',
+        available: typeof window !== 'undefined' && 'puter' in window
+    },
+    [AIProvider.GEMINI_3_PRO]: {
+        name: 'gemini_3_pro',
+        displayName: 'Gemini 3 Pro',
+        icon: '🌌',
         available: typeof window !== 'undefined' && 'puter' in window
     }
 };

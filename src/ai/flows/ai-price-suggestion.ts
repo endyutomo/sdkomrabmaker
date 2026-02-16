@@ -207,7 +207,8 @@ Output harus dalam format JSON dengan struktur persis seperti ini:
 }`;
 
   try {
-    const response = await callPuterAI(promptText, { model: 'google/gemini-2.5-flash' });
+    // Model will be determined automatically by callPuterAI based on active provider
+    const response = await callPuterAI(promptText);
     const parsed = parseAIJSON<PriceSuggestionOutput>(response);
     return parsed;
   } catch (error) {

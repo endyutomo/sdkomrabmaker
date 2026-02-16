@@ -42,6 +42,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { suggestItemPrice } from "@/ai/flows/ai-price-suggestion";
+import { suggestItemPriceClient, shouldUsePuterAI, PriceSuggestionInput } from "@/ai/puter-ai-adapter";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabase } from "@/components/providers/supabase-provider";
 import { useSupabaseQuery } from "@/hooks/use-supabase-query";
@@ -157,38 +158,25 @@ export function BoqTable({
 
     setLoadingPriceId(item.id);
     try {
-      // @ts-ignore
-      if (!window.puter) {
-        throw new Error("Layanan Puter.js tidak tersedia. Coba refresh halaman.");
-      }
+      const input: PriceSuggestionInput = {
+        itemName: item.name,
+        itemType: item.type as 'perangkat' | 'jasa'
+      };
 
-      const currentDate = new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
-      const prompt = `
-        Saya adalah estimator proyek konstruksi di Indonesia. Berikan estimasi harga satuan tertinggi (high-end) untuk item berikut dalam Rupiah (IDR).
-        
-        Item: "${item.name}"
-        Tipe: ${item.type} (perangkat/jasa)
-        Konteks Waktu: ${currentDate}
-        
-        Instruksi:
-        1. Jika perangkat, cari harga dari Official Store atau penjual bereputasi tinggi di marketplace Indonesia (Tokopedia/Shopee/Bhinneka). PRIORITASKAN penjual di JABODETABEK (Jakarta, Bogor, Depok, Tangerang, Bekasi).
-        2. Jika jasa, estimasi biaya profesional di area Jabodetabek.
-        3. PENTING: Harga harus relevan dengan kondisi pasar bulan ${currentDate}.
-        4. Output WAJIB dalam format JSON murni tanpa markdown block.
-        
-        Format JSON:
-        {
-          "suggestedPrice": number (harga dalam angka, contoh: 1500000),
-          "sourceName": string (contoh: "Tokopedia - Toko Abadi Jakarta"),
-          "sourceUrl": string (URL contoh atau link pencarian yang relevan),
-          "notes": string (alasan harga dan referensi waktu)
+      let result;
+
+      // Check active provider
+      if (shouldUsePuterAI()) {
+        // @ts-ignore
+        if (!window.puter) {
+          throw new Error("Layanan AI Client tidak tersedia. Coba refresh halaman.");
         }
-      `;
-
-      // @ts-ignore
-      const response = await window.puter.ai.chat(prompt, { model: 'gpt-4o-mini' });
-      const text = response.message.content.trim().replace(/```json/g, '').replace(/```/g, ''); // Clean markdown if any
-      const result = JSON.parse(text);
+        console.log("Using Client-Side AI Provider (Puter/OpenAI/Claude/Grok)");
+        result = await suggestItemPriceClient(input);
+      } else {
+        console.log("Using Server-Side AI Provider (Gemini)");
+        result = await suggestItemPrice(input);
+      }
 
       onUpdateItem(categoryId, item.id, {
         unitPrice: result.suggestedPrice,

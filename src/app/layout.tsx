@@ -14,6 +14,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+import { FloatingChatButton } from "@/components/shared/floating-chat-button";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,6 +31,7 @@ export default function RootLayout({
         <SupabaseProvider>
           {children}
           <Toaster />
+          <FloatingChatButton />
         </SupabaseProvider>
       </body>
     </html>

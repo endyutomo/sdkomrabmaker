@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { suggestItemPrice } from "@/ai/flows/ai-price-suggestion";
+import { suggestItemPriceClient, shouldUsePuterAI, PriceSuggestionInput } from "@/ai/puter-ai-adapter";
+import { AIProvider } from "@/ai/ai-provider";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -86,9 +89,39 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
         }
       `;
 
-      // @ts-ignore
-      const response = await window.puter.ai.chat(prompt, { model: 'gpt-4o-mini' });
-      const text = response.message.content.trim().replace(/```json/g, '').replace(/```/g, '');
+      let aiResponseText: string;
+
+      // Check if we should use Puter/OpenAI/Claude/Grok (Client Side)
+      if (shouldUsePuterAI()) {
+        // @ts-ignore
+        if (!window.puter) {
+          throw new Error("Layanan Puter.js tidak tersedia. Coba refresh halaman.");
+        }
+        console.log("Using Client-Side AI Provider (Puter.js)");
+        // @ts-ignore
+        const response = await window.puter.ai.chat(prompt, { model: 'gpt-4o-mini' });
+        aiResponseText = response.message.content;
+      } else {
+        console.log("Using Server-Side AI Provider (Genkit)");
+        // For the initial generation of categories and items, we'll use a generic prompt
+        // The `suggestItemPrice` flow is designed for individual item pricing,
+        // so we'll adapt this to call a more general flow if available,
+        // or simulate the structure for now.
+        // For this specific instruction, we'll assume a server-side flow for full RAB generation exists.
+        // If not, this part would need a dedicated server-side flow.
+        // For now, we'll use a placeholder or throw an error if no client-side AI is available.
+        throw new Error("Server-side AI for full RAB generation is not yet implemented for this component.");
+        // Example of how a server-side call *might* look if a flow existed:
+        // const serverResponse = await fetch('/api/generate-rab', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify({ prompt }),
+        // });
+        // const data = await serverResponse.json();
+        // aiResponseText = data.content;
+      }
+
+      const text = aiResponseText.trim().replace(/```json/g, '').replace(/```/g, '');
       const result = JSON.parse(text);
 
       const formattedCategories: BoqCategory[] = result.categories.map((cat: any, idx: number) => ({

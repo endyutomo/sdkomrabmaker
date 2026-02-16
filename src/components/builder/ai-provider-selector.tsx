@@ -26,8 +26,7 @@ export function AIProviderSelector() {
     const handleProviderChange = (provider: AIProvider) => {
         setActive(provider);
         setActiveProvider(provider);
-        // Reload page to apply changes
-        window.location.reload();
+        // No reload needed, state is handled dynamically
     };
 
     if (!mounted) {

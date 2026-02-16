@@ -2620,14 +2620,14 @@ function AiGenerator(param) {
                         className: "h-5 w-5 text-accent"
                     }, void 0, false, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 119,
+                        lineNumber: 122,
                         columnNumber: 9
                     }, this),
                     "Penyusun RAB Berbasis AI"
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 118,
+                lineNumber: 121,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2638,7 +2638,7 @@ function AiGenerator(param) {
                         children: "💰 Estimasi Harga Teraman Multi-Marketplace"
                     }, void 0, false, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 124,
+                        lineNumber: 127,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2649,7 +2649,7 @@ function AiGenerator(param) {
                                 children: "tertinggi yang realistis"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 126,
+                                lineNumber: 129,
                                 columnNumber: 40
                             }, this),
                             " dari ",
@@ -2657,20 +2657,20 @@ function AiGenerator(param) {
                                 children: "Tokopedia, Shopee, Bukalapak, dan Lazada"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 126,
+                                lineNumber: 129,
                                 columnNumber: 87
                             }, this),
                             " (seller rating 4-5 bintang) untuk RAB yang aman dengan buffer harga. Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di marketplace terpercaya sebelum membeli."
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 125,
+                        lineNumber: 128,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 123,
+                lineNumber: 126,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2684,7 +2684,7 @@ function AiGenerator(param) {
                                 children: "Tipe Proyek"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 132,
+                                lineNumber: 135,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -2694,13 +2694,13 @@ function AiGenerator(param) {
                                 onChange: (e)=>setProjectType(e.target.value)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 133,
+                                lineNumber: 136,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 131,
+                        lineNumber: 134,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2711,7 +2711,7 @@ function AiGenerator(param) {
                                 children: "Persyaratan Khusus (Opsional)"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 142,
+                                lineNumber: 145,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -2722,19 +2722,19 @@ function AiGenerator(param) {
                                 className: "min-h-[100px]"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 143,
+                                lineNumber: 146,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 141,
+                        lineNumber: 144,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 130,
+                lineNumber: 133,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -2747,7 +2747,7 @@ function AiGenerator(param) {
                             className: "mr-2 h-4 w-4 animate-spin"
                         }, void 0, false, {
                             fileName: "[project]/src/components/builder/ai-generator.tsx",
-                            lineNumber: 160,
+                            lineNumber: 163,
                             columnNumber: 13
                         }, this),
                         "Menghasilkan Item RAB..."
@@ -2758,7 +2758,7 @@ function AiGenerator(param) {
                             className: "mr-2 h-4 w-4"
                         }, void 0, false, {
                             fileName: "[project]/src/components/builder/ai-generator.tsx",
-                            lineNumber: 165,
+                            lineNumber: 168,
                             columnNumber: 13
                         }, this),
                         "Hasilkan Saran"
@@ -2766,7 +2766,7 @@ function AiGenerator(param) {
                 }, void 0, true)
             }, void 0, false, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 153,
+                lineNumber: 156,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2774,13 +2774,13 @@ function AiGenerator(param) {
                 children: "Didukung oleh AI Generatif Canggih"
             }, void 0, false, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 170,
+                lineNumber: 173,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/builder/ai-generator.tsx",
-        lineNumber: 117,
+        lineNumber: 120,
         columnNumber: 5
     }, this);
 }
@@ -3185,6 +3185,9 @@ __turbopack_context__.s([
 var AIProvider = /*#__PURE__*/ function(AIProvider) {
     AIProvider["GEMINI"] = "gemini";
     AIProvider["PUTER"] = "puter";
+    AIProvider["OPENAI"] = "openai";
+    AIProvider["CLAUDE"] = "claude";
+    AIProvider["GROK"] = "grok";
     return AIProvider;
 }({});
 const AI_PROVIDERS = {
@@ -3196,8 +3199,26 @@ const AI_PROVIDERS = {
     },
     ["puter"]: {
         name: 'puter',
-        displayName: 'Puter AI',
+        displayName: 'Puter AI (Gemini 2.5)',
         icon: '🚀',
+        available: "object" !== 'undefined' && 'puter' in window
+    },
+    ["openai"]: {
+        name: 'openai',
+        displayName: 'OpenAI (GPT-4o)',
+        icon: '🧠',
+        available: "object" !== 'undefined' && 'puter' in window
+    },
+    ["claude"]: {
+        name: 'claude',
+        displayName: 'Claude (Sonnet 4.5)',
+        icon: '🎭',
+        available: "object" !== 'undefined' && 'puter' in window
+    },
+    ["grok"]: {
+        name: 'grok',
+        displayName: 'Grok (4.1 Fast)',
+        icon: '⚡',
         available: "object" !== 'undefined' && 'puter' in window
     }
 };
