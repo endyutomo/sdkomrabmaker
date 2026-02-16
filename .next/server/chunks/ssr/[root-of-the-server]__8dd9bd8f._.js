@@ -2295,25 +2295,32 @@ function AiGenerator({ onSuggest }) {
         Konteks Waktu: ${currentDate}
         
         Instruksi Penting:
-        1. HARGA WAJIB berdasarkan estimasi harga PASARAN yang umum di marketplace seperti Shopee
-        2. Jangan memberikan link toko spesifik atau nama toko yang tidak valid
-        3. Gunakan harga estimasi yang realistis berdasarkan pengalaman pasar
-        4. Untuk material bangunan: gunakan harga rata-rata yang umum di toko bangunan
-        5. Untuk peralatan: gunakan harga pasaran yang wajar
-        6. Jangan gunakan harga terendah (kualitas rendah) atau harga tertinggi (overprice)
-        7. Kelompokkan item pekerjaan ke dalam kategori logis (misal: "Pekerjaan Persiapan", "Pekerjaan Pondasi", "Pekerjaan Lantai", dll)
-        8. Berikan estimasi volume yang realistis untuk proyek jenis ini
-        9. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi)
-        10. Output WAJIB dalam format JSON murni array of objects
+        1. HARGA WAJIB berdasarkan estimasi harga dari MULTIPLE MARKETPLACE TERPERCAYA:
+           - Tokopedia (seller rating 4-5 bintang)
+           - Shopee (seller rating 4-5 bintang)
+           - Bukalapak (seller rating 4-5 bintang)
+           - Lazada (seller rating 4-5 bintang)
+        2. Berikan RANGE HARGA (harga terendah dan tertinggi) dari seller terpercaya di marketplace tersebut
+        3. Gunakan harga MEDIAN/RATA-RATA sebagai unitPrice (bukan yang termurah atau termahal)
+        4. Fokus pada seller dengan rating tinggi (4-5 bintang) dan review positif
+        5. Jangan memberikan link toko spesifik atau nama toko yang tidak valid
+        6. Untuk material bangunan: bandingkan harga di semua marketplace, ambil rata-rata
+        7. Untuk peralatan: gunakan harga pasaran yang wajar dari seller terpercaya
+        8. Untuk jasa: gunakan standar upah profesional di Indonesia (${currentDate})
+        9. Kelompokkan item pekerjaan ke dalam kategori logis (misal: "Pekerjaan Persiapan", "Pekerjaan Pondasi", "Pekerjaan Lantai", dll)
+        10. Berikan estimasi volume yang realistis untuk proyek jenis ini
+        11. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi)
+        12. Output WAJIB dalam format JSON murni array of objects
 
-        Panduan Pricing Realistis:
-        - Material Bangunan: Harga rata-rata pasaran (estimasi berdasarkan pengalaman)
-        - Peralatan: Harga pasaran yang wajar untuk kualitas baik
-        - Jasa: Harga pasaran tukang profesional (bukan yang termurah)
-        - Include estimasi ongkir dan handling untuk material
-        - Untuk jasa, gunakan upah harian tukang berpengalaman
+        Panduan Pricing Multi-Marketplace:
+        - Material Bangunan: Rata-rata harga dari Tokopedia, Shopee, Bukalapak, Lazada (seller rating 4-5★)
+        - Peralatan: Harga median dari marketplace dengan seller terpercaya
+        - Jasa: Standar upah profesional Indonesia (update ${currentDate})
+        - Pertimbangkan ongkir rata-rata untuk material
+        - Hindari harga outlier (terlalu murah = kualitas rendah, terlalu mahal = overprice)
+        - Prioritaskan seller dengan banyak review positif
 
-        PENTING: Jangan membuat link toko atau nama toko spesifik. Gunakan harga estimasi yang realistis.
+        PENTING: Estimasi harga harus mencerminkan RATA-RATA dari multiple marketplace, bukan hanya satu sumber.
 
         Format JSON Output:
         {
@@ -2369,14 +2376,14 @@ function AiGenerator({ onSuggest }) {
                         className: "h-5 w-5 text-accent"
                     }, void 0, false, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 105,
+                        lineNumber: 112,
                         columnNumber: 9
                     }, this),
                     "Penyusun RAB Berbasis AI"
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 104,
+                lineNumber: 111,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2384,24 +2391,34 @@ function AiGenerator({ onSuggest }) {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "font-medium mb-1",
-                        children: "💰 Estimasi Harga Pasaran"
+                        children: "💰 Estimasi Harga Multi-Marketplace"
                     }, void 0, false, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 110,
+                        lineNumber: 117,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "text-xs",
-                        children: "AI memberikan estimasi harga berdasarkan pasaran umum marketplace. Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di toko terpercaya sebelum membeli."
-                    }, void 0, false, {
+                        children: [
+                            "AI memberikan estimasi harga berdasarkan rata-rata dari ",
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                children: "Tokopedia, Shopee, Bukalapak, dan Lazada"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/builder/ai-generator.tsx",
+                                lineNumber: 119,
+                                columnNumber: 67
+                            }, this),
+                            " (seller rating 4-5 bintang). Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di marketplace terpercaya sebelum membeli."
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 111,
+                        lineNumber: 118,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 109,
+                lineNumber: 116,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2415,7 +2432,7 @@ function AiGenerator({ onSuggest }) {
                                 children: "Tipe Proyek"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 118,
+                                lineNumber: 125,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -2425,13 +2442,13 @@ function AiGenerator({ onSuggest }) {
                                 onChange: (e)=>setProjectType(e.target.value)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 119,
+                                lineNumber: 126,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 117,
+                        lineNumber: 124,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2442,7 +2459,7 @@ function AiGenerator({ onSuggest }) {
                                 children: "Persyaratan Khusus (Opsional)"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 128,
+                                lineNumber: 135,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -2453,19 +2470,19 @@ function AiGenerator({ onSuggest }) {
                                 className: "min-h-[100px]"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 129,
+                                lineNumber: 136,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 127,
+                        lineNumber: 134,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 116,
+                lineNumber: 123,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -2478,7 +2495,7 @@ function AiGenerator({ onSuggest }) {
                             className: "mr-2 h-4 w-4 animate-spin"
                         }, void 0, false, {
                             fileName: "[project]/src/components/builder/ai-generator.tsx",
-                            lineNumber: 146,
+                            lineNumber: 153,
                             columnNumber: 13
                         }, this),
                         "Menghasilkan Item RAB..."
@@ -2489,7 +2506,7 @@ function AiGenerator({ onSuggest }) {
                             className: "mr-2 h-4 w-4"
                         }, void 0, false, {
                             fileName: "[project]/src/components/builder/ai-generator.tsx",
-                            lineNumber: 151,
+                            lineNumber: 158,
                             columnNumber: 13
                         }, this),
                         "Hasilkan Saran"
@@ -2497,7 +2514,7 @@ function AiGenerator({ onSuggest }) {
                 }, void 0, true)
             }, void 0, false, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 139,
+                lineNumber: 146,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2505,13 +2522,13 @@ function AiGenerator({ onSuggest }) {
                 children: "Didukung oleh AI Generatif Canggih"
             }, void 0, false, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 156,
+                lineNumber: 163,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/builder/ai-generator.tsx",
-        lineNumber: 103,
+        lineNumber: 110,
         columnNumber: 5
     }, this);
 }

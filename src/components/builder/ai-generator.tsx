@@ -33,25 +33,32 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
         Konteks Waktu: ${currentDate}
         
         Instruksi Penting:
-        1. HARGA WAJIB berdasarkan estimasi harga PASARAN yang umum di marketplace seperti Shopee
-        2. Jangan memberikan link toko spesifik atau nama toko yang tidak valid
-        3. Gunakan harga estimasi yang realistis berdasarkan pengalaman pasar
-        4. Untuk material bangunan: gunakan harga rata-rata yang umum di toko bangunan
-        5. Untuk peralatan: gunakan harga pasaran yang wajar
-        6. Jangan gunakan harga terendah (kualitas rendah) atau harga tertinggi (overprice)
-        7. Kelompokkan item pekerjaan ke dalam kategori logis (misal: "Pekerjaan Persiapan", "Pekerjaan Pondasi", "Pekerjaan Lantai", dll)
-        8. Berikan estimasi volume yang realistis untuk proyek jenis ini
-        9. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi)
-        10. Output WAJIB dalam format JSON murni array of objects
+        1. HARGA WAJIB berdasarkan estimasi harga dari MULTIPLE MARKETPLACE TERPERCAYA:
+           - Tokopedia (seller rating 4-5 bintang)
+           - Shopee (seller rating 4-5 bintang)
+           - Bukalapak (seller rating 4-5 bintang)
+           - Lazada (seller rating 4-5 bintang)
+        2. Berikan RANGE HARGA (harga terendah dan tertinggi) dari seller terpercaya di marketplace tersebut
+        3. Gunakan harga MEDIAN/RATA-RATA sebagai unitPrice (bukan yang termurah atau termahal)
+        4. Fokus pada seller dengan rating tinggi (4-5 bintang) dan review positif
+        5. Jangan memberikan link toko spesifik atau nama toko yang tidak valid
+        6. Untuk material bangunan: bandingkan harga di semua marketplace, ambil rata-rata
+        7. Untuk peralatan: gunakan harga pasaran yang wajar dari seller terpercaya
+        8. Untuk jasa: gunakan standar upah profesional di Indonesia (${currentDate})
+        9. Kelompokkan item pekerjaan ke dalam kategori logis (misal: "Pekerjaan Persiapan", "Pekerjaan Pondasi", "Pekerjaan Lantai", dll)
+        10. Berikan estimasi volume yang realistis untuk proyek jenis ini
+        11. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi)
+        12. Output WAJIB dalam format JSON murni array of objects
 
-        Panduan Pricing Realistis:
-        - Material Bangunan: Harga rata-rata pasaran (estimasi berdasarkan pengalaman)
-        - Peralatan: Harga pasaran yang wajar untuk kualitas baik
-        - Jasa: Harga pasaran tukang profesional (bukan yang termurah)
-        - Include estimasi ongkir dan handling untuk material
-        - Untuk jasa, gunakan upah harian tukang berpengalaman
+        Panduan Pricing Multi-Marketplace:
+        - Material Bangunan: Rata-rata harga dari Tokopedia, Shopee, Bukalapak, Lazada (seller rating 4-5★)
+        - Peralatan: Harga median dari marketplace dengan seller terpercaya
+        - Jasa: Standar upah profesional Indonesia (update ${currentDate})
+        - Pertimbangkan ongkir rata-rata untuk material
+        - Hindari harga outlier (terlalu murah = kualitas rendah, terlalu mahal = overprice)
+        - Prioritaskan seller dengan banyak review positif
 
-        PENTING: Jangan membuat link toko atau nama toko spesifik. Gunakan harga estimasi yang realistis.
+        PENTING: Estimasi harga harus mencerminkan RATA-RATA dari multiple marketplace, bukan hanya satu sumber.
 
         Format JSON Output:
         {
@@ -107,9 +114,9 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
       </div>
 
       <div className="bg-yellow-50 rounded-lg p-3 text-sm text-yellow-800">
-        <div className="font-medium mb-1">💰 Estimasi Harga Pasaran</div>
+        <div className="font-medium mb-1">💰 Estimasi Harga Multi-Marketplace</div>
         <div className="text-xs">
-          AI memberikan estimasi harga berdasarkan pasaran umum marketplace. Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di toko terpercaya sebelum membeli.
+          AI memberikan estimasi harga berdasarkan rata-rata dari <strong>Tokopedia, Shopee, Bukalapak, dan Lazada</strong> (seller rating 4-5 bintang). Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di marketplace terpercaya sebelum membeli.
         </div>
       </div>
 

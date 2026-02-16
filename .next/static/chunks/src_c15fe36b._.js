@@ -2459,7 +2459,7 @@ function AiGenerator(param) {
                 month: 'long',
                 year: 'numeric'
             });
-            const prompt = '\n        Saya estimator konstruksi profesional. Buatkan daftar Rencana Anggaran Biaya (RAB) untuk proyek: "'.concat(projectType, '".\n        Spesifikasi/Kondisi: "').concat(specifications || 'Standar umum', '".\n        Konteks Waktu: ').concat(currentDate, '\n        \n        Instruksi Penting:\n        1. HARGA WAJIB berdasarkan estimasi harga PASARAN yang umum di marketplace seperti Shopee\n        2. Jangan memberikan link toko spesifik atau nama toko yang tidak valid\n        3. Gunakan harga estimasi yang realistis berdasarkan pengalaman pasar\n        4. Untuk material bangunan: gunakan harga rata-rata yang umum di toko bangunan\n        5. Untuk peralatan: gunakan harga pasaran yang wajar\n        6. Jangan gunakan harga terendah (kualitas rendah) atau harga tertinggi (overprice)\n        7. Kelompokkan item pekerjaan ke dalam kategori logis (misal: "Pekerjaan Persiapan", "Pekerjaan Pondasi", "Pekerjaan Lantai", dll)\n        8. Berikan estimasi volume yang realistis untuk proyek jenis ini\n        9. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi)\n        10. Output WAJIB dalam format JSON murni array of objects\n\n        Panduan Pricing Realistis:\n        - Material Bangunan: Harga rata-rata pasaran (estimasi berdasarkan pengalaman)\n        - Peralatan: Harga pasaran yang wajar untuk kualitas baik\n        - Jasa: Harga pasaran tukang profesional (bukan yang termurah)\n        - Include estimasi ongkir dan handling untuk material\n        - Untuk jasa, gunakan upah harian tukang berpengalaman\n\n        PENTING: Jangan membuat link toko atau nama toko spesifik. Gunakan harga estimasi yang realistis.\n\n        Format JSON Output:\n        {\n          "categories": [\n            {\n              "name": "Nama Kategori",\n              "items": [\n                {\n                  "name": "Nama Item Pekerjaan",\n                  "unit": "Satuan (m2/m3/unit/ls)",\n                  "quantity": number,\n                  "unitPrice": number (harga satuan estimasi pasaran yang wajar),\n                  "type": "perangkat" | "jasa"\n                }\n              ]\n            }\n          ]\n        }\n      ');
+            const prompt = '\n        Saya estimator konstruksi profesional. Buatkan daftar Rencana Anggaran Biaya (RAB) untuk proyek: "'.concat(projectType, '".\n        Spesifikasi/Kondisi: "').concat(specifications || 'Standar umum', '".\n        Konteks Waktu: ').concat(currentDate, "\n        \n        Instruksi Penting:\n        1. HARGA WAJIB berdasarkan estimasi harga dari MULTIPLE MARKETPLACE TERPERCAYA:\n           - Tokopedia (seller rating 4-5 bintang)\n           - Shopee (seller rating 4-5 bintang)\n           - Bukalapak (seller rating 4-5 bintang)\n           - Lazada (seller rating 4-5 bintang)\n        2. Berikan RANGE HARGA (harga terendah dan tertinggi) dari seller terpercaya di marketplace tersebut\n        3. Gunakan harga MEDIAN/RATA-RATA sebagai unitPrice (bukan yang termurah atau termahal)\n        4. Fokus pada seller dengan rating tinggi (4-5 bintang) dan review positif\n        5. Jangan memberikan link toko spesifik atau nama toko yang tidak valid\n        6. Untuk material bangunan: bandingkan harga di semua marketplace, ambil rata-rata\n        7. Untuk peralatan: gunakan harga pasaran yang wajar dari seller terpercaya\n        8. Untuk jasa: gunakan standar upah profesional di Indonesia (").concat(currentDate, ')\n        9. Kelompokkan item pekerjaan ke dalam kategori logis (misal: "Pekerjaan Persiapan", "Pekerjaan Pondasi", "Pekerjaan Lantai", dll)\n        10. Berikan estimasi volume yang realistis untuk proyek jenis ini\n        11. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi)\n        12. Output WAJIB dalam format JSON murni array of objects\n\n        Panduan Pricing Multi-Marketplace:\n        - Material Bangunan: Rata-rata harga dari Tokopedia, Shopee, Bukalapak, Lazada (seller rating 4-5★)\n        - Peralatan: Harga median dari marketplace dengan seller terpercaya\n        - Jasa: Standar upah profesional Indonesia (update ').concat(currentDate, ')\n        - Pertimbangkan ongkir rata-rata untuk material\n        - Hindari harga outlier (terlalu murah = kualitas rendah, terlalu mahal = overprice)\n        - Prioritaskan seller dengan banyak review positif\n\n        PENTING: Estimasi harga harus mencerminkan RATA-RATA dari multiple marketplace, bukan hanya satu sumber.\n\n        Format JSON Output:\n        {\n          "categories": [\n            {\n              "name": "Nama Kategori",\n              "items": [\n                {\n                  "name": "Nama Item Pekerjaan",\n                  "unit": "Satuan (m2/m3/unit/ls)",\n                  "quantity": number,\n                  "unitPrice": number (harga satuan estimasi pasaran yang wajar),\n                  "type": "perangkat" | "jasa"\n                }\n              ]\n            }\n          ]\n        }\n      ');
             // @ts-ignore
             const response = await window.puter.ai.chat(prompt, {
                 model: 'gpt-4o-mini'
@@ -2496,14 +2496,14 @@ function AiGenerator(param) {
                         className: "h-5 w-5 text-accent"
                     }, void 0, false, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 105,
+                        lineNumber: 112,
                         columnNumber: 9
                     }, this),
                     "Penyusun RAB Berbasis AI"
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 104,
+                lineNumber: 111,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2511,24 +2511,34 @@ function AiGenerator(param) {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "font-medium mb-1",
-                        children: "💰 Estimasi Harga Pasaran"
+                        children: "💰 Estimasi Harga Multi-Marketplace"
                     }, void 0, false, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 110,
+                        lineNumber: 117,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "text-xs",
-                        children: "AI memberikan estimasi harga berdasarkan pasaran umum marketplace. Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di toko terpercaya sebelum membeli."
-                    }, void 0, false, {
+                        children: [
+                            "AI memberikan estimasi harga berdasarkan rata-rata dari ",
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                children: "Tokopedia, Shopee, Bukalapak, dan Lazada"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/builder/ai-generator.tsx",
+                                lineNumber: 119,
+                                columnNumber: 67
+                            }, this),
+                            " (seller rating 4-5 bintang). Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di marketplace terpercaya sebelum membeli."
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 111,
+                        lineNumber: 118,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 109,
+                lineNumber: 116,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2542,7 +2552,7 @@ function AiGenerator(param) {
                                 children: "Tipe Proyek"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 118,
+                                lineNumber: 125,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -2552,13 +2562,13 @@ function AiGenerator(param) {
                                 onChange: (e)=>setProjectType(e.target.value)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 119,
+                                lineNumber: 126,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 117,
+                        lineNumber: 124,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2569,7 +2579,7 @@ function AiGenerator(param) {
                                 children: "Persyaratan Khusus (Opsional)"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 128,
+                                lineNumber: 135,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -2580,19 +2590,19 @@ function AiGenerator(param) {
                                 className: "min-h-[100px]"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 129,
+                                lineNumber: 136,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 127,
+                        lineNumber: 134,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 116,
+                lineNumber: 123,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -2605,7 +2615,7 @@ function AiGenerator(param) {
                             className: "mr-2 h-4 w-4 animate-spin"
                         }, void 0, false, {
                             fileName: "[project]/src/components/builder/ai-generator.tsx",
-                            lineNumber: 146,
+                            lineNumber: 153,
                             columnNumber: 13
                         }, this),
                         "Menghasilkan Item RAB..."
@@ -2616,7 +2626,7 @@ function AiGenerator(param) {
                             className: "mr-2 h-4 w-4"
                         }, void 0, false, {
                             fileName: "[project]/src/components/builder/ai-generator.tsx",
-                            lineNumber: 151,
+                            lineNumber: 158,
                             columnNumber: 13
                         }, this),
                         "Hasilkan Saran"
@@ -2624,7 +2634,7 @@ function AiGenerator(param) {
                 }, void 0, true)
             }, void 0, false, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 139,
+                lineNumber: 146,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2632,13 +2642,13 @@ function AiGenerator(param) {
                 children: "Didukung oleh AI Generatif Canggih"
             }, void 0, false, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 156,
+                lineNumber: 163,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/builder/ai-generator.tsx",
-        lineNumber: 103,
+        lineNumber: 110,
         columnNumber: 5
     }, this);
 }
