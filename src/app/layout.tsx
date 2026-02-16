@@ -15,6 +15,7 @@ export const viewport: Viewport = {
 };
 
 import { FloatingChatButton } from "@/components/shared/floating-chat-button";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 export default function RootLayout({
   children,
@@ -22,17 +23,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id">
+    <html lang="id" suppressHydrationWarning>
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
         <script src="https://js.puter.com/v2/"></script>
       </head>
-      <body className="font-body antialiased">
-        <SupabaseProvider>
-          {children}
-          <Toaster />
-          <FloatingChatButton />
-        </SupabaseProvider>
+      <body className="font-body antialiased transition-colors duration-300">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SupabaseProvider>
+            {children}
+            <Toaster />
+            <FloatingChatButton />
+          </SupabaseProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

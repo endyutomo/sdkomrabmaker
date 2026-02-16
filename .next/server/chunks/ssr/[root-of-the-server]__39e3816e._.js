@@ -343,15 +343,35 @@ async function callPuterAI(prompt, options = {}) {
         const response = await window.puter.ai.chat(prompt, {
             model
         });
-        // Handle Grok's specific response structure if needed (based on user example: response.message.content)
-        // However, puter.ai.chat usually standardizes string response unless specified otherwise
-        // Let's check if response is object or string. The example shows .then(response => puter.print(response.message.content))
-        // But for consistency with other models, we might need to handle it.
-        // Assuming Puter SDK standardizes it, but if Grok returns object, we need to extract content.
-        if (typeof response === 'object' && response.message?.content) {
-            return response.message.content;
+        // Standardize response to string
+        if (typeof response === 'string') {
+            return response;
         }
-        return response;
+        if (typeof response === 'object' && response !== null) {
+            // Handle { message: { content: "..." | [...] } }
+            const message = response.message;
+            if (message?.content) {
+                if (typeof message.content === 'string') {
+                    return message.content;
+                }
+                if (Array.isArray(message.content)) {
+                    // Extract text from blocks (Claude style)
+                    return message.content.map((block)=>{
+                        if (typeof block === 'string') return block;
+                        if (block?.text) return block.text;
+                        return JSON.stringify(block);
+                    }).join("");
+                }
+                return String(message.content);
+            }
+            // Handle direct array response
+            if (Array.isArray(response)) {
+                return JSON.stringify(response);
+            }
+            // Fallback for other object structures
+            return JSON.stringify(response);
+        }
+        return String(response);
     } catch (error) {
         console.error('Puter AI Error:', error);
         throw new Error(`Puter AI failed: ${error instanceof Error ? error.message : 'Unknown error'}`);

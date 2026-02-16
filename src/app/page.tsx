@@ -19,9 +19,12 @@ export default function Home() {
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-lg border-b">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Logo className="h-10 w-10" />
-            <span className="text-xl font-bold tracking-tight text-primary">SDKOM RAB MAker</span>
+          <div className="flex items-center gap-2 group">
+            <Logo className="h-10 w-10 transition-transform group-hover:scale-110" />
+            <div className="flex flex-col -space-y-1">
+              <span className="text-xl font-bold tracking-tight text-primary">SDKOM <span className="text-slate-400 font-medium italic">RAB MAker</span></span>
+              <span className="text-[10px] font-light text-slate-400/80 tracking-tight">create by Endy Akbbar</span>
+            </div>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
             <a href="#features" className="hover:text-primary transition-colors">Fitur</a>
@@ -178,7 +181,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-2">
             <Logo className="h-8 w-8" />
-            <span className="text-lg font-bold text-primary">SDKOM RAB MAker</span>
+            <div className="flex flex-col -space-y-1">
+              <span className="text-lg font-bold text-primary">SDKOM <span className="text-slate-400 font-medium italic">RAB MAker</span></span>
+              <span className="text-[9px] font-light text-slate-400/80 tracking-tight">create by Endy Akbbar</span>
+            </div>
           </div>
           <div className="flex gap-8 text-sm text-muted-foreground">
             <a href="#" className="hover:text-primary">Syarat & Ketentuan</a>

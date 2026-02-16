@@ -437,7 +437,8 @@ export function BuilderClient() {
             <div className="min-h-screen flex items-center justify-center bg-background">
                 <div className="flex flex-col items-center gap-4">
                     <Loader2 className="h-10 w-10 animate-spin text-primary" />
-                    <p className="text-slate-500 font-medium animate-pulse">Memuat data SDKOM RAB MAker...</p>
+                    <p className="text-slate-500 font-medium animate-pulse">Memuat data SDKOM <span className="font-light italic">RAB MAker</span>...</p>
+                    <span className="text-[10px] font-light text-slate-400 -mt-3">create by Endy Akbbar</span>
                 </div>
             </div>
         );
@@ -497,7 +498,10 @@ export function BuilderClient() {
                                 <SheetHeader className="mb-4">
                                     <SheetTitle className="text-left flex items-center gap-2">
                                         <Logo className="h-6 w-6" />
-                                        Menu RAB Maker
+                                        <div className="flex flex-col -space-y-1">
+                                            <span className="text-sm font-bold">SDKOM <span className="text-slate-400 font-medium italic">RAB MAker</span></span>
+                                            <span className="text-[9px] font-light text-slate-400 tracking-tight">create by Endy Akbbar</span>
+                                        </div>
                                     </SheetTitle>
                                 </SheetHeader>
                                 <SidebarContent />

@@ -27,6 +27,7 @@ import { callPuterAI } from "@/ai/puter-ai-adapter";
 import { AIProvider, getActiveProvider, AI_PROVIDERS, setActiveProvider } from "@/ai/ai-provider";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/ui/logo";
+import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 
 interface Message {
     id: string;
@@ -204,15 +205,18 @@ export function AIChatSidebar({ open, onOpenChange }: AIChatSidebarProps) {
                                 </div>
                             </div>
                         </div>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors rounded-lg"
-                            onClick={handleClearChat}
-                            title="Bersihkan Chat"
-                        >
-                            <RotateCcw className="h-4 w-4" />
-                        </Button>
+                        <div className="flex items-center gap-1">
+                            <ThemeSwitcher />
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-muted-foreground hover:text-primary transition-colors rounded-lg"
+                                onClick={handleClearChat}
+                                title="Bersihkan Chat"
+                            >
+                                <RotateCcw className="h-4 w-4" />
+                            </Button>
+                        </div>
                     </div>
                 </SheetHeader>
 

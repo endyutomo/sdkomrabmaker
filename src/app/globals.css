@@ -4,68 +4,92 @@
 
 @layer base {
   :root {
-    /* Background: Light gray (#E9E9F1) */
     --background: 240 16% 93%;
     --foreground: 238 52% 10%;
-    
     --card: 0 0% 100%;
     --card-foreground: 238 52% 10%;
-    
     --popover: 0 0% 100%;
     --popover-foreground: 238 52% 10%;
-    
-    /* Primary: Deep blue (#2E3192) */
     --primary: 238 52% 38%;
     --primary-foreground: 0 0% 100%;
-    
     --secondary: 240 10% 90%;
     --secondary-foreground: 238 52% 20%;
-    
     --muted: 240 10% 85%;
     --muted-foreground: 240 5% 45%;
-    
-    /* Accent: Electric purple (#BE0AFF) */
     --accent: 283 100% 52%;
     --accent-foreground: 0 0% 100%;
-    
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 240 5.9% 85%;
     --input: 240 5.9% 85%;
     --ring: 238 52% 38%;
-    
     --radius: 0.75rem;
   }
 
-  .dark {
-    --background: 238 52% 10%;
-    --foreground: 240 16% 93%;
-    
-    --card: 238 52% 12%;
-    --card-foreground: 240 16% 93%;
-    
-    --popover: 238 52% 12%;
-    --popover-foreground: 240 16% 93%;
-    
-    --primary: 238 52% 38%;
-    --primary-foreground: 0 0% 100%;
-    
-    --secondary: 238 52% 15%;
-    --secondary-foreground: 240 16% 93%;
-    
-    --muted: 238 52% 18%;
-    --muted-foreground: 240 5% 65%;
-    
-    --accent: 283 100% 52%;
-    --accent-foreground: 0 0% 100%;
-    
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+  /* Color Themes */
+  [data-theme='ocean'] {
+    --primary: 199 89% 48%;
+    --accent: 189 94% 43%;
+    --ring: 199 89% 48%;
+  }
 
-    --border: 238 52% 20%;
-    --input: 238 52% 20%;
-    --ring: 283 100% 52%;
+  [data-theme='rose'] {
+    --primary: 346 84% 61%;
+    --accent: 326 100% 64%;
+    --ring: 346 84% 61%;
+  }
+
+  [data-theme='emerald'] {
+    --primary: 142 71% 45%;
+    --accent: 160 84% 39%;
+    --ring: 142 71% 45%;
+  }
+
+  [data-theme='amber'] {
+    --primary: 38 92% 50%;
+    --accent: 24 94% 50%;
+    --ring: 38 92% 50%;
+  }
+
+  .dark {
+    --background: 238 52% 6%;
+    --foreground: 240 16% 93%;
+    --card: 238 52% 8%;
+    --card-foreground: 240 16% 93%;
+    --popover: 238 52% 8%;
+    --popover-foreground: 240 16% 93%;
+    --secondary: 238 52% 12%;
+    --secondary-foreground: 240 16% 93%;
+    --muted: 238 52% 15%;
+    --muted-foreground: 240 5% 65%;
+    --border: 238 52% 15%;
+    --input: 238 52% 15%;
+    /* Accent remains electric purple by default in dark mode unless overridden by data-theme */
+  }
+
+  /* Dark + Color Themes */
+  .dark[data-theme='ocean'] {
+    --primary: 199 89% 55%;
+    --accent: 189 94% 50%;
+    --ring: 199 89% 55%;
+  }
+
+  .dark[data-theme='rose'] {
+    --primary: 346 84% 65%;
+    --accent: 326 100% 70%;
+    --ring: 346 84% 65%;
+  }
+
+  .dark[data-theme='emerald'] {
+    --primary: 142 71% 55%;
+    --accent: 160 84% 45%;
+    --ring: 142 71% 55%;
+  }
+
+  .dark[data-theme='amber'] {
+    --primary: 38 92% 60%;
+    --accent: 24 94% 60%;
+    --ring: 38 92% 60%;
   }
 }
 
@@ -73,13 +97,14 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground font-body antialiased;
   }
 }
 
 .boq-glass {
-  @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-xl;
+  @apply bg-white/80 dark:bg-slate-900/60 backdrop-blur-md border border-white/20 dark:border-white/5 shadow-xl;
 }
 
 .boq-accent-gradient {
@@ -87,8 +112,15 @@
 }
 
 @media print {
+
   /* Sembunyikan semua elemen UI kecuali konten utama */
-  header, aside, .no-print, button, .dropdown-menu, .popover, [role="combobox"] {
+  header,
+  aside,
+  .no-print,
+  button,
+  .dropdown-menu,
+  .popover,
+  [role="combobox"] {
     display: none !important;
   }
 
@@ -107,7 +139,10 @@
   }
 
   /* Hilangkan border radius dan bayangan untuk penghematan tinta & kebersihan */
-  .rounded-2xl, .rounded-xl, .shadow-sm, .shadow-xl {
+  .rounded-2xl,
+  .rounded-xl,
+  .shadow-sm,
+  .shadow-xl {
     border-radius: 0 !important;
     shadow: none !important;
     border-color: #eee !important;
@@ -119,18 +154,22 @@
     border-collapse: collapse !important;
   }
 
-  th, td {
+  th,
+  td {
     border: 1px solid #ddd !important;
     color: black !important;
   }
 
   /* Warna aksen untuk cetakan agar tidak terlalu boros tinta */
-  .bg-slate-50, .bg-primary\/5, .bg-emerald-50 {
+  .bg-slate-50,
+  .bg-primary\/5,
+  .bg-emerald-50 {
     background-color: transparent !important;
     border-bottom: 2px solid #333 !important;
   }
 
-  .text-primary, .text-accent {
+  .text-primary,
+  .text-accent {
     color: black !important;
   }
 
