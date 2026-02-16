@@ -946,6 +946,7 @@ function BoqTable(param) {
         }
         setLoadingPriceId(item.id);
         try {
+            var _result_marketplaceSources, _result_marketplaceSources1;
             // @ts-ignore
             if (!window.puter) {
                 throw new Error("Layanan Puter.js tidak tersedia. Coba refresh halaman.");
@@ -964,16 +965,28 @@ function BoqTable(param) {
             onUpdateItem(categoryId, item.id, {
                 unitPrice: result.suggestedPrice,
                 sourceUrl: result.sourceUrl,
-                vendorName: result.sourceName
+                vendorName: result.sourceName,
+                priceRange: result.priceRange,
+                marketplaceSources: result.marketplaceSources,
+                brandDetected: result.brandDetected,
+                isPremiumBrand: result.isPremiumBrand,
+                brandNote: result.brandNote
             });
+            const toastTitle = result.isPremiumBrand ? "Harga Brand Premium: ".concat(result.brandDetected) : "Saran Harga Termurah Berhasil";
+            const toastDescription = result.isPremiumBrand ? "".concat(result.brandNote || "Brand premium terdeteksi. Harga dari ".concat(((_result_marketplaceSources = result.marketplaceSources) === null || _result_marketplaceSources === void 0 ? void 0 : _result_marketplaceSources.join(', ')) || result.sourceName, ".")) : "Menggunakan harga termurah dari ".concat(((_result_marketplaceSources1 = result.marketplaceSources) === null || _result_marketplaceSources1 === void 0 ? void 0 : _result_marketplaceSources1.join(', ')) || result.sourceName, ".");
             toast({
-                title: "Saran Harga Tertinggi Berhasil",
-                description: "Menggunakan harga aman (high-end) dari ".concat(result.sourceName, ".")
+                title: toastTitle,
+                description: toastDescription
             });
             recordToCatalog({
                 ...item,
                 unitPrice: result.suggestedPrice,
-                vendorName: result.sourceName
+                vendorName: result.sourceName,
+                priceRange: result.priceRange,
+                marketplaceSources: result.marketplaceSources,
+                brandDetected: result.brandDetected,
+                isPremiumBrand: result.isPremiumBrand,
+                brandNote: result.brandNote
             });
         } catch (error) {
             console.error("Gagal mendapatkan saran harga:", error);
@@ -1025,7 +1038,7 @@ function BoqTable(param) {
                                             className: "h-5 w-5"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 252,
+                                            lineNumber: 270,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1033,13 +1046,13 @@ function BoqTable(param) {
                                             children: "Informasi Klien"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 253,
+                                            lineNumber: 271,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                    lineNumber: 251,
+                                    lineNumber: 269,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1051,7 +1064,7 @@ function BoqTable(param) {
                                         })
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                    lineNumber: 255,
+                                    lineNumber: 273,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1064,7 +1077,7 @@ function BoqTable(param) {
                                                     className: "h-4 w-4 shrink-0"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 263,
+                                                    lineNumber: 281,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1076,13 +1089,13 @@ function BoqTable(param) {
                                                         })
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 264,
+                                                    lineNumber: 282,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 262,
+                                            lineNumber: 280,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1092,7 +1105,7 @@ function BoqTable(param) {
                                                     className: "h-4 w-4 shrink-0"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 272,
+                                                    lineNumber: 290,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1104,25 +1117,25 @@ function BoqTable(param) {
                                                         })
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 273,
+                                                    lineNumber: 291,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 271,
+                                            lineNumber: 289,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                    lineNumber: 261,
+                                    lineNumber: 279,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                            lineNumber: 250,
+                            lineNumber: 268,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1135,7 +1148,7 @@ function BoqTable(param) {
                                             className: "h-5 w-5"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 285,
+                                            lineNumber: 303,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1143,13 +1156,13 @@ function BoqTable(param) {
                                             children: "Data Dokumen"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 286,
+                                            lineNumber: 304,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                    lineNumber: 284,
+                                    lineNumber: 302,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1160,7 +1173,7 @@ function BoqTable(param) {
                                             children: "Nomor Dokumen"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 289,
+                                            lineNumber: 307,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1172,13 +1185,13 @@ function BoqTable(param) {
                                                 })
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 290,
+                                            lineNumber: 308,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                    lineNumber: 288,
+                                    lineNumber: 306,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1189,7 +1202,7 @@ function BoqTable(param) {
                                             children: "Tanggal"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 298,
+                                            lineNumber: 316,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1199,7 +1212,7 @@ function BoqTable(param) {
                                                     className: "h-4 w-4 text-muted-foreground"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 300,
+                                                    lineNumber: 318,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1211,19 +1224,19 @@ function BoqTable(param) {
                                                         })
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 301,
+                                                    lineNumber: 319,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 299,
+                                            lineNumber: 317,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                    lineNumber: 297,
+                                    lineNumber: 315,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1234,7 +1247,7 @@ function BoqTable(param) {
                                             children: "Pembuat RAB"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 310,
+                                            lineNumber: 328,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1244,7 +1257,7 @@ function BoqTable(param) {
                                                     className: "h-4 w-4 text-primary"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 312,
+                                                    lineNumber: 330,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1256,36 +1269,36 @@ function BoqTable(param) {
                                                         })
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 313,
+                                                    lineNumber: 331,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 311,
+                                            lineNumber: 329,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                    lineNumber: 309,
+                                    lineNumber: 327,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                            lineNumber: 283,
+                            lineNumber: 301,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                    lineNumber: 249,
+                    lineNumber: 267,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                lineNumber: 248,
+                lineNumber: 266,
                 columnNumber: 7
             }, this),
             categories.map((category)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1302,7 +1315,7 @@ function BoqTable(param) {
                                             children: categories.indexOf(category) + 1
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 329,
+                                            lineNumber: 347,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1313,7 +1326,7 @@ function BoqTable(param) {
                                                 })
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 332,
+                                            lineNumber: 350,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -1325,13 +1338,13 @@ function BoqTable(param) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 337,
+                                            lineNumber: 355,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                    lineNumber: 328,
+                                    lineNumber: 346,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1343,18 +1356,18 @@ function BoqTable(param) {
                                         className: "h-5 w-5"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                        lineNumber: 347,
+                                        lineNumber: 365,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                    lineNumber: 341,
+                                    lineNumber: 359,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                            lineNumber: 327,
+                            lineNumber: 345,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1371,7 +1384,7 @@ function BoqTable(param) {
                                                     children: "Tipe"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 355,
+                                                    lineNumber: 373,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
@@ -1379,7 +1392,7 @@ function BoqTable(param) {
                                                     children: "Uraian Pekerjaan & Spesifikasi"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 356,
+                                                    lineNumber: 374,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
@@ -1387,7 +1400,7 @@ function BoqTable(param) {
                                                     children: "Satuan"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 357,
+                                                    lineNumber: 375,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
@@ -1395,7 +1408,7 @@ function BoqTable(param) {
                                                     children: "Vol (Qty)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 358,
+                                                    lineNumber: 376,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
@@ -1403,7 +1416,7 @@ function BoqTable(param) {
                                                     children: "Harga Dasar (Modal)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 359,
+                                                    lineNumber: 377,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
@@ -1411,7 +1424,7 @@ function BoqTable(param) {
                                                     children: "Margin (%)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 360,
+                                                    lineNumber: 378,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
@@ -1419,7 +1432,7 @@ function BoqTable(param) {
                                                     children: "Total Jual (Rp)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 361,
+                                                    lineNumber: 379,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
@@ -1427,7 +1440,7 @@ function BoqTable(param) {
                                                     children: "Referensi Vendor"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 362,
+                                                    lineNumber: 380,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
@@ -1435,25 +1448,25 @@ function BoqTable(param) {
                                                     children: "AI"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 363,
+                                                    lineNumber: 381,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableHead"], {
                                                     className: "w-[50px]"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 364,
+                                                    lineNumber: 382,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 354,
+                                            lineNumber: 372,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                        lineNumber: 353,
+                                        lineNumber: 371,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableBody"], {
@@ -1466,18 +1479,18 @@ function BoqTable(param) {
                                                             className: "h-5 w-5 text-primary opacity-60 mx-auto"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 372,
+                                                            lineNumber: 390,
                                                             columnNumber: 25
                                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2d$cog$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__UserCog$3e$__["UserCog"], {
                                                             className: "h-5 w-5 text-accent opacity-60 mx-auto"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 374,
+                                                            lineNumber: 392,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 370,
+                                                        lineNumber: 388,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -1494,7 +1507,7 @@ function BoqTable(param) {
                                                                     onBlur: ()=>setTimeout(()=>recordToCatalog(item), 500)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                    lineNumber: 379,
+                                                                    lineNumber: 397,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 catalogItems && catalogItems.filter((c)=>c.name.toLowerCase().includes(item.name.toLowerCase()) && item.name.length > 2).length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Popover"], {
@@ -1509,17 +1522,17 @@ function BoqTable(param) {
                                                                                     className: "h-4 w-4"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                                    lineNumber: 390,
+                                                                                    lineNumber: 408,
                                                                                     columnNumber: 33
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                                lineNumber: 389,
+                                                                                lineNumber: 407,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                            lineNumber: 388,
+                                                                            lineNumber: 406,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PopoverContent"], {
@@ -1533,7 +1546,7 @@ function BoqTable(param) {
                                                                                             className: "h-4 w-4 text-muted-foreground"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                                            lineNumber: 395,
+                                                                                            lineNumber: 413,
                                                                                             columnNumber: 33
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1541,13 +1554,13 @@ function BoqTable(param) {
                                                                                             children: "Item dari Katalog"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                                            lineNumber: 396,
+                                                                                            lineNumber: 414,
                                                                                             columnNumber: 33
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                                    lineNumber: 394,
+                                                                                    lineNumber: 412,
                                                                                     columnNumber: 31
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1561,7 +1574,7 @@ function BoqTable(param) {
                                                                                                     children: c.name
                                                                                                 }, void 0, false, {
                                                                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                                                    lineNumber: 407,
+                                                                                                    lineNumber: 425,
                                                                                                     columnNumber: 39
                                                                                                 }, this),
                                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1575,7 +1588,7 @@ function BoqTable(param) {
                                                                                                             ]
                                                                                                         }, void 0, true, {
                                                                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                                                            lineNumber: 409,
+                                                                                                            lineNumber: 427,
                                                                                                             columnNumber: 41
                                                                                                         }, this),
                                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1583,47 +1596,47 @@ function BoqTable(param) {
                                                                                                             children: c.type
                                                                                                         }, void 0, false, {
                                                                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                                                            lineNumber: 410,
+                                                                                                            lineNumber: 428,
                                                                                                             columnNumber: 41
                                                                                                         }, this)
                                                                                                     ]
                                                                                                 }, void 0, true, {
                                                                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                                                    lineNumber: 408,
+                                                                                                    lineNumber: 426,
                                                                                                     columnNumber: 39
                                                                                                 }, this)
                                                                                             ]
                                                                                         }, idx, true, {
                                                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                                            lineNumber: 402,
+                                                                                            lineNumber: 420,
                                                                                             columnNumber: 37
                                                                                         }, this))
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                                    lineNumber: 398,
+                                                                                    lineNumber: 416,
                                                                                     columnNumber: 31
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                            lineNumber: 393,
+                                                                            lineNumber: 411,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                    lineNumber: 387,
+                                                                    lineNumber: 405,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 378,
+                                                            lineNumber: 396,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 377,
+                                                        lineNumber: 395,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -1635,12 +1648,12 @@ function BoqTable(param) {
                                                                 })
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 421,
+                                                            lineNumber: 439,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 420,
+                                                        lineNumber: 438,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -1653,31 +1666,142 @@ function BoqTable(param) {
                                                                 })
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 428,
+                                                            lineNumber: 446,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 427,
+                                                        lineNumber: 445,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
-                                                            type: "number",
-                                                            className: "bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-black text-slate-900 px-3 -ml-2 w-full text-lg",
-                                                            value: item.unitPrice,
-                                                            onChange: (e)=>onUpdateItem(category.id, item.id, {
-                                                                    unitPrice: parseFloat(e.target.value) || 0
-                                                                }),
-                                                            onBlur: ()=>recordToCatalog(item)
-                                                        }, void 0, false, {
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "flex flex-col items-end gap-1",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                                    type: "number",
+                                                                    className: "bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-black text-slate-900 px-3 -ml-2 w-full text-lg",
+                                                                    value: item.unitPrice,
+                                                                    onChange: (e)=>onUpdateItem(category.id, item.id, {
+                                                                            unitPrice: parseFloat(e.target.value) || 0
+                                                                        }),
+                                                                    onBlur: ()=>recordToCatalog(item)
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/builder/boq-table.tsx",
+                                                                    lineNumber: 455,
+                                                                    columnNumber: 25
+                                                                }, this),
+                                                                item.priceRange && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "flex items-center gap-2",
+                                                                    children: [
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
+                                                                            variant: "outline",
+                                                                            className: "text-[10px] py-0 px-1.5 bg-slate-50 text-slate-500 font-medium border-slate-200",
+                                                                            children: [
+                                                                                formatCurrency(item.priceRange.min),
+                                                                                " - ",
+                                                                                formatCurrency(item.priceRange.max)
+                                                                            ]
+                                                                        }, void 0, true, {
+                                                                            fileName: "[project]/src/components/builder/boq-table.tsx",
+                                                                            lineNumber: 464,
+                                                                            columnNumber: 29
+                                                                        }, this),
+                                                                        item.marketplaceSources && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Popover"], {
+                                                                            children: [
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PopoverTrigger"], {
+                                                                                    asChild: true,
+                                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                                                                        variant: "ghost",
+                                                                                        size: "icon",
+                                                                                        className: "h-4 w-4 text-slate-400 hover:text-primary p-0",
+                                                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$hash$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Hash$3e$__["Hash"], {
+                                                                                            className: "h-3 w-3"
+                                                                                        }, void 0, false, {
+                                                                                            fileName: "[project]/src/components/builder/boq-table.tsx",
+                                                                                            lineNumber: 471,
+                                                                                            columnNumber: 37
+                                                                                        }, this)
+                                                                                    }, void 0, false, {
+                                                                                        fileName: "[project]/src/components/builder/boq-table.tsx",
+                                                                                        lineNumber: 470,
+                                                                                        columnNumber: 35
+                                                                                    }, this)
+                                                                                }, void 0, false, {
+                                                                                    fileName: "[project]/src/components/builder/boq-table.tsx",
+                                                                                    lineNumber: 469,
+                                                                                    columnNumber: 33
+                                                                                }, this),
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$popover$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["PopoverContent"], {
+                                                                                    className: "w-48 p-3",
+                                                                                    align: "end",
+                                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                                        className: "space-y-2",
+                                                                                        children: [
+                                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                                                className: "text-[10px] font-bold text-muted-foreground uppercase tracking-widest",
+                                                                                                children: "Sumber Marketplace"
+                                                                                            }, void 0, false, {
+                                                                                                fileName: "[project]/src/components/builder/boq-table.tsx",
+                                                                                                lineNumber: 476,
+                                                                                                columnNumber: 37
+                                                                                            }, this),
+                                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                                                className: "flex flex-wrap gap-1",
+                                                                                                children: item.marketplaceSources.map((source, idx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
+                                                                                                        variant: "secondary",
+                                                                                                        className: "text-[9px] py-0 px-1",
+                                                                                                        children: source
+                                                                                                    }, idx, false, {
+                                                                                                        fileName: "[project]/src/components/builder/boq-table.tsx",
+                                                                                                        lineNumber: 479,
+                                                                                                        columnNumber: 41
+                                                                                                    }, this))
+                                                                                            }, void 0, false, {
+                                                                                                fileName: "[project]/src/components/builder/boq-table.tsx",
+                                                                                                lineNumber: 477,
+                                                                                                columnNumber: 37
+                                                                                            }, this),
+                                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                                                className: "text-[9px] text-muted-foreground italic mt-2 border-t pt-1",
+                                                                                                children: "Fokus seller rating 4-5★"
+                                                                                            }, void 0, false, {
+                                                                                                fileName: "[project]/src/components/builder/boq-table.tsx",
+                                                                                                lineNumber: 484,
+                                                                                                columnNumber: 37
+                                                                                            }, this)
+                                                                                        ]
+                                                                                    }, void 0, true, {
+                                                                                        fileName: "[project]/src/components/builder/boq-table.tsx",
+                                                                                        lineNumber: 475,
+                                                                                        columnNumber: 35
+                                                                                    }, this)
+                                                                                }, void 0, false, {
+                                                                                    fileName: "[project]/src/components/builder/boq-table.tsx",
+                                                                                    lineNumber: 474,
+                                                                                    columnNumber: 33
+                                                                                }, this)
+                                                                            ]
+                                                                        }, void 0, true, {
+                                                                            fileName: "[project]/src/components/builder/boq-table.tsx",
+                                                                            lineNumber: 468,
+                                                                            columnNumber: 31
+                                                                        }, this)
+                                                                    ]
+                                                                }, void 0, true, {
+                                                                    fileName: "[project]/src/components/builder/boq-table.tsx",
+                                                                    lineNumber: 463,
+                                                                    columnNumber: 27
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 436,
+                                                            lineNumber: 454,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 435,
+                                                        lineNumber: 453,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -1690,12 +1814,12 @@ function BoqTable(param) {
                                                                 })
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 445,
+                                                            lineNumber: 496,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 444,
+                                                        lineNumber: 495,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -1703,7 +1827,7 @@ function BoqTable(param) {
                                                         children: formatCurrency(calculateItemTotal(item))
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 452,
+                                                        lineNumber: 503,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -1714,7 +1838,7 @@ function BoqTable(param) {
                                                                     className: "h-4 w-4 text-muted-foreground shrink-0"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                    lineNumber: 457,
+                                                                    lineNumber: 508,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -1727,18 +1851,18 @@ function BoqTable(param) {
                                                                     onBlur: ()=>recordToCatalog(item)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                    lineNumber: 458,
+                                                                    lineNumber: 509,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 456,
+                                                            lineNumber: 507,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 455,
+                                                        lineNumber: 506,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -1756,18 +1880,18 @@ function BoqTable(param) {
                                                                         className: "h-5 w-5 animate-spin"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                        lineNumber: 477,
+                                                                        lineNumber: 528,
                                                                         columnNumber: 29
                                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
                                                                         className: "h-5 w-5"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                        lineNumber: 479,
+                                                                        lineNumber: 530,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                    lineNumber: 469,
+                                                                    lineNumber: 520,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 item.sourceUrl && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -1779,23 +1903,23 @@ function BoqTable(param) {
                                                                         className: "h-4 w-4"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                        lineNumber: 484,
+                                                                        lineNumber: 535,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                    lineNumber: 483,
+                                                                    lineNumber: 534,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 468,
+                                                            lineNumber: 519,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 467,
+                                                        lineNumber: 518,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TableCell"], {
@@ -1808,39 +1932,39 @@ function BoqTable(param) {
                                                                 className: "h-5 w-5"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                lineNumber: 491,
+                                                                lineNumber: 542,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 490,
+                                                            lineNumber: 541,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 489,
+                                                        lineNumber: 540,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, item.id, true, {
                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                lineNumber: 369,
+                                                lineNumber: 387,
                                                 columnNumber: 19
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                        lineNumber: 367,
+                                        lineNumber: 385,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                lineNumber: 352,
+                                lineNumber: 370,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                            lineNumber: 351,
+                            lineNumber: 369,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1858,7 +1982,7 @@ function BoqTable(param) {
                                                     className: "h-5 w-5 mr-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 504,
+                                                    lineNumber: 555,
                                                     columnNumber: 19
                                                 }, this),
                                                 " Tambah Item Pekerjaan ",
@@ -1866,18 +1990,18 @@ function BoqTable(param) {
                                                     className: "h-4 w-4 ml-2 opacity-50"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 504,
+                                                    lineNumber: 555,
                                                     columnNumber: 75
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 503,
+                                            lineNumber: 554,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                        lineNumber: 502,
+                                        lineNumber: 553,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
@@ -1892,7 +2016,7 @@ function BoqTable(param) {
                                                         className: "mr-4 h-6 w-6 text-primary"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 509,
+                                                        lineNumber: 560,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1903,7 +2027,7 @@ function BoqTable(param) {
                                                                 children: "Baris Perangkat"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                lineNumber: 511,
+                                                                lineNumber: 562,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1911,19 +2035,19 @@ function BoqTable(param) {
                                                                 children: "Material, Hardware, Barang Fisik"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                lineNumber: 512,
+                                                                lineNumber: 563,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 510,
+                                                        lineNumber: 561,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                lineNumber: 508,
+                                                lineNumber: 559,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
@@ -1934,7 +2058,7 @@ function BoqTable(param) {
                                                         className: "mr-4 h-6 w-6 text-accent"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 516,
+                                                        lineNumber: 567,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1945,7 +2069,7 @@ function BoqTable(param) {
                                                                 children: "Baris Jasa"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                lineNumber: 518,
+                                                                lineNumber: 569,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1953,42 +2077,42 @@ function BoqTable(param) {
                                                                 children: "Instalasi, Konfigurasi, Tenaga Kerja"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                lineNumber: 519,
+                                                                lineNumber: 570,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 517,
+                                                        lineNumber: 568,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                lineNumber: 515,
+                                                lineNumber: 566,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                        lineNumber: 507,
+                                        lineNumber: 558,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                lineNumber: 501,
+                                lineNumber: 552,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                            lineNumber: 500,
+                            lineNumber: 551,
                             columnNumber: 11
                         }, this)
                     ]
                 }, category.id, true, {
                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                    lineNumber: 326,
+                    lineNumber: 344,
                     columnNumber: 9
                 }, this)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2001,14 +2125,14 @@ function BoqTable(param) {
                                 className: "h-7 w-7"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                lineNumber: 531,
+                                lineNumber: 582,
                                 columnNumber: 11
                             }, this),
                             " Rekapitulasi Anggaran (Saran Harga Tertinggi)"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                        lineNumber: 530,
+                        lineNumber: 581,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2029,14 +2153,14 @@ function BoqTable(param) {
                                                             className: "h-5 w-5 text-primary opacity-70"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 539,
+                                                            lineNumber: 590,
                                                             columnNumber: 19
                                                         }, this),
                                                         " Total Perangkat"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 538,
+                                                    lineNumber: 589,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2044,13 +2168,13 @@ function BoqTable(param) {
                                                     children: formatCurrency(totalPerangkat)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 541,
+                                                    lineNumber: 592,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 537,
+                                            lineNumber: 588,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2063,14 +2187,14 @@ function BoqTable(param) {
                                                             className: "h-5 w-5 text-accent opacity-70"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 545,
+                                                            lineNumber: 596,
                                                             columnNumber: 19
                                                         }, this),
                                                         " Total Jasa Instalasi"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 544,
+                                                    lineNumber: 595,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2078,13 +2202,13 @@ function BoqTable(param) {
                                                     children: formatCurrency(totalJasa)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 547,
+                                                    lineNumber: 598,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 543,
+                                            lineNumber: 594,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2096,25 +2220,25 @@ function BoqTable(param) {
                                                         children: "Estimasi Laba Kotor"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 552,
+                                                        lineNumber: 603,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: formatCurrency(totalProfit)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 553,
+                                                        lineNumber: 604,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                lineNumber: 551,
+                                                lineNumber: 602,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 550,
+                                            lineNumber: 601,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2131,7 +2255,7 @@ function BoqTable(param) {
                                                                 onCheckedChange: (checked)=>setIncludePph23(!!checked)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                lineNumber: 560,
+                                                                lineNumber: 611,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
@@ -2140,13 +2264,13 @@ function BoqTable(param) {
                                                                 children: "PPh 23 (Potongan Jasa 2%)"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                lineNumber: 561,
+                                                                lineNumber: 612,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 559,
+                                                        lineNumber: 610,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2157,18 +2281,18 @@ function BoqTable(param) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                        lineNumber: 563,
+                                                        lineNumber: 614,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                lineNumber: 558,
+                                                lineNumber: 609,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 557,
+                                            lineNumber: 608,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2182,7 +2306,7 @@ function BoqTable(param) {
                                                             children: "Cadangan Tak Terduga (Contingency)"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 569,
+                                                            lineNumber: 620,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2195,26 +2319,26 @@ function BoqTable(param) {
                                                                     onChange: (e)=>setContingencyRate(parseFloat(e.target.value) || 0)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                    lineNumber: 571,
+                                                                    lineNumber: 622,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$percent$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Percent$3e$__["Percent"], {
                                                                     className: "h-3 w-3 text-slate-500"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                                    lineNumber: 577,
+                                                                    lineNumber: 628,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 570,
+                                                            lineNumber: 621,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 568,
+                                                    lineNumber: 619,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2222,13 +2346,13 @@ function BoqTable(param) {
                                                     children: formatCurrency(contingencyAmount)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 580,
+                                                    lineNumber: 631,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 567,
+                                            lineNumber: 618,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2243,7 +2367,7 @@ function BoqTable(param) {
                                                             onCheckedChange: (checked)=>setIncludeVat(!!checked)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 585,
+                                                            lineNumber: 636,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
@@ -2252,13 +2376,13 @@ function BoqTable(param) {
                                                             children: "Sertakan PPN 11%"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 586,
+                                                            lineNumber: 637,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 584,
+                                                    lineNumber: 635,
                                                     columnNumber: 17
                                                 }, this),
                                                 includeVat && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2269,7 +2393,7 @@ function BoqTable(param) {
                                                             children: "Nilai PPN 11%"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 590,
+                                                            lineNumber: 641,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2277,30 +2401,30 @@ function BoqTable(param) {
                                                             children: formatCurrency(vatAmount)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                            lineNumber: 591,
+                                                            lineNumber: 642,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                    lineNumber: 589,
+                                                    lineNumber: 640,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 583,
+                                            lineNumber: 634,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                    lineNumber: 536,
+                                    lineNumber: 587,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                lineNumber: 535,
+                                lineNumber: 586,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2314,12 +2438,12 @@ function BoqTable(param) {
                                                 className: "h-32 w-32"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                                lineNumber: 601,
+                                                lineNumber: 652,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 600,
+                                            lineNumber: 651,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2327,7 +2451,7 @@ function BoqTable(param) {
                                             children: "Total Penawaran Aman"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 603,
+                                            lineNumber: 654,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2335,36 +2459,36 @@ function BoqTable(param) {
                                             children: formatCurrency(grandTotal)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/boq-table.tsx",
-                                            lineNumber: 604,
+                                            lineNumber: 655,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/builder/boq-table.tsx",
-                                    lineNumber: 599,
+                                    lineNumber: 650,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                                lineNumber: 598,
+                                lineNumber: 649,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/boq-table.tsx",
-                        lineNumber: 534,
+                        lineNumber: 585,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/boq-table.tsx",
-                lineNumber: 529,
+                lineNumber: 580,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/builder/boq-table.tsx",
-        lineNumber: 246,
+        lineNumber: 264,
         columnNumber: 5
     }, this);
 }
@@ -2459,7 +2583,7 @@ function AiGenerator(param) {
                 month: 'long',
                 year: 'numeric'
             });
-            const prompt = '\n        Saya estimator konstruksi profesional. Buatkan daftar Rencana Anggaran Biaya (RAB) untuk proyek: "'.concat(projectType, '".\n        Spesifikasi/Kondisi: "').concat(specifications || 'Standar umum', '".\n        Konteks Waktu: ').concat(currentDate, "\n        \n        Instruksi Penting:\n        1. HARGA WAJIB berdasarkan estimasi harga dari MULTIPLE MARKETPLACE TERPERCAYA:\n           - Tokopedia (seller rating 4-5 bintang)\n           - Shopee (seller rating 4-5 bintang)\n           - Bukalapak (seller rating 4-5 bintang)\n           - Lazada (seller rating 4-5 bintang)\n        2. Berikan RANGE HARGA (harga terendah dan tertinggi) dari seller terpercaya di marketplace tersebut\n        3. Gunakan harga MEDIAN/RATA-RATA sebagai unitPrice (bukan yang termurah atau termahal)\n        4. Fokus pada seller dengan rating tinggi (4-5 bintang) dan review positif\n        5. Jangan memberikan link toko spesifik atau nama toko yang tidak valid\n        6. Untuk material bangunan: bandingkan harga di semua marketplace, ambil rata-rata\n        7. Untuk peralatan: gunakan harga pasaran yang wajar dari seller terpercaya\n        8. Untuk jasa: gunakan standar upah profesional di Indonesia (").concat(currentDate, ')\n        9. Kelompokkan item pekerjaan ke dalam kategori logis (misal: "Pekerjaan Persiapan", "Pekerjaan Pondasi", "Pekerjaan Lantai", dll)\n        10. Berikan estimasi volume yang realistis untuk proyek jenis ini\n        11. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi)\n        12. Output WAJIB dalam format JSON murni array of objects\n\n        Panduan Pricing Multi-Marketplace:\n        - Material Bangunan: Rata-rata harga dari Tokopedia, Shopee, Bukalapak, Lazada (seller rating 4-5★)\n        - Peralatan: Harga median dari marketplace dengan seller terpercaya\n        - Jasa: Standar upah profesional Indonesia (update ').concat(currentDate, ')\n        - Pertimbangkan ongkir rata-rata untuk material\n        - Hindari harga outlier (terlalu murah = kualitas rendah, terlalu mahal = overprice)\n        - Prioritaskan seller dengan banyak review positif\n\n        PENTING: Estimasi harga harus mencerminkan RATA-RATA dari multiple marketplace, bukan hanya satu sumber.\n\n        Format JSON Output:\n        {\n          "categories": [\n            {\n              "name": "Nama Kategori",\n              "items": [\n                {\n                  "name": "Nama Item Pekerjaan",\n                  "unit": "Satuan (m2/m3/unit/ls)",\n                  "quantity": number,\n                  "unitPrice": number (harga satuan estimasi pasaran yang wajar),\n                  "type": "perangkat" | "jasa"\n                }\n              ]\n            }\n          ]\n        }\n      ');
+            const prompt = '\n        Saya estimator konstruksi profesional. Buatkan daftar Rencana Anggaran Biaya (RAB) untuk proyek: "'.concat(projectType, '".\n        Spesifikasi/Kondisi: "').concat(specifications || 'Standar umum', '".\n        Konteks Waktu: ').concat(currentDate, "\n        \n        Instruksi Penting:\n        1. HARGA WAJIB berdasarkan estimasi harga dari MULTIPLE MARKETPLACE TERPERCAYA:\n           - Tokopedia (seller rating 4-5 bintang)\n           - Shopee (seller rating 4-5 bintang)\n           - Bukalapak (seller rating 4-5 bintang)\n           - Lazada (seller rating 4-5 bintang)\n        2. DETEKSI BRAND PREMIUM dalam spesifikasi item:\n           - Networking: Belden, Commscope, AMP, Panduit (harga 3-10x dari generik)\n           - Electrical: Broco, Schneider, ABB, Siemens (harga 2-5x dari generik)\n           - Pipe: Rucika, Wavin, Pralon Premium (harga 1.5-3x dari generik)\n           - Paint: Nippon, Dulux, Jotun, Avian (harga 2-4x dari generik)\n           - Sanitary: TOTO, American Standard, Kohler (harga 2-5x dari generik)\n        3. Jika BRAND PREMIUM terdeteksi: gunakan harga premium yang sesuai\n        4. Jika TIDAK ADA BRAND: gunakan harga TERMURAH/MINIMUM untuk RAB kompetitif\n        5. Berikan RANGE HARGA (harga terendah dan tertinggi) dari seller terpercaya\n        6. Fokus pada seller dengan rating tinggi (4-5 bintang) dan review positif\n        7. Jangan memberikan link toko spesifik atau nama toko yang tidak valid\n        8. Untuk material bangunan: sesuaikan harga dengan brand (premium vs generik)\n        9. Untuk peralatan: gunakan harga sesuai brand dan kualitas\n        10. Untuk jasa: gunakan standar upah profesional di Indonesia (").concat(currentDate, ')\n        11. Kelompokkan item pekerjaan ke dalam kategori logis\n        12. Berikan estimasi volume yang realistis untuk proyek jenis ini\n        13. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi)\n        14. Output WAJIB dalam format JSON murni array of objects\n\n        Panduan Pricing Brand-Aware:\n        - BRAND PREMIUM: Gunakan harga premium sesuai brand (contoh: Kabel Belden 305m = Rp 2-2.5 juta)\n        - GENERIK/TANPA BRAND: Harga TERMURAH dari marketplace (contoh: Kabel UTP Cat6 305m = Rp 300-500 ribu)\n        - Jasa: Standar upah profesional Indonesia (update ').concat(currentDate, ')\n        - Pertimbangkan ongkir rata-rata untuk material\n        - Hindari harga yang tidak realistis (terlalu murah = kualitas rendah)\n        - Prioritaskan seller dengan banyak review positif\n\n        PENTING: Jika item menyebutkan brand premium (Belden, Rucika, Nippon, TOTO, dll), WAJIB gunakan harga premium. Jangan berikan harga generik untuk brand premium!\n\n        Format JSON Output:\n        {\n          "categories": [\n            {\n              "name": "Nama Kategori",\n              "items": [\n                {\n                  "name": "Nama Item Pekerjaan",\n                  "unit": "Satuan (m2/m3/unit/ls)",\n                  "quantity": number,\n                  "unitPrice": number (harga satuan estimasi pasaran yang wajar),\n                  "type": "perangkat" | "jasa"\n                }\n              ]\n            }\n          ]\n        }\n      ');
             // @ts-ignore
             const response = await window.puter.ai.chat(prompt, {
                 model: 'gpt-4o-mini'
@@ -2496,14 +2620,14 @@ function AiGenerator(param) {
                         className: "h-5 w-5 text-accent"
                     }, void 0, false, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 112,
+                        lineNumber: 119,
                         columnNumber: 9
                     }, this),
                     "Penyusun RAB Berbasis AI"
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 111,
+                lineNumber: 118,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2511,34 +2635,42 @@ function AiGenerator(param) {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "font-medium mb-1",
-                        children: "💰 Estimasi Harga Multi-Marketplace"
+                        children: "💰 Estimasi Harga Termurah Multi-Marketplace"
                     }, void 0, false, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 117,
+                        lineNumber: 124,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "text-xs",
                         children: [
-                            "AI memberikan estimasi harga berdasarkan rata-rata dari ",
+                            "AI memberikan estimasi harga ",
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                children: "termurah yang realistis"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/builder/ai-generator.tsx",
+                                lineNumber: 126,
+                                columnNumber: 40
+                            }, this),
+                            " dari ",
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                                 children: "Tokopedia, Shopee, Bukalapak, dan Lazada"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 119,
-                                columnNumber: 67
+                                lineNumber: 126,
+                                columnNumber: 86
                             }, this),
                             " (seller rating 4-5 bintang). Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di marketplace terpercaya sebelum membeli."
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 118,
+                        lineNumber: 125,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 116,
+                lineNumber: 123,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2552,7 +2684,7 @@ function AiGenerator(param) {
                                 children: "Tipe Proyek"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 125,
+                                lineNumber: 132,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -2562,13 +2694,13 @@ function AiGenerator(param) {
                                 onChange: (e)=>setProjectType(e.target.value)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 126,
+                                lineNumber: 133,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 124,
+                        lineNumber: 131,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2579,7 +2711,7 @@ function AiGenerator(param) {
                                 children: "Persyaratan Khusus (Opsional)"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 135,
+                                lineNumber: 142,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -2590,19 +2722,19 @@ function AiGenerator(param) {
                                 className: "min-h-[100px]"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                                lineNumber: 136,
+                                lineNumber: 143,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/ai-generator.tsx",
-                        lineNumber: 134,
+                        lineNumber: 141,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 123,
+                lineNumber: 130,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -2615,7 +2747,7 @@ function AiGenerator(param) {
                             className: "mr-2 h-4 w-4 animate-spin"
                         }, void 0, false, {
                             fileName: "[project]/src/components/builder/ai-generator.tsx",
-                            lineNumber: 153,
+                            lineNumber: 160,
                             columnNumber: 13
                         }, this),
                         "Menghasilkan Item RAB..."
@@ -2626,7 +2758,7 @@ function AiGenerator(param) {
                             className: "mr-2 h-4 w-4"
                         }, void 0, false, {
                             fileName: "[project]/src/components/builder/ai-generator.tsx",
-                            lineNumber: 158,
+                            lineNumber: 165,
                             columnNumber: 13
                         }, this),
                         "Hasilkan Saran"
@@ -2634,7 +2766,7 @@ function AiGenerator(param) {
                 }, void 0, true)
             }, void 0, false, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 146,
+                lineNumber: 153,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2642,13 +2774,13 @@ function AiGenerator(param) {
                 children: "Didukung oleh AI Generatif Canggih"
             }, void 0, false, {
                 fileName: "[project]/src/components/builder/ai-generator.tsx",
-                lineNumber: 163,
+                lineNumber: 170,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/builder/ai-generator.tsx",
-        lineNumber: 110,
+        lineNumber: 117,
         columnNumber: 5
     }, this);
 }

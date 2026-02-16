@@ -193,18 +193,36 @@ export function BoqTable({
       onUpdateItem(categoryId, item.id, {
         unitPrice: result.suggestedPrice,
         sourceUrl: result.sourceUrl,
-        vendorName: result.sourceName
+        vendorName: result.sourceName,
+        priceRange: result.priceRange,
+        marketplaceSources: result.marketplaceSources,
+        brandDetected: result.brandDetected,
+        isPremiumBrand: result.isPremiumBrand,
+        brandNote: result.brandNote
       });
 
+      const toastTitle = result.isPremiumBrand
+        ? `Harga Brand Premium: ${result.brandDetected}`
+        : "Saran Harga Termurah Berhasil";
+
+      const toastDescription = result.isPremiumBrand
+        ? `${result.brandNote || `Brand premium terdeteksi. Harga dari ${result.marketplaceSources?.join(', ') || result.sourceName}.`}`
+        : `Menggunakan harga termurah dari ${result.marketplaceSources?.join(', ') || result.sourceName}.`;
+
       toast({
-        title: "Saran Harga Tertinggi Berhasil",
-        description: `Menggunakan harga aman (high-end) dari ${result.sourceName}.`
+        title: toastTitle,
+        description: toastDescription
       });
 
       recordToCatalog({
         ...item,
         unitPrice: result.suggestedPrice,
-        vendorName: result.sourceName
+        vendorName: result.sourceName,
+        priceRange: result.priceRange,
+        marketplaceSources: result.marketplaceSources,
+        brandDetected: result.brandDetected,
+        isPremiumBrand: result.isPremiumBrand,
+        brandNote: result.brandNote
       });
     } catch (error: any) {
       console.error("Gagal mendapatkan saran harga:", error);
@@ -433,13 +451,46 @@ export function BoqTable({
                       />
                     </TableCell>
                     <TableCell>
-                      <Input
-                        type="number"
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-black text-slate-900 px-3 -ml-2 w-full text-lg"
-                        value={item.unitPrice}
-                        onChange={(e) => onUpdateItem(category.id, item.id, { unitPrice: parseFloat(e.target.value) || 0 })}
-                        onBlur={() => recordToCatalog(item)}
-                      />
+                      <div className="flex flex-col items-end gap-1">
+                        <Input
+                          type="number"
+                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-black text-slate-900 px-3 -ml-2 w-full text-lg"
+                          value={item.unitPrice}
+                          onChange={(e) => onUpdateItem(category.id, item.id, { unitPrice: parseFloat(e.target.value) || 0 })}
+                          onBlur={() => recordToCatalog(item)}
+                        />
+                        {item.priceRange && (
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className="text-[10px] py-0 px-1.5 bg-slate-50 text-slate-500 font-medium border-slate-200">
+                              {formatCurrency(item.priceRange.min)} - {formatCurrency(item.priceRange.max)}
+                            </Badge>
+                            {item.marketplaceSources && (
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <Button variant="ghost" size="icon" className="h-4 w-4 text-slate-400 hover:text-primary p-0">
+                                    <Hash className="h-3 w-3" />
+                                  </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-48 p-3" align="end">
+                                  <div className="space-y-2">
+                                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Sumber Marketplace</p>
+                                    <div className="flex flex-wrap gap-1">
+                                      {item.marketplaceSources.map((source, idx) => (
+                                        <Badge key={idx} variant="secondary" className="text-[9px] py-0 px-1">
+                                          {source}
+                                        </Badge>
+                                      ))}
+                                    </div>
+                                    <p className="text-[9px] text-muted-foreground italic mt-2 border-t pt-1">
+                                      Fokus seller rating 4-5★
+                                    </p>
+                                  </div>
+                                </PopoverContent>
+                              </Popover>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell>
                       <Input

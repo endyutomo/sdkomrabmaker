@@ -9,6 +9,14 @@ export interface BoqItem {
   suggestedPrice?: number;
   sourceUrl?: string;
   vendorName?: string;
+  priceRange?: {
+    min: number;
+    max: number;
+  };
+  marketplaceSources?: string[];
+  brandDetected?: string;
+  isPremiumBrand?: boolean;
+  brandNote?: string;
 }
 
 export interface BoqCategory {

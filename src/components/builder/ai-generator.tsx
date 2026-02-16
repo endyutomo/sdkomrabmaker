@@ -38,27 +38,34 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
            - Shopee (seller rating 4-5 bintang)
            - Bukalapak (seller rating 4-5 bintang)
            - Lazada (seller rating 4-5 bintang)
-        2. Berikan RANGE HARGA (harga terendah dan tertinggi) dari seller terpercaya di marketplace tersebut
-        3. Gunakan harga MEDIAN/RATA-RATA sebagai unitPrice (bukan yang termurah atau termahal)
-        4. Fokus pada seller dengan rating tinggi (4-5 bintang) dan review positif
-        5. Jangan memberikan link toko spesifik atau nama toko yang tidak valid
-        6. Untuk material bangunan: bandingkan harga di semua marketplace, ambil rata-rata
-        7. Untuk peralatan: gunakan harga pasaran yang wajar dari seller terpercaya
-        8. Untuk jasa: gunakan standar upah profesional di Indonesia (${currentDate})
-        9. Kelompokkan item pekerjaan ke dalam kategori logis (misal: "Pekerjaan Persiapan", "Pekerjaan Pondasi", "Pekerjaan Lantai", dll)
-        10. Berikan estimasi volume yang realistis untuk proyek jenis ini
-        11. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi)
-        12. Output WAJIB dalam format JSON murni array of objects
+        2. DETEKSI BRAND PREMIUM dalam spesifikasi item:
+           - Networking: Belden, Commscope, AMP, Panduit (harga 3-10x dari generik)
+           - Electrical: Broco, Schneider, ABB, Siemens (harga 2-5x dari generik)
+           - Pipe: Rucika, Wavin, Pralon Premium (harga 1.5-3x dari generik)
+           - Paint: Nippon, Dulux, Jotun, Avian (harga 2-4x dari generik)
+           - Sanitary: TOTO, American Standard, Kohler (harga 2-5x dari generik)
+        3. Jika BRAND PREMIUM terdeteksi: gunakan harga premium yang sesuai
+        4. Jika TIDAK ADA BRAND: gunakan harga TERMURAH/MINIMUM untuk RAB kompetitif
+        5. Berikan RANGE HARGA (harga terendah dan tertinggi) dari seller terpercaya
+        6. Fokus pada seller dengan rating tinggi (4-5 bintang) dan review positif
+        7. Jangan memberikan link toko spesifik atau nama toko yang tidak valid
+        8. Untuk material bangunan: sesuaikan harga dengan brand (premium vs generik)
+        9. Untuk peralatan: gunakan harga sesuai brand dan kualitas
+        10. Untuk jasa: gunakan standar upah profesional di Indonesia (${currentDate})
+        11. Kelompokkan item pekerjaan ke dalam kategori logis
+        12. Berikan estimasi volume yang realistis untuk proyek jenis ini
+        13. Tentukan tipe item: "perangkat" (material/barang) atau "jasa" (upah/instalasi)
+        14. Output WAJIB dalam format JSON murni array of objects
 
-        Panduan Pricing Multi-Marketplace:
-        - Material Bangunan: Rata-rata harga dari Tokopedia, Shopee, Bukalapak, Lazada (seller rating 4-5★)
-        - Peralatan: Harga median dari marketplace dengan seller terpercaya
+        Panduan Pricing Brand-Aware:
+        - BRAND PREMIUM: Gunakan harga premium sesuai brand (contoh: Kabel Belden 305m = Rp 2-2.5 juta)
+        - GENERIK/TANPA BRAND: Harga TERMURAH dari marketplace (contoh: Kabel UTP Cat6 305m = Rp 300-500 ribu)
         - Jasa: Standar upah profesional Indonesia (update ${currentDate})
         - Pertimbangkan ongkir rata-rata untuk material
-        - Hindari harga outlier (terlalu murah = kualitas rendah, terlalu mahal = overprice)
+        - Hindari harga yang tidak realistis (terlalu murah = kualitas rendah)
         - Prioritaskan seller dengan banyak review positif
 
-        PENTING: Estimasi harga harus mencerminkan RATA-RATA dari multiple marketplace, bukan hanya satu sumber.
+        PENTING: Jika item menyebutkan brand premium (Belden, Rucika, Nippon, TOTO, dll), WAJIB gunakan harga premium. Jangan berikan harga generik untuk brand premium!
 
         Format JSON Output:
         {
@@ -114,9 +121,9 @@ export function AiGenerator({ onSuggest }: AiGeneratorProps) {
       </div>
 
       <div className="bg-yellow-50 rounded-lg p-3 text-sm text-yellow-800">
-        <div className="font-medium mb-1">💰 Estimasi Harga Multi-Marketplace</div>
+        <div className="font-medium mb-1">💰 Estimasi Harga Termurah Multi-Marketplace</div>
         <div className="text-xs">
-          AI memberikan estimasi harga berdasarkan rata-rata dari <strong>Tokopedia, Shopee, Bukalapak, dan Lazada</strong> (seller rating 4-5 bintang). Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di marketplace terpercaya sebelum membeli.
+          AI memberikan estimasi harga <strong>termurah yang realistis</strong> dari <strong>Tokopedia, Shopee, Bukalapak, dan Lazada</strong> (seller rating 4-5 bintang). Harga adalah perkiraan dan dapat berbeda dengan harga aktual. Disarankan untuk melakukan verifikasi harga langsung di marketplace terpercaya sebelum membeli.
         </div>
       </div>
 
