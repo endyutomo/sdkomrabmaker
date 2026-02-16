@@ -9,7 +9,10 @@ import {
     MessageSquare,
     ChevronRight,
     Sparkles,
-    RotateCcw
+    RotateCcw,
+    Paperclip,
+    File,
+    Image as ImageIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,8 +39,15 @@ import ReactMarkdown from "react-markdown";
 import { callPuterAI } from "@/ai/puter-ai-adapter";
 import { AIProvider, getActiveProvider, AI_PROVIDERS, setActiveProvider } from "@/ai/ai-provider";
 import { cn } from "@/lib/utils";
+import { uploadFile } from "@/lib/storage";
 import { Logo } from "@/components/ui/logo";
 import { ThemeSwitcher } from "@/components/shared/theme-switcher";
+
+interface Attachment {
+    url: string;
+    name: string;
+    type: string;
+}
 
 interface Message {
     id: string;
@@ -45,6 +55,7 @@ interface Message {
     content: string;
     timestamp: Date;
     provider?: AIProvider;
+    attachments?: Attachment[];
 }
 
 interface AIChatSidebarProps {
@@ -68,6 +79,9 @@ export function AIChatSidebar({ open, onOpenChange }: AIChatSidebarProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [activeProvider, setActiveProviderState] = useState<AIProvider>(AIProvider.GEMINI);
     const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
+    const [pendingFiles, setPendingFiles] = useState<File[]>([]);
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     // Load messages from localStorage on mount
@@ -134,23 +148,61 @@ export function AIChatSidebar({ open, onOpenChange }: AIChatSidebarProps) {
         setIsClearDialogOpen(false);
     };
 
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            setPendingFiles(prev => [...prev, ...Array.from(e.target.files!)]);
+        }
+    };
+
+    const removePendingFile = (index: number) => {
+        setPendingFiles(prev => prev.filter((_, i) => i !== index));
+    };
+
     const handleSend = async () => {
-        if (!input.trim() || isLoading) return;
+        if ((!input.trim() && pendingFiles.length === 0) || isLoading) return;
 
-        const userMessage: Message = {
-            id: Date.now().toString(),
-            role: "user",
-            content: input,
-            timestamp: new Date()
-        };
-
-        setMessages(prev => [...prev, userMessage]);
-        setInput("");
         setIsLoading(true);
+        setIsUploading(pendingFiles.length > 0);
+
+        let attachments: Attachment[] = [];
 
         try {
+            // Upload files if any
+            if (pendingFiles.length > 0) {
+                const uploadPromises = pendingFiles.map(async (file) => {
+                    const url = await uploadFile(file);
+                    return {
+                        url,
+                        name: file.name,
+                        type: file.type
+                    };
+                });
+                attachments = await Promise.all(uploadPromises);
+            }
+
+            const userMessage: Message = {
+                id: Date.now().toString(),
+                role: "user",
+                content: input,
+                timestamp: new Date(),
+                attachments: attachments.length > 0 ? attachments : undefined
+            };
+
+            setMessages(prev => [...prev, userMessage]);
+            setInput("");
+            setPendingFiles([]);
+            setIsUploading(false);
+
             const provider = getActiveProvider();
-            const response = await callPuterAI(input);
+
+            // Prepare context with attachments for AI
+            let aiPrompt = input;
+            if (attachments.length > 0) {
+                const fileList = attachments.map(a => `- ${a.name} (${a.url})`).join("\n");
+                aiPrompt += `\n\n[USER ATTACHMENTS]\n${fileList}\n\nAnalisis file di atas jika itu adalah gambar atau dokumen terkait RAB.`;
+            }
+
+            const response = await callPuterAI(aiPrompt);
 
             const aiMessage: Message = {
                 id: (Date.now() + 1).toString(),
@@ -172,6 +224,7 @@ export function AIChatSidebar({ open, onOpenChange }: AIChatSidebarProps) {
             setMessages(prev => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
+            setIsUploading(false);
         }
     };
 
@@ -265,6 +318,27 @@ export function AIChatSidebar({ open, onOpenChange }: AIChatSidebarProps) {
                                                 ? "bg-primary text-white rounded-tr-none shadow-md shadow-primary/10"
                                                 : "bg-slate-50 border border-slate-100 text-slate-700 rounded-tl-none"
                                         )}>
+                                            {message.attachments && message.attachments.length > 0 && (
+                                                <div className="mb-3 space-y-2">
+                                                    {message.attachments.map((att, idx) => (
+                                                        <div key={idx} className="rounded-lg overflow-hidden border border-white/20 shadow-sm bg-white/10">
+                                                            {att.type.startsWith('image/') ? (
+                                                                <img src={att.url} alt={att.name} className="max-w-full h-auto block" />
+                                                            ) : (
+                                                                <a
+                                                                    href={att.url}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="flex items-center gap-2 p-2 text-xs hover:bg-white/10 transition-colors"
+                                                                >
+                                                                    <File className="h-4 w-4" />
+                                                                    <span className="truncate flex-1">{att.name}</span>
+                                                                </a>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
                                             <ReactMarkdown>{typeof message.content === 'string' ? message.content : JSON.stringify(message.content)}</ReactMarkdown>
                                             {message.provider && message.role === "assistant" && (
                                                 <div className="mt-2 pt-2 border-t border-slate-200/50 flex items-center gap-1.5 opacity-50 text-[10px] font-medium">
@@ -284,7 +358,9 @@ export function AIChatSidebar({ open, onOpenChange }: AIChatSidebarProps) {
                                         </div>
                                         <div className="bg-slate-50 border border-slate-100 rounded-2xl rounded-tl-none p-4 flex items-center gap-2">
                                             <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                                            <span className="text-sm text-slate-500 font-medium">AI sedang berpikir...</span>
+                                            <span className="text-sm text-slate-500 font-medium">
+                                                {isUploading ? "Mengunggah file..." : "AI sedang berpikir..."}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -293,23 +369,62 @@ export function AIChatSidebar({ open, onOpenChange }: AIChatSidebarProps) {
                     </ScrollArea>
                 </div>
 
-                <div className="p-4 border-t bg-slate-50/50">
-                    <div className="flex gap-2 bg-white p-1 rounded-xl border shadow-sm focus-within:ring-2 focus-within:ring-primary/20 transition-all">
-                        <Input
-                            placeholder="Tanyakan apa saja tentang RAB..."
-                            className="border-none focus-visible:ring-0 px-3 bg-transparent"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                        />
-                        <Button
-                            size="icon"
-                            className="h-10 w-10 rounded-lg boq-accent-gradient shadow-md"
-                            onClick={handleSend}
-                            disabled={isLoading || !input.trim()}
+                <div className="p-4 border-t bg-slate-50/50 space-y-3">
+                    {/* Pending Files Preview */}
+                    {pendingFiles.length > 0 && (
+                        <div className="flex flex-wrap gap-2 animate-in fade-in slide-in-from-bottom-2">
+                            {pendingFiles.map((file, idx) => (
+                                <div key={idx} className="relative group rounded-lg border bg-white p-2 flex items-center gap-2 pr-8 shadow-sm">
+                                    {file.type.startsWith('image/') ? (
+                                        <ImageIcon className="h-4 w-4 text-primary" />
+                                    ) : (
+                                        <File className="h-4 w-4 text-slate-400" />
+                                    )}
+                                    <span className="text-[10px] font-bold truncate max-w-[100px]">{file.name}</span>
+                                    <button
+                                        onClick={() => removePendingFile(idx)}
+                                        className="absolute right-1 top-1/2 -translate-y-1/2 h-5 w-5 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-destructive transition-colors"
+                                    >
+                                        <X className="h-3 w-3" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    <div className="flex gap-2 items-end">
+                        <button
+                            onClick={() => fileInputRef.current?.click()}
+                            className="h-12 w-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary/30 transition-all shadow-sm hover:shadow-md shrink-0"
+                            disabled={isLoading}
                         >
-                            <Send className="h-4 w-4 text-white" />
-                        </Button>
+                            <Paperclip className="h-5 w-5" />
+                        </button>
+                        <input
+                            type="file"
+                            multiple
+                            hidden
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                        />
+
+                        <div className="flex-1 flex gap-2 bg-white p-1 rounded-xl border shadow-sm focus-within:ring-2 focus-within:ring-primary/20 transition-all min-h-[48px] items-center">
+                            <Input
+                                placeholder="Tanyakan apa saja tentang RAB..."
+                                className="border-none focus-visible:ring-0 px-3 bg-transparent h-10"
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                            />
+                            <Button
+                                size="icon"
+                                className="h-10 w-10 rounded-lg boq-accent-gradient shadow-md shrink-0"
+                                onClick={handleSend}
+                                disabled={isLoading || (!input.trim() && pendingFiles.length === 0)}
+                            >
+                                <Send className="h-4 w-4 text-white" />
+                            </Button>
+                        </div>
                     </div>
                     <p className="text-[10px] text-center mt-3 text-muted-foreground font-medium">
                         AI dapat memberikan informasi yang tidak akurat. Mohon verifikasi hasil manual.
