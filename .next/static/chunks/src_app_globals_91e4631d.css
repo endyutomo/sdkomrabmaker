@@ -799,6 +799,10 @@ body {
   margin-top: 2rem;
 }
 
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
 .line-clamp-1 {
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -1933,6 +1937,20 @@ body {
   background-color: rgba(254, 252, 232, var(--tw-bg-opacity, 1));
 }
 
+.bg-destructive\/10 {
+  background-color: hsl(var(--destructive) / .1);
+}
+
+.bg-orange-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(255, 237, 213, var(--tw-bg-opacity, 1));
+}
+
+.bg-orange-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(234, 88, 12, var(--tw-bg-opacity, 1));
+}
+
 .bg-clip-text {
   -webkit-background-clip: text;
   background-clip: text;
@@ -2455,6 +2473,11 @@ body {
   color: rgba(133, 77, 14, var(--tw-text-opacity, 1));
 }
 
+.text-orange-600 {
+  --tw-text-opacity: 1;
+  color: rgba(234, 88, 12, var(--tw-text-opacity, 1));
+}
+
 .underline-offset-4 {
   text-underline-offset: 4px;
 }
@@ -2566,6 +2589,16 @@ body {
 
 .shadow-primary\/30 {
   --tw-shadow-color: hsl(var(--primary) / .3);
+  --tw-shadow: var(--tw-shadow-colored);
+}
+
+.shadow-destructive\/20 {
+  --tw-shadow-color: hsl(var(--destructive) / .2);
+  --tw-shadow: var(--tw-shadow-colored);
+}
+
+.shadow-orange-600\/20 {
+  --tw-shadow-color: rgba(234, 88, 12, .2);
   --tw-shadow: var(--tw-shadow-colored);
 }
 
@@ -3059,6 +3092,11 @@ body {
 
 .hover\:bg-white\/10:hover {
   background-color: rgba(255, 255, 255, .1);
+}
+
+.hover\:bg-orange-700:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgba(194, 65, 12, var(--tw-bg-opacity, 1));
 }
 
 .hover\:text-accent:hover {

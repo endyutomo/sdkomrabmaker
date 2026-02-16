@@ -29,6 +29,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useSupabase } from "@/components/providers/supabase-provider";
 import { useSupabaseQuery } from "@/hooks/use-supabase-query";
 import { format, parseISO } from "date-fns";
@@ -53,6 +63,10 @@ export default function DashboardPage() {
   const [filterYear, setFilterYear] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+
+  // Dialog States
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
 
   // Filter Logic
   const filteredProjects = projects?.filter((project: any) => {
@@ -94,30 +108,35 @@ export default function DashboardPage() {
   const handleDelete = async (e: React.MouseEvent, projectId: string) => {
     e.preventDefault();
     e.stopPropagation();
+    setProjectToDelete(projectId);
+    setIsDeleteDialogOpen(true);
+  };
 
-    if (!supabase || !user) return;
+  const confirmDelete = async () => {
+    if (!supabase || !user || !projectToDelete) return;
 
-    if (confirm("Apakah Anda yakin ingin menghapus proyek ini?")) {
-      try {
-        const { error } = await supabase
-          .from('projects')
-          .delete()
-          .eq('id', projectId)
-          .eq('user_id', user.id);
+    try {
+      const { error } = await supabase
+        .from('projects')
+        .delete()
+        .eq('id', projectToDelete)
+        .eq('user_id', user.id);
 
-        if (error) throw error;
+      if (error) throw error;
 
-        toast({
-          title: "Proyek Dihapus",
-          description: "Data RAB telah berhasil dihapus dari database.",
-        });
-      } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "Gagal Menghapus",
-          description: "Terjadi kesalahan saat menghapus data.",
-        });
-      }
+      toast({
+        title: "Proyek Dihapus",
+        description: "Data RAB telah berhasil dihapus dari database.",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Gagal Menghapus",
+        description: "Terjadi kesalahan saat menghapus data.",
+      });
+    } finally {
+      setIsDeleteDialogOpen(false);
+      setProjectToDelete(null);
     }
   };
 
@@ -385,6 +404,34 @@ export default function DashboardPage() {
             )}
           </div>
         )}
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <AlertDialogContent className="boq-glass border-white/40 rounded-[2rem] p-8 shadow-2xl">
+            <AlertDialogHeader className="space-y-4">
+              <div className="h-14 w-14 bg-destructive/10 text-destructive rounded-2xl flex items-center justify-center mb-2">
+                <Trash2 className="h-7 w-7" />
+              </div>
+              <AlertDialogTitle className="text-2xl font-black text-primary tracking-tight">
+                Hapus Proyek RAB?
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-slate-500 text-base font-medium">
+                Tindakan ini tidak dapat dibatalkan. Seluruh data estimasi harga dan item pada proyek ini akan dihapus secara permanen dari server.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="mt-8 gap-3">
+              <AlertDialogCancel className="h-12 px-6 rounded-xl font-bold border-slate-200 hover:bg-slate-50 transition-all">
+                Batal
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={confirmDelete}
+                className="h-12 px-6 rounded-xl font-bold bg-destructive hover:bg-destructive/90 text-white transition-all shadow-lg shadow-destructive/20"
+              >
+                Ya, Hapus Permanen
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </main>
     </div>
   );

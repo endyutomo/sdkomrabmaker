@@ -3173,10 +3173,29 @@ function BuilderClient() {
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         className: "text-slate-500 font-medium animate-pulse",
-                        children: "Memuat data SDKOM RAB MAker..."
-                    }, void 0, false, {
+                        children: [
+                            "Memuat data SDKOM ",
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "font-light italic",
+                                children: "RAB MAker"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/builder/builder-client.tsx",
+                                lineNumber: 440,
+                                columnNumber: 95
+                            }, this),
+                            "..."
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/src/components/builder/builder-client.tsx",
                         lineNumber: 440,
+                        columnNumber: 21
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "text-[10px] font-light text-slate-400 -mt-3",
+                        children: "create by Endy Akbbar"
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/builder/builder-client.tsx",
+                        lineNumber: 441,
                         columnNumber: 21
                     }, this)
                 ]
@@ -3202,7 +3221,7 @@ function BuilderClient() {
                             onSuggest: handleAiSuggest
                         }, void 0, false, {
                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                            lineNumber: 450,
+                            lineNumber: 451,
                             columnNumber: 17
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3213,7 +3232,7 @@ function BuilderClient() {
                                     children: "Tambah Cepat Kategori"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                    lineNumber: 453,
+                                    lineNumber: 454,
                                     columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3228,14 +3247,14 @@ function BuilderClient() {
                                                     className: "h-4 w-4 mr-2 text-primary"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                    lineNumber: 456,
+                                                    lineNumber: 457,
                                                     columnNumber: 29
                                                 }, this),
                                                 " Perangkat Utama"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                                            lineNumber: 455,
+                                            lineNumber: 456,
                                             columnNumber: 25
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -3247,14 +3266,14 @@ function BuilderClient() {
                                                     className: "h-4 w-4 mr-2 text-accent"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                    lineNumber: 459,
+                                                    lineNumber: 460,
                                                     columnNumber: 29
                                                 }, this),
                                                 " Jasa Instalasi"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                                            lineNumber: 458,
+                                            lineNumber: 459,
                                             columnNumber: 25
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -3266,14 +3285,14 @@ function BuilderClient() {
                                                     className: "h-4 w-4 mr-2 text-amber-500"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                    lineNumber: 462,
+                                                    lineNumber: 463,
                                                     columnNumber: 29
                                                 }, this),
                                                 " Mobilisasi"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                                            lineNumber: 461,
+                                            lineNumber: 462,
                                             columnNumber: 25
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -3285,32 +3304,32 @@ function BuilderClient() {
                                                     className: "h-4 w-4 mr-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                    lineNumber: 465,
+                                                    lineNumber: 466,
                                                     columnNumber: 29
                                                 }, this),
                                                 " Bagian Kustom"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                                            lineNumber: 464,
+                                            lineNumber: 465,
                                             columnNumber: 25
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                    lineNumber: 454,
+                                    lineNumber: 455,
                                     columnNumber: 21
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                            lineNumber: 452,
+                            lineNumber: 453,
                             columnNumber: 17
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                    lineNumber: 449,
+                    lineNumber: 450,
                     columnNumber: 13
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3326,19 +3345,19 @@ function BuilderClient() {
                                         className: "h-4 w-4 mr-2"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                                        lineNumber: 474,
+                                        lineNumber: 475,
                                         columnNumber: 25
                                     }, this),
                                     " Proyek Saya"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                lineNumber: 473,
+                                lineNumber: 474,
                                 columnNumber: 21
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                            lineNumber: 472,
+                            lineNumber: 473,
                             columnNumber: 17
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -3350,26 +3369,26 @@ function BuilderClient() {
                                     className: "h-4 w-4 mr-2"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                    lineNumber: 478,
+                                    lineNumber: 479,
                                     columnNumber: 21
                                 }, this),
                                 " Pratinjau Cetak"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                            lineNumber: 477,
+                            lineNumber: 478,
                             columnNumber: 17
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                    lineNumber: 471,
+                    lineNumber: 472,
                     columnNumber: 13
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/builder/builder-client.tsx",
-            lineNumber: 448,
+            lineNumber: 449,
             columnNumber: 9
         }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$section$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Section"], {
@@ -3394,17 +3413,17 @@ function BuilderClient() {
                                                     className: "h-6 w-6"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                    lineNumber: 493,
+                                                    lineNumber: 494,
                                                     columnNumber: 37
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                lineNumber: 492,
+                                                lineNumber: 493,
                                                 columnNumber: 33
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                                            lineNumber: 491,
+                                            lineNumber: 492,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sheet$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SheetContent"], {
@@ -3420,41 +3439,75 @@ function BuilderClient() {
                                                                 className: "h-6 w-6"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                                lineNumber: 499,
+                                                                lineNumber: 500,
                                                                 columnNumber: 41
                                                             }, this),
-                                                            "Menu RAB Maker"
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "flex flex-col -space-y-1",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                        className: "text-sm font-bold",
+                                                                        children: [
+                                                                            "SDKOM ",
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "text-slate-400 font-medium italic",
+                                                                                children: "RAB MAker"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/src/components/builder/builder-client.tsx",
+                                                                                lineNumber: 502,
+                                                                                columnNumber: 87
+                                                                            }, this)
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/src/components/builder/builder-client.tsx",
+                                                                        lineNumber: 502,
+                                                                        columnNumber: 45
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                        className: "text-[9px] font-light text-slate-400 tracking-tight",
+                                                                        children: "create by Endy Akbbar"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/components/builder/builder-client.tsx",
+                                                                        lineNumber: 503,
+                                                                        columnNumber: 45
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/src/components/builder/builder-client.tsx",
+                                                                lineNumber: 501,
+                                                                columnNumber: 41
+                                                            }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                        lineNumber: 498,
+                                                        lineNumber: 499,
                                                         columnNumber: 37
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                    lineNumber: 497,
+                                                    lineNumber: 498,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(SidebarContent, {}, void 0, false, {
                                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                    lineNumber: 503,
+                                                    lineNumber: 507,
                                                     columnNumber: 33
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                                            lineNumber: 496,
+                                            lineNumber: 497,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                    lineNumber: 490,
+                                    lineNumber: 491,
                                     columnNumber: 25
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                lineNumber: 489,
+                                lineNumber: 490,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -3468,24 +3521,24 @@ function BuilderClient() {
                                         className: "h-5 w-5"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                                        lineNumber: 510,
+                                        lineNumber: 514,
                                         columnNumber: 29
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                    lineNumber: 509,
+                                    lineNumber: 513,
                                     columnNumber: 25
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                lineNumber: 508,
+                                lineNumber: 512,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "h-8 w-px bg-border hidden lg:block"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                lineNumber: 513,
+                                lineNumber: 517,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3495,7 +3548,7 @@ function BuilderClient() {
                                         className: "h-8 w-8 hidden sm:block"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                                        lineNumber: 515,
+                                        lineNumber: 519,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3507,19 +3560,19 @@ function BuilderClient() {
                                                 }))
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                                        lineNumber: 516,
+                                        lineNumber: 520,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                lineNumber: 514,
+                                lineNumber: 518,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                        lineNumber: 488,
+                        lineNumber: 489,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3527,7 +3580,7 @@ function BuilderClient() {
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$builder$2f$ai$2d$provider$2d$selector$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AIProviderSelector"], {}, void 0, false, {
                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                lineNumber: 525,
+                                lineNumber: 529,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenu"], {
@@ -3543,19 +3596,19 @@ function BuilderClient() {
                                                     className: "h-4 w-4 mr-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                    lineNumber: 530,
+                                                    lineNumber: 534,
                                                     columnNumber: 33
                                                 }, this),
                                                 " Ekspor"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                                            lineNumber: 529,
+                                            lineNumber: 533,
                                             columnNumber: 29
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                                        lineNumber: 528,
+                                        lineNumber: 532,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuTrigger"], {
@@ -3568,17 +3621,17 @@ function BuilderClient() {
                                                 className: "h-4 w-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                lineNumber: 535,
+                                                lineNumber: 539,
                                                 columnNumber: 33
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                                            lineNumber: 534,
+                                            lineNumber: 538,
                                             columnNumber: 29
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                                        lineNumber: 533,
+                                        lineNumber: 537,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
@@ -3593,14 +3646,14 @@ function BuilderClient() {
                                                         className: "h-4 w-4 mr-2 text-red-500"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                        lineNumber: 540,
+                                                        lineNumber: 544,
                                                         columnNumber: 33
                                                     }, this),
                                                     " Simpan sebagai PDF"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                lineNumber: 539,
+                                                lineNumber: 543,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
@@ -3611,26 +3664,26 @@ function BuilderClient() {
                                                         className: "h-4 w-4 mr-2 text-green-600"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                        lineNumber: 543,
+                                                        lineNumber: 547,
                                                         columnNumber: 33
                                                     }, this),
                                                     " Ekspor ke Excel (.xlsx)"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                lineNumber: 542,
+                                                lineNumber: 546,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                                        lineNumber: 538,
+                                        lineNumber: 542,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                lineNumber: 527,
+                                lineNumber: 531,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -3642,20 +3695,20 @@ function BuilderClient() {
                                         className: "h-4 w-4 animate-spin"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                                        lineNumber: 553,
+                                        lineNumber: 557,
                                         columnNumber: 37
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$save$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Save$3e$__["Save"], {
                                         className: "h-4 w-4 mr-2"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                                        lineNumber: 553,
+                                        lineNumber: 557,
                                         columnNumber: 84
                                     }, this),
                                     "Simpan"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                lineNumber: 548,
+                                lineNumber: 552,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -3666,30 +3719,30 @@ function BuilderClient() {
                                     className: "h-4 w-4 animate-spin"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                    lineNumber: 561,
+                                    lineNumber: 565,
                                     columnNumber: 37
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$save$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Save$3e$__["Save"], {
                                     className: "h-4 w-4"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                    lineNumber: 561,
+                                    lineNumber: 565,
                                     columnNumber: 84
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                lineNumber: 556,
+                                lineNumber: 560,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                        lineNumber: 524,
+                        lineNumber: 528,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                lineNumber: 487,
+                lineNumber: 488,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3699,12 +3752,12 @@ function BuilderClient() {
                         className: "w-80 border-r bg-white p-6 hidden lg:block no-print overflow-y-auto h-[calc(100vh-64px)]",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(SidebarContent, {}, void 0, false, {
                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                            lineNumber: 569,
+                            lineNumber: 573,
                             columnNumber: 21
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                        lineNumber: 568,
+                        lineNumber: 572,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -3718,7 +3771,7 @@ function BuilderClient() {
                                     className: "lg:hidden"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                    lineNumber: 576,
+                                    lineNumber: 580,
                                     columnNumber: 25
                                 }, this),
                                 project.categories.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3730,12 +3783,12 @@ function BuilderClient() {
                                                 className: "h-8 w-8 lg:h-10 lg:w-10 opacity-40"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                lineNumber: 585,
+                                                lineNumber: 589,
                                                 columnNumber: 37
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                                            lineNumber: 584,
+                                            lineNumber: 588,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3746,7 +3799,7 @@ function BuilderClient() {
                                                     children: "Siap Menyusun RAB?"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                    lineNumber: 588,
+                                                    lineNumber: 592,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3754,13 +3807,13 @@ function BuilderClient() {
                                                     children: "Gunakan panel samping (atau menu di HP) untuk menambah kategori perangkat dan jasa secara cepat, atau biarkan AI SDKOM RAB MAker memberikan saran item yang relevan."
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                    lineNumber: 589,
+                                                    lineNumber: 593,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                                            lineNumber: 587,
+                                            lineNumber: 591,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3774,25 +3827,25 @@ function BuilderClient() {
                                                         className: "h-5 w-5 mr-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                        lineNumber: 595,
+                                                        lineNumber: 599,
                                                         columnNumber: 41
                                                     }, this),
                                                     " Mulai Input Manual"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                                                lineNumber: 594,
+                                                lineNumber: 598,
                                                 columnNumber: 37
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                                            lineNumber: 593,
+                                            lineNumber: 597,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                    lineNumber: 583,
+                                    lineNumber: 587,
                                     columnNumber: 29
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$builder$2f$boq$2d$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["BoqTable"], {
                                     project: project,
@@ -3804,30 +3857,30 @@ function BuilderClient() {
                                     onDeleteCategory: handleDeleteCategory
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/builder/builder-client.tsx",
-                                    lineNumber: 600,
+                                    lineNumber: 604,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/builder/builder-client.tsx",
-                            lineNumber: 574,
+                            lineNumber: 578,
                             columnNumber: 21
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/builder/builder-client.tsx",
-                        lineNumber: 573,
+                        lineNumber: 577,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/builder/builder-client.tsx",
-                lineNumber: 566,
+                lineNumber: 570,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/builder/builder-client.tsx",
-        lineNumber: 485,
+        lineNumber: 486,
         columnNumber: 9
     }, this);
 }

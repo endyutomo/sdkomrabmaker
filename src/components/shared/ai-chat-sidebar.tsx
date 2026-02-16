@@ -21,6 +21,16 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import ReactMarkdown from "react-markdown";
 import { callPuterAI } from "@/ai/puter-ai-adapter";
@@ -57,6 +67,7 @@ export function AIChatSidebar({ open, onOpenChange }: AIChatSidebarProps) {
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [activeProvider, setActiveProviderState] = useState<AIProvider>(AIProvider.GEMINI);
+    const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     // Load messages from localStorage on mount
@@ -106,6 +117,10 @@ export function AIChatSidebar({ open, onOpenChange }: AIChatSidebarProps) {
     };
 
     const handleClearChat = () => {
+        setIsClearDialogOpen(true);
+    };
+
+    const confirmClearChat = () => {
         const freshGreeting = [
             {
                 id: Date.now().toString(),
@@ -116,6 +131,7 @@ export function AIChatSidebar({ open, onOpenChange }: AIChatSidebarProps) {
         ];
         setMessages(freshGreeting);
         localStorage.removeItem(CHAT_HISTORY_KEY);
+        setIsClearDialogOpen(false);
     };
 
     const handleSend = async () => {
@@ -299,6 +315,32 @@ export function AIChatSidebar({ open, onOpenChange }: AIChatSidebarProps) {
                         AI dapat memberikan informasi yang tidak akurat. Mohon verifikasi hasil manual.
                     </p>
                 </div>
+
+                {/* Clear Chat Confirmation */}
+                <AlertDialog open={isClearDialogOpen} onOpenChange={setIsClearDialogOpen}>
+                    <AlertDialogContent className="rounded-2xl border-slate-200 dark:border-slate-800 shadow-2xl p-6">
+                        <AlertDialogHeader className="space-y-3">
+                            <div className="h-12 w-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center mb-1">
+                                <RotateCcw className="h-6 w-6" />
+                            </div>
+                            <AlertDialogTitle className="text-xl font-bold text-slate-900 dark:text-white">
+                                Bersihkan Riwayat Chat?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription className="text-sm text-slate-500 font-medium">
+                                Seluruh percakapan Anda dengan asisten AI di sesi ini akan dihapus secara permanen.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter className="mt-6">
+                            <AlertDialogCancel className="rounded-xl font-medium">Batal</AlertDialogCancel>
+                            <AlertDialogAction
+                                onClick={confirmClearChat}
+                                className="rounded-xl font-bold bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-600/20"
+                            >
+                                Ya, Bersihkan
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </SheetContent>
         </Sheet>
     );
