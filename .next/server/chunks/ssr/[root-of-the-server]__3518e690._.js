@@ -1184,6 +1184,7 @@ __turbopack_context__.s([
     ()=>setActiveProvider
 ]);
 var AIProvider = /*#__PURE__*/ function(AIProvider) {
+    AIProvider["LITELLM"] = "litellm";
     AIProvider["GEMINI"] = "gemini";
     AIProvider["PUTER"] = "puter";
     AIProvider["OPENAI"] = "openai";
@@ -1193,6 +1194,12 @@ var AIProvider = /*#__PURE__*/ function(AIProvider) {
     return AIProvider;
 }({});
 const AI_PROVIDERS = {
+    ["litellm"]: {
+        name: 'litellm',
+        displayName: 'LiteLLM (Rekomendasi)',
+        icon: '💎',
+        available: true
+    },
     ["gemini"]: {
         name: 'gemini',
         displayName: 'Google Gemini',
@@ -1233,7 +1240,7 @@ const AI_PROVIDERS = {
 // Local storage key
 const AI_PROVIDER_KEY = 'sdkom_ai_provider';
 function getActiveProvider() {
-    if ("TURBOPACK compile-time truthy", 1) return "gemini";
+    if ("TURBOPACK compile-time truthy", 1) return "litellm";
     //TURBOPACK unreachable
     ;
     const stored = undefined;

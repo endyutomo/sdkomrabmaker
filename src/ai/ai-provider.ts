@@ -1,5 +1,6 @@
 // AI Provider Types and Manager
 export enum AIProvider {
+    LITELLM = 'litellm',
     GEMINI = 'gemini',
     PUTER = 'puter',
     OPENAI = 'openai',
@@ -16,6 +17,12 @@ export interface AIProviderConfig {
 }
 
 export const AI_PROVIDERS: Record<AIProvider, AIProviderConfig> = {
+    [AIProvider.LITELLM]: {
+        name: 'litellm',
+        displayName: 'LiteLLM (Rekomendasi)',
+        icon: '💎',
+        available: true
+    },
     [AIProvider.GEMINI]: {
         name: 'gemini',
         displayName: 'Google Gemini',
@@ -59,14 +66,14 @@ const AI_PROVIDER_KEY = 'sdkom_ai_provider';
 
 // Get active provider from localStorage
 export function getActiveProvider(): AIProvider {
-    if (typeof window === 'undefined') return AIProvider.GEMINI;
+    if (typeof window === 'undefined') return AIProvider.LITELLM;
 
     const stored = localStorage.getItem(AI_PROVIDER_KEY);
     if (stored && Object.values(AIProvider).includes(stored as AIProvider)) {
         return stored as AIProvider;
     }
 
-    return AIProvider.GEMINI;
+    return AIProvider.LITELLM;
 }
 
 // Set active provider

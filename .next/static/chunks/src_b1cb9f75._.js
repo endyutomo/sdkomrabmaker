@@ -1383,6 +1383,7 @@ __turbopack_context__.s([
     ()=>setActiveProvider
 ]);
 var AIProvider = /*#__PURE__*/ function(AIProvider) {
+    AIProvider["LITELLM"] = "litellm";
     AIProvider["GEMINI"] = "gemini";
     AIProvider["PUTER"] = "puter";
     AIProvider["OPENAI"] = "openai";
@@ -1392,6 +1393,12 @@ var AIProvider = /*#__PURE__*/ function(AIProvider) {
     return AIProvider;
 }({});
 const AI_PROVIDERS = {
+    ["litellm"]: {
+        name: 'litellm',
+        displayName: 'LiteLLM (Rekomendasi)',
+        icon: '💎',
+        available: true
+    },
     ["gemini"]: {
         name: 'gemini',
         displayName: 'Google Gemini',
@@ -1438,7 +1445,7 @@ function getActiveProvider() {
     if (stored && Object.values(AIProvider).includes(stored)) {
         return stored;
     }
-    return "gemini";
+    return "litellm";
 }
 function setActiveProvider(provider) {
     if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
