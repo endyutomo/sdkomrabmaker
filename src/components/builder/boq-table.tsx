@@ -20,13 +20,23 @@ import {
   MapPin,
   Hash,
   FileText,
-  Percent,
-  Store,
-  Coins,
   Search,
   History,
-  User
+  User,
+  Image as ImageIcon,
+  ZoomIn,
+  ImageOff,
+  Store,
+  Percent,
+  Coins
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -41,7 +51,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { suggestItemPrice } from "@/ai/flows/ai-price-suggestion";
+import { suggestItemPrice, PriceSuggestionOutput } from "@/ai/flows/ai-price-suggestion";
 import { suggestItemPriceClient, shouldUsePuterAI, PriceSuggestionInput } from "@/ai/puter-ai-adapter";
 import { useToast } from "@/hooks/use-toast";
 import { useSupabase } from "@/components/providers/supabase-provider";
@@ -70,6 +80,9 @@ export function BoqTable({
   const [includePph23, setIncludePph23] = useState(true);
   const [contingencyRate, setContingencyRate] = useState(5);
   const [loadingPriceId, setLoadingPriceId] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
   const { toast } = useToast();
   const { supabase, user } = useSupabase();
 
@@ -97,7 +110,11 @@ export function BoqTable({
           unit_price: item.unitPrice,
           type: item.type,
           vendor_name: item.vendorName || "",
-          last_used: new Date().toISOString()
+          last_used: new Date().toISOString(),
+          // Note: model_type and image_url might need DB migration manually if they don't exist
+          // but passing them here won't hurt if using JSONB or if schema is updated
+          model_type: item.modelType || null,
+          image_url: item.imageUrl || null
         });
 
       if (error) throw error;
@@ -186,7 +203,9 @@ export function BoqTable({
         marketplaceSources: result.marketplaceSources,
         brandDetected: result.brandDetected,
         isPremiumBrand: result.isPremiumBrand,
-        brandNote: result.brandNote
+        brandNote: result.brandNote,
+        modelType: result.modelType,
+        imageUrl: result.imageUrl
       });
 
       const toastTitle = result.isPremiumBrand
@@ -210,7 +229,9 @@ export function BoqTable({
         marketplaceSources: result.marketplaceSources,
         brandDetected: result.brandDetected,
         isPremiumBrand: result.isPremiumBrand,
-        brandNote: result.brandNote
+        brandNote: result.brandNote,
+        modelType: result.modelType,
+        imageUrl: result.imageUrl
       });
     } catch (error: any) {
       console.error("Gagal mendapatkan saran harga:", error);
@@ -389,6 +410,23 @@ export function BoqTable({
                           onChange={(e) => onUpdateItem(category.id, item.id, { name: e.target.value })}
                           onBlur={() => setTimeout(() => recordToCatalog(item), 500)}
                         />
+                        {item.modelType && (
+                          <div className="text-[10px] font-bold text-accent px-2 -mt-2 mb-1 uppercase tracking-tighter bg-accent/5 rounded w-fit">
+                            Model: {item.modelType}
+                          </div>
+                        )}
+                        {item.imageUrl && (
+                          <div className="flex items-center gap-2 px-2 -mt-1 mb-1">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 px-2 text-[10px] font-bold text-primary bg-primary/5 hover:bg-primary/10 gap-1"
+                              onClick={() => setSelectedImage(item.imageUrl || null)}
+                            >
+                              <ImageIcon className="h-3 w-3" /> Lihat Foto
+                            </Button>
+                          </div>
+                        )}
                         {catalogItems && catalogItems.filter(c => c.name.toLowerCase().includes(item.name.toLowerCase()) && item.name.length > 2).length > 0 && (
                           <Popover>
                             <PopoverTrigger asChild>
@@ -647,6 +685,61 @@ export function BoqTable({
           </div>
         </div>
       </div>
+
+      {/* Image Zoom Dialog */}
+      <Dialog open={!!selectedImage} onOpenChange={(open) => {
+        if (!open) {
+          setSelectedImage(null);
+          setImageLoading(true);
+          setImageError(false);
+        }
+      }}>
+        <DialogContent className="max-w-3xl border-none bg-transparent shadow-none p-0 overflow-hidden flex items-center justify-center min-h-[300px]">
+          <div className="relative group w-full flex items-center justify-center">
+            {selectedImage && (
+              <>
+                {imageLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center z-10 text-white">
+                    <Loader2 className="h-12 w-12 animate-spin" />
+                  </div>
+                )}
+                {imageError ? (
+                  <div className="bg-white p-8 rounded-xl flex flex-col items-center gap-4 text-center">
+                    <div className="bg-red-50 p-4 rounded-full">
+                      <ImageOff className="h-10 w-10 text-red-500" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg text-slate-800">Gagal Memuat Foto</h4>
+                      <p className="text-sm text-slate-500 max-w-xs break-all mt-1">
+                        URL tidak valid atau diblokir oleh server asal.
+                      </p>
+                      <a href={selectedImage} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline mt-2 block">
+                        Coba buka link langsung
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  <img
+                    src={selectedImage}
+                    alt="Product Preview"
+                    className={`max-h-[85vh] w-auto rounded-2xl shadow-2xl transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
+                    onLoad={() => setImageLoading(false)}
+                    onError={() => {
+                      setImageLoading(false);
+                      setImageError(true);
+                    }}
+                  />
+                )}
+              </>
+            )}
+            {!imageLoading && !imageError && (
+              <div className="absolute top-4 right-4 h-10 w-10 rounded-full bg-black/50 text-white flex items-center justify-center backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                <ZoomIn className="h-6 w-6" />
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

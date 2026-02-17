@@ -17,6 +17,8 @@ export interface BoqItem {
   brandDetected?: string;
   isPremiumBrand?: boolean;
   brandNote?: string;
+  imageUrl?: string;
+  modelType?: string;
 }
 
 export interface BoqCategory {
