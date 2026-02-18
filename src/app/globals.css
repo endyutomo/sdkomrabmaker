@@ -4,24 +4,24 @@
 
 @layer base {
   :root {
-    --background: 240 16% 93%;
-    --foreground: 238 52% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 238 52% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 238 52% 10%;
+    --background: 142 71% 15%;
+    --foreground: 240 16% 93%;
+    --card: 142 71% 20%;
+    --card-foreground: 240 16% 93%;
+    --popover: 142 71% 20%;
+    --popover-foreground: 240 16% 93%;
     --primary: 238 52% 38%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 10% 90%;
-    --secondary-foreground: 238 52% 20%;
-    --muted: 240 10% 85%;
-    --muted-foreground: 240 5% 45%;
+    --secondary: 142 71% 25%;
+    --secondary-foreground: 240 16% 93%;
+    --muted: 142 71% 30%;
+    --muted-foreground: 240 5% 75%;
     --accent: 283 100% 52%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 240 5.9% 85%;
-    --input: 240 5.9% 85%;
+    --border: 142 71% 25%;
+    --input: 142 71% 25%;
     --ring: 238 52% 38%;
     --radius: 0.75rem;
   }
@@ -104,7 +104,7 @@
 }
 
 .boq-glass {
-  @apply bg-white/80 dark:bg-slate-900/60 backdrop-blur-md border border-white/20 dark:border-white/5 shadow-xl;
+  @apply bg-emerald-900/80 dark:bg-slate-900/60 backdrop-blur-md border border-emerald-700/50 dark:border-white/5 shadow-xl;
 }
 
 .boq-accent-gradient {

@@ -19,7 +19,8 @@ import {
   Search,
   Filter,
   User as UserIcon,
-  ChevronLeft
+  ChevronLeft,
+  Settings
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -160,12 +161,12 @@ export default function DashboardPage() {
   const totalDrafts = projects?.filter((p: any) => !p.client_name).length || 0;
 
   return (
-    <div className="min-h-screen bg-[#F0F2F5] flex flex-col relative overflow-hidden">
+    <div className="min-h-screen bg-background flex flex-col relative overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px] -z-10 animate-pulse" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-[150px] -z-10" />
 
-      <header className="h-16 border-b bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl flex items-center justify-between px-6 sticky top-0 z-40 transition-all">
+      <header className="h-16 border-b bg-emerald-800/80 backdrop-blur-xl flex items-center justify-between px-6 sticky top-0 z-40 transition-all">
         <div className="flex items-center gap-2 group cursor-pointer">
           <Logo className="h-10 w-10 group-hover:scale-110 transition-transform duration-500" />
           <div className="flex flex-col -space-y-1">
@@ -175,6 +176,12 @@ export default function DashboardPage() {
         </div>
         <div className="flex items-center gap-3">
           <ThemeSwitcher />
+          <Link href="/settings">
+            <Button variant="outline" size="sm" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Pengaturan
+            </Button>
+          </Link>
           <Link href="/builder">
             <Button className="boq-accent-gradient h-10 px-6 font-extrabold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
               <Plus className="h-5 w-5 mr-1.5" /> RAB Baru
@@ -192,7 +199,7 @@ export default function DashboardPage() {
 
           {/* Stats Summary - Glass Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div className="boq-glass p-6 rounded-2xl flex items-center gap-5 border-white/40 hover:-translate-y-1 transition-all duration-300">
+            <div className="boq-glass p-6 rounded-2xl flex items-center gap-5 border-white/40 hover:-translate-y-1 transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:shadow-emerald-500/25">
               <div className="h-14 w-14 rounded-xl boq-accent-gradient flex items-center justify-center text-white shadow-lg shadow-primary/30">
                 <Briefcase className="h-7 w-7" />
               </div>
@@ -202,7 +209,7 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="boq-glass p-6 rounded-2xl flex items-center gap-5 border-white/40 hover:-translate-y-1 transition-all duration-300">
+            <div className="boq-glass p-6 rounded-2xl flex items-center gap-5 border-white/40 hover:-translate-y-1 transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:shadow-emerald-500/25">
               <div className="h-14 w-14 rounded-xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
                 <Layers className="h-7 w-7" />
               </div>
@@ -212,7 +219,7 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="boq-glass p-6 rounded-2xl flex items-center gap-5 border-white/40 hover:-translate-y-1 transition-all duration-300">
+            <div className="boq-glass p-6 rounded-2xl flex items-center gap-5 border-white/40 hover:-translate-y-1 transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:shadow-emerald-500/25">
               <div className="h-14 w-14 rounded-xl bg-orange-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/30">
                 <FileText className="h-7 w-7" />
               </div>
@@ -269,7 +276,7 @@ export default function DashboardPage() {
         </div>
 
         {!projects || projects.length === 0 ? (
-          <div className="boq-glass rounded-[40px] border-dashed border-slate-300 p-20 text-center flex flex-col items-center space-y-8 border-2">
+          <div className="boq-glass rounded-[40px] border-dashed border-slate-300 p-20 text-center flex flex-col items-center space-y-8 border-2 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:shadow-emerald-500/25 transition-all duration-500">
             <div className="h-24 w-24 bg-primary/5 rounded-full flex items-center justify-center text-primary animate-bounce">
               <Logo className="h-16 w-16" />
             </div>
@@ -288,7 +295,7 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {paginatedProjects.map((project: any) => (
                 <Link key={project.id} href={`/builder?id=${project.id}`} className="group relative">
-                  <div className="boq-glass h-full rounded-[2rem] border-white/40 p-8 hover:shadow-[0_20px_50px_-12px_rgba(46,49,146,0.15)] transition-all duration-500 hover:-translate-y-2 flex flex-col">
+                  <div className="boq-glass h-full rounded-[2rem] border-white/40 p-8 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:shadow-emerald-500/25 transition-all duration-500 hover:-translate-y-2 flex flex-col">
                     <div className="flex justify-between items-start mb-6">
                       <div className="h-14 w-14 bg-primary/5 text-primary rounded-2xl flex items-center justify-center group-hover:boq-accent-gradient group-hover:text-white transition-all duration-500 shadow-sm">
                         <Logo className="h-10 w-10 transition-transform group-hover:scale-110" />

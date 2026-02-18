@@ -557,7 +557,7 @@ export function BuilderClient() {
     return (
         <Section className="min-h-screen flex flex-col bg-background p-0 md:p-0 lg:p-0">
             {/* Header / Config Bar */}
-            <header className="h-16 border-b bg-white flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30 shadow-sm no-print">
+            <header className="h-16 border-b bg-emerald-800/80 backdrop-blur-xl flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30 shadow-sm no-print">
                 <div className="flex items-center gap-4">
                     <div className="lg:hidden">
                         <Sheet>
