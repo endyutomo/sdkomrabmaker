@@ -242,15 +242,29 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$genkitx$2d$o
 ;
 ;
 ;
+// Check if LiteLLM credentials are available
+const litellmApiKey = process.env.LITELLM_API_KEY;
+const litellmBaseUrl = process.env.LITELLM_BASE_URL;
+// Only configure LiteLLM if credentials are available
+const plugins = [
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$genkit$2d$ai$2f$google$2d$genai$2f$lib$2f$googleai$2f$index$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["googleAI"])()
+];
+if (litellmApiKey && litellmBaseUrl) {
+    try {
+        plugins.push((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$genkitx$2d$openai$2f$lib$2f$index$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$locals$3e$__["openAI"])({
+            apiKey: litellmApiKey,
+            baseURL: litellmBaseUrl
+        }));
+        console.log('LiteLLM provider configured successfully');
+    } catch (error) {
+        console.error('Failed to configure LiteLLM:', error);
+    }
+} else {
+    console.warn('LiteLLM credentials not found. Only Google AI will be available.');
+}
 const ai = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$genkit$2f$lib$2f$genkit$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["genkit"])({
-    plugins: [
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$genkit$2d$ai$2f$google$2d$genai$2f$lib$2f$googleai$2f$index$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["googleAI"])(),
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$genkitx$2d$openai$2f$lib$2f$index$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$locals$3e$__["openAI"])({
-            apiKey: process.env.LITELLM_API_KEY,
-            baseURL: process.env.LITELLM_BASE_URL
-        })
-    ],
-    model: 'openai/gpt-4o'
+    plugins: plugins,
+    model: litellmApiKey ? 'openai/gpt-4o' : 'google/gemini-1.5-flash'
 });
 }),
 "[project]/src/ai/ai-provider.ts [app-rsc] (ecmascript)", ((__turbopack_context__) => {
