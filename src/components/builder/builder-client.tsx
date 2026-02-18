@@ -21,7 +21,8 @@ import {
     FileSpreadsheet,
     FileText,
     Globe,
-    Check
+    Check,
+    LogOut
 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
@@ -75,19 +76,28 @@ export function BuilderClient() {
     const { toast } = useToast();
     const { supabase, user, isLoading: isAuthLoading } = useSupabase();
 
-    // Ensure user is signed in
+    // Check if user is authenticated with email
     useEffect(() => {
-        if (!isAuthLoading && !user) {
-            supabase.auth.signInAnonymously().catch(err => {
-                console.error("Anonymous sign-in failed:", err);
+        if (!isAuthLoading) {
+            // If no user, redirect to login
+            if (!user) {
+                router.push('/auth');
+                return;
+            }
+
+            // Only allow @sdkom.co.id emails
+            const email = user.email;
+            if (!email?.endsWith('@sdkom.co.id')) {
                 toast({
-                    variant: "destructive",
-                    title: "Autentikasi Gagal",
-                    description: "Gagal masuk secara anonim. Pastikan 'Anonymous Sign-ins' sudah diaktifkan di menu Authentication > Providers pada dashboard Supabase Anda.",
+                    variant: 'destructive',
+                    title: 'Email Tidak Diizinkan',
+                    description: 'Hanya email dengan domain @sdkom.co.id yang dapat mengakses builder.',
                 });
-            });
+                supabase.auth.signOut();
+                router.push('/auth');
+            }
         }
-    }, [user, isAuthLoading, supabase]);
+    }, [user, isAuthLoading, supabase, router, toast]);
 
     // Auto-save functionality
     useEffect(() => {
@@ -436,6 +446,23 @@ export function BuilderClient() {
         }
     };
 
+    const handleLogout = async () => {
+        try {
+            await supabase.auth.signOut();
+            toast({
+                title: 'Logout Berhasil',
+                description: 'Anda telah keluar dari aplikasi.',
+            });
+            router.push('/auth');
+        } catch (error: any) {
+            toast({
+                variant: 'destructive',
+                title: 'Logout Gagal',
+                description: error.message,
+            });
+        }
+    };
+
     const handlePrintPdf = () => {
         // Memberikan jeda sedikit agar UI stabil sebelum dialog print muncul
         setTimeout(() => {
@@ -727,6 +754,16 @@ export function BuilderClient() {
                         disabled={isSaving}
                     >
                         {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                    </Button>
+
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleLogout}
+                        className="text-muted-foreground hover:text-red-600 hidden sm:flex"
+                        title="Logout"
+                    >
+                        <LogOut className="h-4 w-4" />
                     </Button>
                 </div>
             </header>

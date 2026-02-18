@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Plus,
@@ -20,7 +21,8 @@ import {
   Filter,
   User as UserIcon,
   ChevronLeft,
-  Settings
+  Settings,
+  LogOut
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -50,8 +52,30 @@ import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
+  const router = useRouter();
   const { supabase, user, isLoading: isAuthLoading } = useSupabase();
   const { toast } = useToast();
+
+  // Check if user is authenticated with email
+  useEffect(() => {
+    if (!isAuthLoading) {
+      if (!user) {
+        router.push('/auth');
+        return;
+      }
+
+      const email = user.email;
+      if (!email?.endsWith('@sdkom.co.id')) {
+        toast({
+          variant: 'destructive',
+          title: 'Email Tidak Diizinkan',
+          description: 'Hanya email dengan domain @sdkom.co.id yang dapat mengakses dashboard.',
+        });
+        supabase.auth.signOut();
+        router.push('/auth');
+      }
+    }
+  }, [user, isAuthLoading, supabase, router, toast]);
 
   const { data: projects, isLoading: isProjectsLoading } = useSupabaseQuery<any>(
     'projects',
@@ -141,6 +165,23 @@ export default function DashboardPage() {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast({
+        title: 'Logout Berhasil',
+        description: 'Anda telah keluar dari aplikasi.',
+      });
+      router.push('/auth');
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Logout Gagal',
+        description: error.message,
+      });
+    }
+  };
+
   if (isAuthLoading || isProjectsLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
@@ -182,6 +223,15 @@ export default function DashboardPage() {
               Pengaturan
             </Button>
           </Link>
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={handleLogout}
+            className="text-muted-foreground hover:text-red-600"
+            title="Logout"
+          >
+            <LogOut className="h-4 w-4" />
+          </Button>
           <Link href="/builder">
             <Button className="boq-accent-gradient h-10 px-6 font-extrabold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
               <Plus className="h-5 w-5 mr-1.5" /> RAB Baru
