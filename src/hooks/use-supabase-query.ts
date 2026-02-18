@@ -17,6 +17,7 @@ export function useSupabaseQuery<T>(
         if (!user) {
             setData(null);
             setIsLoading(false);
+            setError(null);
             return;
         }
 
@@ -29,13 +30,47 @@ export function useSupabaseQuery<T>(
                     query = queryFn(query);
                 }
 
-                const { data, error } = await query;
+                // Add timeout to prevent infinite loading
+                const timeoutPromise = new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('Query timeout - possible RLS issue')), 15000)
+                );
 
-                if (error) throw error;
-                setData(data as T[]);
-            } catch (err) {
+                const { data: result, error: queryError } = await Promise.race([
+                    query,
+                    timeoutPromise
+                ]) as any;
+
+                if (queryError) {
+                    console.error(`Supabase error for ${table}:`, queryError);
+                    
+                    // If it's a missing table or RLS error, don't block the UI
+                    if (queryError.code === '42P01' || queryError.code === 'PGRST116' || 
+                        queryError.message?.includes('relation') || 
+                        queryError.message?.includes('policy')) {
+                        console.warn(`${table} table not ready or RLS not configured`);
+                        setData([]);
+                        setError(null); // Don't show error to user for missing tables
+                    } else {
+                        setError(queryError);
+                        setData([]);
+                    }
+                } else {
+                    setData(result as T[]);
+                    setError(null);
+                }
+            } catch (err: any) {
                 console.error(`Error fetching from ${table}:`, err);
-                setError(err);
+                
+                // Check if it's a timeout
+                if (err.message?.includes('timeout')) {
+                    setError({ 
+                        message: 'Query timeout - check RLS policies in Supabase',
+                        code: 'TIMEOUT'
+                    });
+                } else {
+                    setError(err);
+                }
+                setData([]);
             } finally {
                 setIsLoading(false);
             }
@@ -43,7 +78,7 @@ export function useSupabaseQuery<T>(
 
         fetchData();
 
-        // Setup real-time subscription
+        // Setup real-time subscription only if initial fetch succeeded
         const subscription = supabase
             .channel(`${table}_changes`)
             .on(

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,11 @@ import {
   User as UserIcon,
   ChevronLeft,
   Settings,
-  LogOut
+  LogOut,
+  Users,
+  Bell,
+  RefreshCw,
+  AlertCircle
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -50,6 +54,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Logo } from "@/components/ui/logo";
 import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -77,10 +83,99 @@ export default function DashboardPage() {
     }
   }, [user, isAuthLoading, supabase, router, toast]);
 
-  const { data: projects, isLoading: isProjectsLoading } = useSupabaseQuery<any>(
+  const { data: ownedProjects, isLoading: isOwnedLoading, error: projectsError } = useSupabaseQuery<any>(
     'projects',
     (q) => q.order('updated_at', { ascending: false })
   );
+
+  // Query collaboration projects
+  const [collaborationProjects, setCollaborationProjects] = useState<any[]>([]);
+  const [isCollabLoading, setIsCollabLoading] = useState(true);
+  const [collabError, setCollabError] = useState<any>(null);
+
+  const fetchCollaborations = useCallback(async () => {
+    if (!user || !user.email) {
+      setIsCollabLoading(false);
+      return;
+    }
+    
+    try {
+      setIsCollabLoading(true);
+      setCollabError(null);
+      
+      // Try to get collaborations - if fails, just set empty array
+      try {
+        // Query by BOTH user_id AND user_email to catch all cases
+        const { data: collabs, error } = await supabase
+          .from('project_collaborators')
+          .select('id, project_id, role, notified, projects(id, title, client_name, location, project_type, creator_name, created_at, updated_at)')
+          .or(`user_id.eq.${user.id},user_email.eq.${user.email}`);
+
+        if (error) {
+          // If it's a "relation does not exist" or RLS error, silently ignore
+          if (error.code === '42P01' || error.code === 'PGRST116' || error.message.includes('relation') || error.message.includes('policy')) {
+            console.warn('Collaboration table not ready or RLS not configured:', error.message);
+            setCollaborationProjects([]);
+          } else {
+            // For other errors, show them
+            console.error('Collaboration fetch error:', error);
+            setCollabError(error);
+            setCollaborationProjects([]);
+          }
+          return;
+        }
+
+        if (collabs && collabs.length > 0) {
+          console.log(`Found ${collabs.length} collaboration(s) for user:`, user.email);
+          const projects = collabs
+            .filter(c => c.projects) // Only keep items where projects is not null
+            .map(c => ({
+              ...c.projects,
+              isCollaboration: true,
+              collaborationId: c.id,
+              role: c.role,
+              notified: c.notified
+            }));
+          setCollaborationProjects(projects);
+        } else {
+          console.log('No collaborations found for user:', user.email);
+          setCollaborationProjects([]);
+        }
+      } catch (innerError: any) {
+        // Table might not exist yet - this is OK, just skip
+        console.warn('Collaboration feature not available yet:', innerError.message);
+        setCollaborationProjects([]);
+      }
+    } catch (error: any) {
+      console.error('Unexpected error in fetchCollaborations:', error);
+      setCollaborationProjects([]);
+    } finally {
+      setIsCollabLoading(false);
+    }
+  }, [user, supabase]);
+
+  useEffect(() => {
+    fetchCollaborations();
+  }, [fetchCollaborations]);
+
+  // Auto-refresh when window gains focus (untuk refresh data saat kembali dari builder)
+  useEffect(() => {
+    const handleFocus = () => {
+      fetchCollaborations();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, [fetchCollaborations]);
+
+  // Merge owned and collaboration projects
+  const allProjects = [
+    ...(ownedProjects || []).map((p: any) => ({ ...p, isOwned: true })),
+    ...collaborationProjects
+  ];
+  
+  const projects = allProjects;
+  const isProjectsLoading = isOwnedLoading || isCollabLoading;
 
   // Search and Filter States
   const [searchQuery, setSearchQuery] = useState("");
@@ -182,10 +277,36 @@ export default function DashboardPage() {
     }
   };
 
-  if (isAuthLoading || isProjectsLoading) {
+  // Mark collaboration notification as read
+  const markCollaborationAsRead = async (collaborationId: number) => {
+    if (!collaborationId) return;
+    
+    try {
+      await supabase
+        .from('project_collaborators')
+        .update({ notified: true })
+        .eq('id', collaborationId);
+      
+      // Update local state
+      setCollaborationProjects(prev => 
+        prev.map(p => p.collaborationId === collaborationId ? { ...p, notified: true } : p)
+      );
+    } catch (error) {
+      console.error('Error marking as read:', error);
+    }
+  };
+
+  // Count unread collaboration notifications
+  const unreadCount = collaborationProjects.filter(p => !p.notified).length;
+
+  // Show loading only for auth - don't block on projects loading
+  if (isAuthLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+          <p className="text-sm text-muted-foreground">Memuat...</p>
+        </div>
       </div>
     );
   }
@@ -217,6 +338,28 @@ export default function DashboardPage() {
         </div>
         <div className="flex items-center gap-3">
           <ThemeSwitcher />
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => fetchCollaborations()}
+            disabled={isCollabLoading}
+            className="flex items-center gap-2"
+            title="Refresh data kolaborasi"
+          >
+            <RefreshCw className={cn("h-4 w-4", isCollabLoading && "animate-spin")} />
+            <span className="hidden sm:inline">Refresh</span>
+          </Button>
+          {unreadCount > 0 && (
+            <div className="relative">
+              <Button variant="outline" size="sm" className="flex items-center gap-2 relative">
+                <Bell className="h-4 w-4" />
+                <span className="hidden sm:inline">Notifikasi</span>
+                <Badge variant="destructive" className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                  {unreadCount}
+                </Badge>
+              </Button>
+            </div>
+          )}
           <Link href="/settings">
             <Button variant="outline" size="sm" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />
@@ -241,6 +384,37 @@ export default function DashboardPage() {
       </header>
 
       <main className="flex-1 p-8 lg:p-12 max-w-7xl mx-auto w-full z-10">
+        {/* Show error only if it's a timeout or critical error */}
+        {(projectsError?.code === 'TIMEOUT' || collabError?.code === 'TIMEOUT' || 
+          (projectsError && !projectsError.code && projectsError.message?.includes('timeout')) ||
+          (collabError && !collabError.code && collabError.message?.includes('timeout'))) && (
+          <Alert variant="destructive" className="mb-6 border-2 border-red-500">
+            <AlertCircle className="h-5 w-5" />
+            <AlertTitle className="font-bold text-lg">⚠️ Database Timeout - Action Required!</AlertTitle>
+            <AlertDescription className="space-y-3">
+              <p className="font-semibold">Query timeout terdeteksi. Ini biasanya disebabkan oleh Row Level Security (RLS) policies yang tidak dikonfigurasi dengan benar di Supabase.</p>
+              
+              <div className="bg-red-50 dark:bg-red-950/30 p-4 rounded-lg border border-red-200 dark:border-red-900">
+                <p className="font-bold mb-2">🔧 LANGKAH PERBAIKAN:</p>
+                <ol className="list-decimal list-inside space-y-2 text-sm">
+                  <li>Buka <strong>Supabase Dashboard</strong> Anda</li>
+                  <li>Pilih menu <strong>SQL Editor</strong> di sidebar</li>
+                  <li>Copy seluruh isi file <code className="bg-red-200 dark:bg-red-900 px-2 py-1 rounded font-mono">fix-rls-recursion.sql</code></li>
+                  <li>Paste dan <strong>Run</strong> script tersebut</li>
+                  <li>Klik tombol <strong>Refresh</strong> di header setelah selesai</li>
+                </ol>
+              </div>
+              
+              <details className="text-xs">
+                <summary className="cursor-pointer font-semibold hover:underline">Detail Error (untuk debugging)</summary>
+                <div className="mt-2 p-2 bg-black/5 dark:bg-white/5 rounded">
+                  {projectsError && <p>Projects: {projectsError?.message}</p>}
+                  {collabError && <p>Collaborations: {collabError?.message}</p>}
+                </div>
+              </details>
+            </AlertDescription>
+          </Alert>
+        )}
         <div className="mb-10 space-y-8">
           <div>
             <h1 className="text-5xl font-black text-primary mb-3 tracking-tighter">Proyek Saya</h1>
@@ -325,7 +499,16 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {!projects || projects.length === 0 ? (
+        {/* Loading state */}
+        {isProjectsLoading ? (
+          <div className="boq-glass rounded-[40px] p-20 text-center flex flex-col items-center space-y-8 border-2 border-white/40">
+            <Loader2 className="h-16 w-16 animate-spin text-primary" />
+            <div className="space-y-3">
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Memuat Proyek...</h3>
+              <p className="text-slate-500 max-w-sm text-lg leading-relaxed">Silakan tunggu sebentar</p>
+            </div>
+          </div>
+        ) : !projects || projects.length === 0 ? (
           <div className="boq-glass rounded-[40px] border-dashed border-slate-300 p-20 text-center flex flex-col items-center space-y-8 border-2 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:shadow-emerald-500/25 transition-all duration-500">
             <div className="h-24 w-24 bg-primary/5 rounded-full flex items-center justify-center text-primary animate-bounce">
               <Logo className="h-16 w-16" />
@@ -344,26 +527,54 @@ export default function DashboardPage() {
           <div className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {paginatedProjects.map((project: any) => (
-                <Link key={project.id} href={`/builder?id=${project.id}`} className="group relative">
+                <Link 
+                  key={project.id} 
+                  href={`/builder?id=${project.id}`} 
+                  className="group relative"
+                  onClick={() => {
+                    if (project.isCollaboration && !project.notified) {
+                      markCollaborationAsRead(project.collaborationId);
+                    }
+                  }}
+                >
                   <div className="boq-glass h-full rounded-[2rem] border-white/40 p-8 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] hover:shadow-emerald-500/25 transition-all duration-500 hover:-translate-y-2 flex flex-col">
                     <div className="flex justify-between items-start mb-6">
                       <div className="h-14 w-14 bg-primary/5 text-primary rounded-2xl flex items-center justify-center group-hover:boq-accent-gradient group-hover:text-white transition-all duration-500 shadow-sm">
                         <Logo className="h-10 w-10 transition-transform group-hover:scale-110" />
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-slate-300 hover:text-destructive hover:bg-destructive/10 rounded-full h-10 w-10 transition-colors"
-                        onClick={(e) => handleDelete(e, project.id)}
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </Button>
+                      {/* Only show delete button for owned projects */}
+                      {!project.isCollaboration && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-slate-300 hover:text-destructive hover:bg-destructive/10 rounded-full h-10 w-10 transition-colors"
+                          onClick={(e) => handleDelete(e, project.id)}
+                        >
+                          <Trash2 className="h-5 w-5" />
+                        </Button>
+                      )}
                     </div>
 
                     <div className="space-y-4 flex-1">
-                      <h3 className="text-2xl font-black text-primary group-hover:text-accent transition-colors line-clamp-1 tracking-tight">
-                        {project.title || "Draft RAB"}
-                      </h3>
+                      <div className="flex items-start gap-2">
+                        <h3 className="text-2xl font-black text-primary group-hover:text-accent transition-colors line-clamp-1 tracking-tight flex-1">
+                          {project.title || "Draft RAB"}
+                        </h3>
+                        {project.isCollaboration && (
+                          <div className="flex flex-col gap-1 items-end">
+                            <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-[10px] font-bold">
+                              <Users className="h-3 w-3 mr-1" />
+                              Kolaborasi
+                            </Badge>
+                            {!project.notified && (
+                              <Badge variant="default" className="bg-red-500 text-white text-[10px] font-bold animate-pulse">
+                                <Bell className="h-3 w-3 mr-1" />
+                                New
+                              </Badge>
+                            )}
+                          </div>
+                        )}
+                      </div>
 
                       <div className="space-y-3">
                         <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300 bg-slate-50/50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100/50 dark:border-white/5">

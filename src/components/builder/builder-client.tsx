@@ -48,6 +48,7 @@ import { Menu } from "lucide-react";
 import { PageHeader } from "@/components/page-header";
 import { Section } from "@/components/section";
 import { AIProviderSelector } from "@/components/builder/ai-provider-selector";
+import { CollaboratorManager } from "@/components/builder/collaborator-manager";
 
 export function BuilderClient() {
     const searchParams = useSearchParams();
@@ -73,6 +74,7 @@ export function BuilderClient() {
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     const [isPublishing, setIsPublishing] = useState(false);
     const [isPublic, setIsPublic] = useState(false);
+    const [isOwner, setIsOwner] = useState(true);
     const { toast } = useToast();
     const { supabase, user, isLoading: isAuthLoading } = useSupabase();
 
@@ -201,6 +203,7 @@ export function BuilderClient() {
                     };
                     setProject(mappedProject);
                     setIsPublic(data.status === 'public');
+                    setIsOwner(data.user_id === user?.id);
                     setIsDataLoaded(true);
                 } else {
                     toast({
@@ -713,6 +716,10 @@ export function BuilderClient() {
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
+
+                    {projectIdFromUrl && user && (
+                        <CollaboratorManager projectId={project.id} isOwner={isOwner} userId={user.id} />
+                    )}
 
                     {isPublic && (
                         <Button
