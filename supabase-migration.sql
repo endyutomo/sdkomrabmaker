@@ -1,10 +1,7 @@
 -- SDKOM RAB MAker Database Schema
 -- Run this in Supabase SQL Editor to set up the database
 
--- Enable Row Level Security (RLS)
-ALTER TABLE IF EXISTS projects ENABLE ROW LEVEL SECURITY;
-
--- Create projects table
+-- Create projects table (without status column first to avoid errors)
 CREATE TABLE IF NOT EXISTS projects (
     id TEXT PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -17,11 +14,25 @@ CREATE TABLE IF NOT EXISTS projects (
     document_number TEXT,
     project_location TEXT,
     document_date DATE,
-    status TEXT DEFAULT 'draft', -- draft, saved, published
     version INTEGER DEFAULT 1,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- Add status column if it doesn't exist
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'projects' 
+        AND column_name = 'status'
+    ) THEN
+        ALTER TABLE projects ADD COLUMN status TEXT DEFAULT 'draft';
+    END IF;
+END $$;
+
+-- Enable Row Level Security (RLS)
+ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
 
 -- Create index for better performance
 CREATE INDEX IF NOT EXISTS projects_user_id_idx ON projects(user_id);
@@ -38,6 +49,12 @@ CREATE TABLE IF NOT EXISTS projects_versions (
     UNIQUE(project_id, version)
 );
 
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Users can view their own projects" ON projects;
+DROP POLICY IF EXISTS "Users can insert their own projects" ON projects;
+DROP POLICY IF EXISTS "Users can update their own projects" ON projects;
+DROP POLICY IF EXISTS "Users can delete their own projects" ON projects;
+
 -- Create RLS policies for projects table
 CREATE POLICY "Users can view their own projects" ON projects
     FOR SELECT USING (auth.uid() = user_id);
@@ -50,6 +67,10 @@ CREATE POLICY "Users can update their own projects" ON projects
 
 CREATE POLICY "Users can delete their own projects" ON projects
     FOR DELETE USING (auth.uid() = user_id);
+
+-- Drop existing policies for projects_versions if they exist
+DROP POLICY IF EXISTS "Users can view their own project versions" ON projects_versions;
+DROP POLICY IF EXISTS "Users can insert their own project versions" ON projects_versions;
 
 -- Create RLS policies for projects_versions table
 CREATE POLICY "Users can view their own project versions" ON projects_versions
@@ -79,16 +100,23 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+-- Drop existing trigger if it exists
+DROP TRIGGER IF EXISTS update_projects_updated_at ON projects;
+
 -- Create trigger for auto-updating updated_at
 CREATE TRIGGER update_projects_updated_at
     BEFORE UPDATE ON projects
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
--- Insert sample data (optional - for testing)
-INSERT INTO projects (id, user_id, title, type, specifications, categories, client_name, document_number, project_location, document_date, status)
+-- Sample data commented out to avoid foreign key constraint error
+-- You can add sample data after creating actual users in your Supabase auth system
+/*
+INSERT INTO projects (id, user_id, title, type, specifications, categories, client_name, document_number, project_location, document_date)
 VALUES
-    ('sample-project-1', '00000000-0000-0000-0000-000000000000', 'RAB Gedung Perkantoran', 'Gedung Perkantoran', 'Gedung 5 lantai dengan sistem HVAC', '[]'::jsonb, 'PT. Maju Jaya', 'RAB/2024/001', 'Jakarta Pusat', '2024-01-15', 'published')
+    ('sample-project-1', '00000000-0000-0000-0000-000000000000', 'RAB Gedung Perkantoran', 'Gedung Perkantoran', 'Gedung 5 lantai dengan sistem HVAC', '[]'::jsonb, 'PT. Maju Jaya', 'RAB/2024/001', 'Jakarta Pusat', '2024-01-15')
 ON CONFLICT (id) DO NOTHING;
+*/
 
--- Note: Replace the user_id above with an actual user ID when testing
+-- Note: To add sample data, first create a user through Supabase Auth or use anonymous sign-in
+-- Then use the actual user_id from the auth.users table
