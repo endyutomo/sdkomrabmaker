@@ -65,7 +65,8 @@ export function BuilderClient() {
     });
 
     const [isSaving, setIsSaving] = useState(false);
-    const [isDataLoaded, setIsDataLoaded] = useState(false);
+    const [lastSaved, setLastSaved] = useState<Date | null>(null);
+    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const { toast } = useToast();
     const { supabase, user, isLoading: isAuthLoading } = useSupabase();
 
@@ -82,6 +83,76 @@ export function BuilderClient() {
             });
         }
     }, [user, isAuthLoading, supabase]);
+
+    // Auto-save functionality
+    useEffect(() => {
+        if (!supabase || !user || !isDataLoaded) return;
+
+        const autoSave = async () => {
+            if (!hasUnsavedChanges || isSaving) return;
+
+            try {
+                setIsSaving(true);
+                const { error } = await supabase
+                    .from('projects')
+                    .upsert({
+                        id: project.id,
+                        user_id: user.id,
+                        title: project.title,
+                        type: project.type,
+                        specifications: project.specifications,
+                        categories: project.categories,
+                        client_name: project.clientName,
+                        creator_name: project.creatorName,
+                        document_number: project.documentNumber,
+                        project_location: project.projectLocation,
+                        document_date: project.documentDate,
+                        status: 'draft',
+                        created_at: project.createdAt,
+                        updated_at: new Date().toISOString()
+                    });
+
+                if (error) {
+                    console.error("Auto-save failed:", error);
+                    return;
+                }
+
+                setLastSaved(new Date());
+                setHasUnsavedChanges(false);
+
+                // Show subtle notification for auto-save
+                toast({
+                    title: "Auto-saved",
+                    description: "Draft tersimpan otomatis",
+                    duration: 2000,
+                });
+
+            } catch (error) {
+                console.error("Auto-save error:", error);
+            } finally {
+                setIsSaving(false);
+            }
+        };
+
+        // Auto-save after 30 seconds of inactivity
+        const timeoutId = setTimeout(autoSave, 30000);
+
+        return () => clearTimeout(timeoutId);
+    }, [project, hasUnsavedChanges, supabase, user, isDataLoaded, isSaving]);
+
+    // Detect changes and mark as unsaved
+    useEffect(() => {
+        if (!isDataLoaded) return; // Don't mark as unsaved during initial load
+
+        setHasUnsavedChanges(true);
+    }, [project.title, project.type, project.specifications, project.categories, project.clientName, project.creatorName, project.documentNumber, project.projectLocation, project.documentDate]);
+
+    // Reset unsaved changes flag after successful save
+    useEffect(() => {
+        if (lastSaved) {
+            setHasUnsavedChanges(false);
+        }
+    }, [lastSaved]);
 
     // Load project if ID is provided
     useEffect(() => {
@@ -527,6 +598,16 @@ export function BuilderClient() {
 
                 <div className="flex items-center gap-2">
                     <AIProviderSelector />
+
+                    {/* Auto-save status indicator */}
+                    {lastSaved && (
+                        <div className="hidden sm:flex items-center gap-1 text-xs text-muted-foreground">
+                            <div className={`w-2 h-2 rounded-full ${hasUnsavedChanges ? 'bg-amber-500' : 'bg-green-500'}`}></div>
+                            <span>
+                                {hasUnsavedChanges ? 'Belum tersimpan' : `Tersimpan ${lastSaved.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`}
+                            </span>
+                        </div>
+                    )}
 
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
