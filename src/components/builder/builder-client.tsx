@@ -19,7 +19,9 @@ import {
     Truck,
     Loader2,
     FileSpreadsheet,
-    FileText
+    FileText,
+    Globe,
+    Check
 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
@@ -68,6 +70,8 @@ export function BuilderClient() {
     const [lastSaved, setLastSaved] = useState<Date | null>(null);
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
+    const [isPublishing, setIsPublishing] = useState(false);
+    const [isPublic, setIsPublic] = useState(false);
     const { toast } = useToast();
     const { supabase, user, isLoading: isAuthLoading } = useSupabase();
 
@@ -186,6 +190,7 @@ export function BuilderClient() {
                         createdAt: data.created_at
                     };
                     setProject(mappedProject);
+                    setIsPublic(data.status === 'public');
                     setIsDataLoaded(true);
                 } else {
                     toast({
@@ -377,6 +382,57 @@ export function BuilderClient() {
             });
         } finally {
             setIsSaving(false);
+        }
+    };
+
+    const handlePublish = async () => {
+        if (!project.id) {
+            toast({
+                variant: "destructive",
+                title: "Gagal Mempublikasikan",
+                description: "ID proyek tidak ditemukan.",
+            });
+            return;
+        }
+
+        setIsPublishing(true);
+        try {
+            const res = await fetch(`/api/projects/publish/${project.id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            if (!res.ok) {
+                const error = await res.json();
+                throw new Error(error.error || 'Gagal mempublikasikan RAB');
+            }
+
+            const data = await res.json();
+            setIsPublic(true);
+
+            const publicUrl = `${window.location.origin}/public/${project.id}`;
+            
+            toast({
+                title: "Berhasil Dipublikasikan",
+                description: `RAB "${project.title}" sekarang dapat diakses publik.`,
+            });
+
+            // Copy link to clipboard
+            navigator.clipboard.writeText(publicUrl);
+            toast({
+                title: "Link Disalin",
+                description: "Link publik sudah disalin ke clipboard.",
+                duration: 2000,
+            });
+        } catch (error: any) {
+            console.error("Publish error:", error);
+            toast({
+                variant: "destructive",
+                title: "Gagal Mempublikasikan",
+                description: error.message || "Terjadi kesalahan saat mempublikasikan RAB.",
+            });
+        } finally {
+            setIsPublishing(false);
         }
     };
 
@@ -630,6 +686,32 @@ export function BuilderClient() {
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
+
+                    {isPublic && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="hidden sm:flex text-green-600 border-green-200 bg-green-50"
+                        >
+                            <Check className="h-4 w-4 mr-2" /> Dipublikasikan
+                        </Button>
+                    )}
+                    {!isPublic && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handlePublish}
+                            disabled={isPublishing}
+                            className="hidden sm:flex"
+                        >
+                            {isPublishing ? (
+                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            ) : (
+                                <Globe className="h-4 w-4 mr-2" />
+                            )}
+                            Publikasikan
+                        </Button>
+                    )}
 
                     <Button
                         className="boq-accent-gradient h-9 text-white font-bold hidden sm:flex"
