@@ -21,21 +21,74 @@ END $$;
 -- ============================================================
 -- PART 2: Ensure tables exist with correct structure
 -- ============================================================
+
+-- Create projects table if not exists (support both TEXT and UUID id types)
 CREATE TABLE IF NOT EXISTS projects (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id TEXT PRIMARY KEY,
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-    title TEXT NOT NULL,
+    title TEXT NOT NULL DEFAULT 'Draft RAB',
+    type TEXT,
+    specifications TEXT,
+    categories JSONB DEFAULT '[]'::jsonb,
     client_name TEXT,
-    location TEXT,
-    project_type TEXT,
     creator_name TEXT,
+    document_number TEXT,
+    project_location TEXT,
+    document_date TEXT,
+    status TEXT DEFAULT 'draft',
+    version INTEGER DEFAULT 1,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Add missing columns if they don't exist
+DO $$
+BEGIN
+    -- Add type column
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='projects' AND column_name='type') THEN
+        ALTER TABLE projects ADD COLUMN type TEXT;
+    END IF;
+    
+    -- Add specifications column
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='projects' AND column_name='specifications') THEN
+        ALTER TABLE projects ADD COLUMN specifications TEXT;
+    END IF;
+    
+    -- Add categories column
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='projects' AND column_name='categories') THEN
+        ALTER TABLE projects ADD COLUMN categories JSONB DEFAULT '[]'::jsonb;
+    END IF;
+    
+    -- Add document_number column
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='projects' AND column_name='document_number') THEN
+        ALTER TABLE projects ADD COLUMN document_number TEXT;
+    END IF;
+    
+    -- Add project_location column
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='projects' AND column_name='project_location') THEN
+        ALTER TABLE projects ADD COLUMN project_location TEXT;
+    END IF;
+    
+    -- Add document_date column
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='projects' AND column_name='document_date') THEN
+        ALTER TABLE projects ADD COLUMN document_date TEXT;
+    END IF;
+    
+    -- Add status column
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='projects' AND column_name='status') THEN
+        ALTER TABLE projects ADD COLUMN status TEXT DEFAULT 'draft';
+    END IF;
+    
+    -- Add version column
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='projects' AND column_name='version') THEN
+        ALTER TABLE projects ADD COLUMN version INTEGER DEFAULT 1;
+    END IF;
+END $$;
+
+-- Create project_collaborators table
 CREATE TABLE IF NOT EXISTS project_collaborators (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    project_id UUID REFERENCES projects(id) ON DELETE CASCADE NOT NULL,
+    project_id TEXT REFERENCES projects(id) ON DELETE CASCADE NOT NULL,
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
     user_email TEXT NOT NULL,
     role TEXT DEFAULT 'viewer' CHECK (role IN ('viewer', 'editor')),

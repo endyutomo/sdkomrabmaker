@@ -78,13 +78,15 @@ export function useSupabaseQuery<T>(
 
         fetchData();
 
-        // Setup real-time subscription only if initial fetch succeeded
+        // Setup real-time subscription without problematic filters
+        // Just listen to changes and refetch data - don't try to filter in subscription
         const subscription = supabase
-            .channel(`${table}_changes`)
+            .channel(`${table}_changes_${user.id}`)
             .on(
                 'postgres_changes',
-                { event: '*', schema: 'public', table: table, filter: `user_id=eq.${user.id}` },
+                { event: '*', schema: 'public', table: table },
                 () => {
+                    // Refetch to apply RLS filters properly
                     fetchData();
                 }
             )

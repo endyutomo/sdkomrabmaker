@@ -1,6 +1,6 @@
 {
   "node": {
-    "405969474ca1497ad9d86d5e289fe473a6cbd8ef81": {
+    "40c3aa448297c58e9c560a19dfc7b5e7e5ae229551": {
       "workers": {
         "app/builder/page": {
           "moduleId": "[project]/.next-internal/server/app/builder/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/ai/flows/ai-price-suggestion.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",

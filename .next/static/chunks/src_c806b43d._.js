@@ -324,14 +324,15 @@ function useSupabaseQuery(table, queryFn) {
                 }
             }["useSupabaseQuery.useEffect.fetchData"];
             fetchData();
-            // Setup real-time subscription only if initial fetch succeeded
-            const subscription = supabase.channel("".concat(table, "_changes")).on('postgres_changes', {
+            // Setup real-time subscription without problematic filters
+            // Just listen to changes and refetch data - don't try to filter in subscription
+            const subscription = supabase.channel("".concat(table, "_changes_").concat(user.id)).on('postgres_changes', {
                 event: '*',
                 schema: 'public',
-                table: table,
-                filter: "user_id=eq.".concat(user.id)
+                table: table
             }, {
                 "useSupabaseQuery.useEffect.subscription": ()=>{
+                    // Refetch to apply RLS filters properly
                     fetchData();
                 }
             }["useSupabaseQuery.useEffect.subscription"]).subscribe();

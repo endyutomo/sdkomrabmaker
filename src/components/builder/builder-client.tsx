@@ -176,17 +176,24 @@ export function BuilderClient() {
         const loadProject = async () => {
             if (!supabase || !user || !projectIdFromUrl || isDataLoaded) return;
 
+            console.log('[Builder] Loading project with ID:', projectIdFromUrl);
+
             try {
+                // Query WITHOUT user_id filter so collaborators can also access projects
+                // RLS policies will enforce access control on the Supabase side
                 const { data, error } = await supabase
                     .from('projects')
                     .select('*')
                     .eq('id', projectIdFromUrl)
-                    .eq('user_id', user.id)
-                    .single();
+                    .maybeSingle();
 
-                if (error) throw error;
+                if (error) {
+                    console.error('[Builder] Error loading project:', error);
+                    throw error;
+                }
 
                 if (data) {
+                    console.log('[Builder] Project loaded successfully:', data.id);
                     // Map snake_case from DB to camelCase for state
                     const mappedProject: ProjectBoq = {
                         id: data.id,
@@ -206,15 +213,22 @@ export function BuilderClient() {
                     setIsOwner(data.user_id === user?.id);
                     setIsDataLoaded(true);
                 } else {
+                    console.warn('[Builder] No project found with ID:', projectIdFromUrl);
                     toast({
                         variant: "destructive",
                         title: "Proyek Tidak Ditemukan",
-                        description: "Data proyek yang Anda cari tidak tersedia.",
+                        description: "Data proyek yang Anda cari tidak tersedia atau Anda tidak memiliki akses.",
                     });
                     router.push("/dashboard");
                 }
             } catch (error) {
-                console.error("Error loading project:", error);
+                console.error("[Builder] Error loading project:", error);
+                toast({
+                    variant: "destructive",
+                    title: "Gagal Memuat Proyek",
+                    description: "Terjadi kesalahan saat memuat data proyek.",
+                });
+                router.push("/dashboard");
             }
         };
 
