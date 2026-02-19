@@ -16,7 +16,7 @@ export function FloatingChatButton() {
                 {!isOpen && (
                     <div className="bg-white px-4 py-2 rounded-xl shadow-xl border text-sm font-bold text-primary flex items-center gap-2 animate-bounce cursor-pointer group hover:bg-slate-50" onClick={() => setIsOpen(true)}>
                         <Sparkles className="h-4 w-4 text-accent" />
-                        TANYA AI
+                        Tanya SDKOM
                     </div>
                 )}
 

@@ -2679,7 +2679,7 @@ function FloatingChatButton() {
                                 lineNumber: 18,
                                 columnNumber: 25
                             }, this),
-                            "TANYA AI"
+                            "Tanya SDKOM"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/shared/floating-chat-button.tsx",
