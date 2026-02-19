@@ -103,56 +103,27 @@ export default function DashboardPage() {
       setIsCollabLoading(true);
       setCollabError(null);
       
-      // Try to get collaborations - if fails, just set empty array
-      try {
-        // Query by BOTH user_id AND user_email to catch all cases
-        const { data: collabs, error } = await supabase
-          .from('project_collaborators')
-          .select('id, project_id, role, notified, projects(id, title, client_name, location, project_type, creator_name, created_at, updated_at)')
-          .or(`user_id.eq.${user.id},user_email.eq.${user.email}`);
-
-        if (error) {
-          // If it's a "relation does not exist" or RLS error, silently ignore
-          if (error.code === '42P01' || error.code === 'PGRST116' || error.message.includes('relation') || error.message.includes('policy')) {
-            console.warn('Collaboration table not ready or RLS not configured:', error.message);
-            setCollaborationProjects([]);
-          } else {
-            // For other errors, show them
-            console.error('Collaboration fetch error:', error);
-            setCollabError(error);
-            setCollaborationProjects([]);
-          }
-          return;
-        }
-
-        if (collabs && collabs.length > 0) {
-          console.log(`Found ${collabs.length} collaboration(s) for user:`, user.email);
-          const projects = collabs
-            .filter(c => c.projects) // Only keep items where projects is not null
-            .map(c => ({
-              ...c.projects,
-              isCollaboration: true,
-              collaborationId: c.id,
-              role: c.role,
-              notified: c.notified
-            }));
-          setCollaborationProjects(projects);
-        } else {
-          console.log('No collaborations found for user:', user.email);
-          setCollaborationProjects([]);
-        }
-      } catch (innerError: any) {
-        // Table might not exist yet - this is OK, just skip
-        console.warn('Collaboration feature not available yet:', innerError.message);
+      // Use API endpoint that uses service-role (bypasses RLS)
+      const response = await fetch(`/api/collaborations?email=${encodeURIComponent(user.email)}&userId=${encodeURIComponent(user.id)}`);
+      
+      if (!response.ok) {
+        const error = await response.json();
+        console.error('Collaboration API error:', error);
         setCollaborationProjects([]);
+        return;
       }
+
+      const collaborationData = await response.json();
+      console.log(`Loaded ${collaborationData.length} collaboration project(s) via API`);
+      setCollaborationProjects(collaborationData);
+      
     } catch (error: any) {
-      console.error('Unexpected error in fetchCollaborations:', error);
+      console.error('Error fetching collaborations:', error);
       setCollaborationProjects([]);
     } finally {
       setIsCollabLoading(false);
     }
-  }, [user, supabase]);
+  }, [user]);
 
   useEffect(() => {
     fetchCollaborations();

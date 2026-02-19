@@ -1,21 +1,5 @@
 {
-  "node": {
-    "405969474ca1497ad9d86d5e289fe473a6cbd8ef81": {
-      "workers": {
-        "app/builder/page": {
-          "moduleId": "[project]/.next-internal/server/app/builder/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/ai/flows/ai-price-suggestion.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
-          "async": false,
-          "exportedName": "suggestItemPrice",
-          "filename": "src/ai/flows/ai-price-suggestion.ts"
-        }
-      },
-      "layer": {
-        "app/builder/page": "action-browser"
-      },
-      "filename": "src/ai/flows/ai-price-suggestion.ts",
-      "exportedName": "suggestItemPrice"
-    }
-  },
+  "node": {},
   "edge": {},
   "encryptionKey": "MQX8/NG0GqV6+yWkxhcmLtbsxJYOdWjl14/tROc2fes="
 }
