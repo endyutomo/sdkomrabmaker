@@ -1,3 +1,6 @@
 {
-  "/api/collaborations/route": "app/api/collaborations/route.js"
+  "/api/collaborations/route": "app/api/collaborations/route.js",
+  "/builder/page": "app/builder/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js"
 }
