@@ -304,7 +304,7 @@ export default function DashboardPage() {
           <Logo className="h-10 w-10 group-hover:scale-110 transition-transform duration-500" />
           <div className="flex flex-col -space-y-1">
             <span className="text-xl font-black tracking-tight text-primary bg-clip-text">SDKOM <span className="text-slate-400 font-medium italic">RAB MAker</span></span>
-            <span className="text-[10px] font-light text-slate-400/80 tracking-tight">create by Endy Akbbar</span>
+            <span className="text-[10px] font-light text-slate-400/80 tracking-tight">Created By Akbar Endi</span>
           </div>
         </div>
         <div className="flex items-center gap-3">

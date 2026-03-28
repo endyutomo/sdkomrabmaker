@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST="{\"components/builder/builder-client.tsx -> xlsx\":{\"id\":\"components/builder/builder-client.tsx -> xlsx\",\"files\":[\"static/chunks/_app-pages-browser_node_modules_xlsx_xlsx_mjs.js\"]}}"

@@ -23,7 +23,7 @@ export default function Home() {
             <Logo className="h-10 w-10 transition-transform group-hover:scale-110" />
             <div className="flex flex-col -space-y-1">
               <span className="text-xl font-bold tracking-tight text-primary">SDKOM <span className="text-slate-400 font-medium italic">RAB MAker</span></span>
-              <span className="text-[10px] font-light text-slate-400/80 tracking-tight">create by Endy Akbbar</span>
+              <span className="text-[10px] font-light text-slate-400/80 tracking-tight">Created By Akbar Endi</span>
             </div>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
@@ -183,7 +183,7 @@ export default function Home() {
             <Logo className="h-8 w-8" />
             <div className="flex flex-col -space-y-1">
               <span className="text-lg font-bold text-primary">SDKOM <span className="text-slate-400 font-medium italic">RAB MAker</span></span>
-              <span className="text-[9px] font-light text-slate-400/80 tracking-tight">create by Endy Akbbar</span>
+              <span className="text-[9px] font-light text-slate-400/80 tracking-tight">Created By Akbar Endi</span>
             </div>
           </div>
           <div className="flex gap-8 text-sm text-muted-foreground">
