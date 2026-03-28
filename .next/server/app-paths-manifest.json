@@ -1,8 +1,7 @@
 {
-  "/api/collaborations/route": "app/api/collaborations/route.js",
-  "/page": "app/page.js",
-  "/auth/page": "app/auth/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
   "/builder/page": "app/builder/page.js",
-  "/settings/page": "app/settings/page.js"
+  "/dashboard/page": "app/dashboard/page.js",
+  "/page": "app/page.js",
+  "/settings/page": "app/settings/page.js",
+  "/auth/page": "app/auth/page.js"
 }

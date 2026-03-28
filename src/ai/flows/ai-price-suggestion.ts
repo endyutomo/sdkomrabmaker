@@ -21,14 +21,14 @@ const PriceSuggestionOutputSchema = z.object({
     max: z.number().describe('Harga tertinggi dari seller rating 4-5 bintang.'),
   }).describe('Range harga dari berbagai marketplace.'),
   marketplaceSources: z.array(z.string()).describe('Daftar marketplace yang dijadikan referensi (misal: ["Tokopedia", "Shopee", "Bukalapak", "Lazada"]).'),
-  sourceUrl: z.string().url().describe('Tautan referensi umum (bukan toko spesifik).'),
+  sourceUrl: z.string().describe('Tautan referensi umum (bukan toko spesifik).'),
   sourceName: z.string().describe('Nama sumber harga (misal: "Estimasi Multi-Marketplace" atau "Rata-Rata Pasaran Online").'),
   priceRangeNote: z.string().describe('Catatan singkat tentang estimasi harga dan marketplace yang digunakan.'),
   brandDetected: z.string().optional().describe('Brand premium yang terdeteksi dalam nama item (misal: "Belden", "Rucika", "Nippon").'),
   isPremiumBrand: z.boolean().optional().describe('Apakah item mengandung brand premium yang memerlukan harga lebih tinggi.'),
   brandNote: z.string().optional().describe('Catatan tentang brand premium dan alasan harga lebih tinggi.'),
   modelType: z.string().optional().describe('Tipe atau nomor model spesifik yang disarankan (misal: "QA55QN85B").'),
-  imageUrl: z.string().url().optional().describe('URL foto produk yang representatif dan valid.'),
+  imageUrl: z.string().optional().describe('URL foto produk yang representatif dan valid (opsional, bisa kosong).'),
 });
 export type PriceSuggestionOutput = z.infer<typeof PriceSuggestionOutputSchema>;
 
