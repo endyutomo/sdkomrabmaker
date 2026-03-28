@@ -55,6 +55,65 @@ const defaultSettings: ThemeSettings = {
   shadowIntensity: 50
 };
 
+// Helper functions for color conversion
+function hslToHex(hsl: string): string {
+  const match = hsl.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+  if (!match) return '#ffffff';
+  
+  const [, h, s, l] = match.map(Number);
+  const sDecimal = s / 100;
+  const lDecimal = l / 100;
+  
+  const c = (1 - Math.abs(2 * lDecimal - 1)) * sDecimal;
+  const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+  const m = lDecimal - c / 2;
+  
+  let r = 0, g = 0, b = 0;
+  
+  if (h >= 0 && h < 60) { r = c; g = x; b = 0; }
+  else if (h >= 60 && h < 120) { r = x; g = c; b = 0; }
+  else if (h >= 120 && h < 180) { r = 0; g = c; b = x; }
+  else if (h >= 180 && h < 240) { r = 0; g = x; b = c; }
+  else if (h >= 240 && h < 300) { r = x; g = 0; b = c; }
+  else if (h >= 300 && h < 360) { r = c; g = 0; b = x; }
+  
+  const rHex = Math.round((r + m) * 255).toString(16).padStart(2, '0');
+  const gHex = Math.round((g + m) * 255).toString(16).padStart(2, '0');
+  const bHex = Math.round((b + m) * 255).toString(16).padStart(2, '0');
+  
+  return `#${rHex}${gHex}${bHex}`;
+}
+
+function hexToHsl(hex: string): string {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) return 'hsl(0, 0%, 100%)';
+  
+  let r = parseInt(result[1], 16) / 255;
+  let g = parseInt(result[2], 16) / 255;
+  let b = parseInt(result[3], 16) / 255;
+  
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
+  
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      case b: h = ((r - g) / d + 4) / 6; break;
+    }
+  }
+  
+  h = Math.round(h * 360);
+  s = Math.round(s * 100);
+  l = Math.round(l * 100);
+  
+  return `hsl(${h}, ${s}%, ${l}%)`;
+}
+
 const presetThemes = {
   dark: {
     background: "hsl(240, 16%, 15%)",
@@ -446,7 +505,7 @@ export default function SettingsPage() {
               <CardHeader>
                 <CardTitle>Pengaturan Font</CardTitle>
                 <CardDescription>
-                  Sesuaikan ukuran dan jenis font untuk keterbacaan optimal
+                  Sesuaikan ukuran, jenis, dan warna font untuk keterbacaan optimal
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -468,7 +527,7 @@ export default function SettingsPage() {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="fontSize">Ukuran Font: {settings.fontSize}px</Label>
                   <Slider
@@ -481,9 +540,97 @@ export default function SettingsPage() {
                     className="w-full"
                   />
                 </div>
-                
-                <div className="p-4 border rounded-lg">
-                  <p style={{ fontSize: `${settings.fontSize}px`, fontFamily: settings.fontFamily }}>
+
+                <div className="space-y-2">
+                  <Label>Warna Font (Teks)</Label>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    Pilih warna teks yang kontras dengan background hijau tua
+                  </p>
+                  <div className="grid grid-cols-4 gap-2">
+                    <Button
+                      key="color-white"
+                      variant="outline"
+                      className={`h-12 flex flex-col items-center justify-center gap-1 ${settings.foreground === 'hsl(0, 0%, 100%)' ? 'ring-2 ring-primary' : ''}`}
+                      onClick={() => setSettings(prev => ({ ...prev, foreground: 'hsl(0, 0%, 100%)' }))}
+                    >
+                      <div className="w-6 h-6 rounded-full bg-white border border-slate-300"></div>
+                      <span className="text-xs">Putih</span>
+                    </Button>
+                    <Button
+                      key="color-cream"
+                      variant="outline"
+                      className={`h-12 flex flex-col items-center justify-center gap-1 ${settings.foreground === 'hsl(60, 100%, 95%)' ? 'ring-2 ring-primary' : ''}`}
+                      onClick={() => setSettings(prev => ({ ...prev, foreground: 'hsl(60, 100%, 95%)' }))}
+                    >
+                      <div className="w-6 h-6 rounded-full bg-[#FEF3C7] border border-slate-300"></div>
+                      <span className="text-xs">Cream</span>
+                    </Button>
+                    <Button
+                      key="color-blue"
+                      variant="outline"
+                      className={`h-12 flex flex-col items-center justify-center gap-1 ${settings.foreground === 'hsl(200, 100%, 95%)' ? 'ring-2 ring-primary' : ''}`}
+                      onClick={() => setSettings(prev => ({ ...prev, foreground: 'hsl(200, 100%, 95%)' }))}
+                    >
+                      <div className="w-6 h-6 rounded-full bg-[#E0F2FE] border border-slate-300"></div>
+                      <span className="text-xs">Biru Muda</span>
+                    </Button>
+                    <Button
+                      key="color-green"
+                      variant="outline"
+                      className={`h-12 flex flex-col items-center justify-center gap-1 ${settings.foreground === 'hsl(150, 100%, 95%)' ? 'ring-2 ring-primary' : ''}`}
+                      onClick={() => setSettings(prev => ({ ...prev, foreground: 'hsl(150, 100%, 95%)' }))}
+                    >
+                      <div className="w-6 h-6 rounded-full bg-[#ECFDF5] border border-slate-300"></div>
+                      <span className="text-xs">Hijau Muda</span>
+                    </Button>
+                    <Button
+                      key="color-yellow"
+                      variant="outline"
+                      className={`h-12 flex flex-col items-center justify-center gap-1 ${settings.foreground === 'hsl(30, 100%, 95%)' ? 'ring-2 ring-primary' : ''}`}
+                      onClick={() => setSettings(prev => ({ ...prev, foreground: 'hsl(30, 100%, 95%)' }))}
+                    >
+                      <div className="w-6 h-6 rounded-full bg-[#FFFBEB] border border-slate-300"></div>
+                      <span className="text-xs">Kuning Muda</span>
+                    </Button>
+                    <Button
+                      key="color-purple"
+                      variant="outline"
+                      className={`h-12 flex flex-col items-center justify-center gap-1 ${settings.foreground === 'hsl(280, 100%, 95%)' ? 'ring-2 ring-primary' : ''}`}
+                      onClick={() => setSettings(prev => ({ ...prev, foreground: 'hsl(280, 100%, 95%)' }))}
+                    >
+                      <div className="w-6 h-6 rounded-full bg-[#FAF5FF] border border-slate-300"></div>
+                      <span className="text-xs">Ungu Muda</span>
+                    </Button>
+                    <Button
+                      key="color-red"
+                      variant="outline"
+                      className={`h-12 flex flex-col items-center justify-center gap-1 ${settings.foreground === 'hsl(340, 100%, 95%)' ? 'ring-2 ring-primary' : ''}`}
+                      onClick={() => setSettings(prev => ({ ...prev, foreground: 'hsl(340, 100%, 95%)' }))}
+                    >
+                      <div className="w-6 h-6 rounded-full bg-[#FFF1F2] border border-slate-300"></div>
+                      <span className="text-xs">Merah Muda</span>
+                    </Button>
+                    <div key="color-custom" className="flex flex-col gap-2">
+                      <Input
+                        type="color"
+                        value={hslToHex(settings.foreground)}
+                        onChange={(e) => {
+                          const newHsl = hexToHsl(e.target.value);
+                          setSettings(prev => ({ ...prev, foreground: newHsl }));
+                        }}
+                        className="h-8 w-full cursor-pointer"
+                      />
+                      <span className="text-xs text-center text-muted-foreground">Kustom</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 border rounded-lg" style={{ backgroundColor: settings.card }}>
+                  <p style={{ 
+                    fontSize: `${settings.fontSize}px`, 
+                    fontFamily: settings.fontFamily,
+                    color: settings.foreground
+                  }}>
                     Ini adalah contoh teks dengan pengaturan font yang dipilih. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   </p>
                 </div>

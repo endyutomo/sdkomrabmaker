@@ -139,10 +139,18 @@ export default function DashboardPage() {
     return () => window.removeEventListener('focus', handleFocus);
   }, [fetchCollaborations]);
 
-  // Merge owned and collaboration projects
+  // Merge owned and collaboration projects with deduplication
+  const ownedProjectsList = ownedProjects || [];
+  const ownedProjectIds = new Set(ownedProjectsList.map((p: any) => p.id));
+  
+  // Filter out collaboration projects that are already in owned projects (avoid duplicates)
+  const uniqueCollaborationProjects = collaborationProjects.filter(
+    (p: any) => !ownedProjectIds.has(p.id)
+  );
+  
   const allProjects = [
-    ...(ownedProjects || []).map((p: any) => ({ ...p, isOwned: true })),
-    ...collaborationProjects
+    ...ownedProjectsList.map((p: any) => ({ ...p, isOwned: true })),
+    ...uniqueCollaborationProjects
   ];
   
   const projects = allProjects;
