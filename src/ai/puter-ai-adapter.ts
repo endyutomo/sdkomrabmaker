@@ -146,6 +146,8 @@ export interface PriceSuggestionOutput {
     brandDetected?: string;
     isPremiumBrand?: boolean;
     brandNote?: string;
+    modelType?: string;
+    imageUrl?: string;
 }
 
 /**

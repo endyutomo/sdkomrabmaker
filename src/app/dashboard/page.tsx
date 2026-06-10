@@ -57,6 +57,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { BookTemplate } from "lucide-react";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { AnalyticsCharts } from "@/components/dashboard/analytics-charts";
 
 export default function DashboardPage() {
@@ -443,7 +444,9 @@ export default function DashboardPage() {
 
           {/* Analytics Charts */}
           {!isProjectsLoading && projects && projects.length > 0 && (
-            <AnalyticsCharts projects={projects} />
+            <ErrorBoundary>
+              <AnalyticsCharts projects={projects} />
+            </ErrorBoundary>
           )}
         </div>
 

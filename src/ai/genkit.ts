@@ -7,7 +7,7 @@ const litellmApiKey = process.env.LITELLM_API_KEY;
 const litellmBaseUrl = process.env.LITELLM_BASE_URL;
 
 // Only configure LiteLLM if credentials are available
-const plugins = [googleAI()];
+const plugins: any[] = [googleAI()];
 
 if (litellmApiKey && litellmBaseUrl) {
   try {

@@ -135,7 +135,7 @@ export function AIChatSidebar({ open, onOpenChange }: AIChatSidebarProps) {
     };
 
     const confirmClearChat = () => {
-        const freshGreeting = [
+        const freshGreeting: Message[] = [
             {
                 id: Date.now().toString(),
                 role: "assistant",

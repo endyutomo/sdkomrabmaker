@@ -3,9 +3,9 @@ import { supabaseAdmin } from '../../../../../lib/supabase-server';
 
 export async function POST(
   _request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = params?.id;
+  const { id } = await params;
   if (!id) return NextResponse.json({ error: 'Missing project id' }, { status: 400 });
 
   const { data, error } = await supabaseAdmin

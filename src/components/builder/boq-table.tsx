@@ -79,7 +79,9 @@ export function BoqTable({
   onUpdateItem,
   onDeleteItem,
   onAddItem,
-  onDeleteCategory
+  onDeleteCategory,
+  onReorderCategory,
+  onReorderItem
 }: BoqTableProps) {
   const [includeVat, setIncludeVat] = useState(true);
   const [includePph23, setIncludePph23] = useState(true);

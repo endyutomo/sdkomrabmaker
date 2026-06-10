@@ -3,9 +3,9 @@ import { supabaseAdmin } from '@/lib/supabase-server';
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const projectId = params?.id;
+  const { id: projectId } = await params;
   if (!projectId) {
     return NextResponse.json({ error: 'Missing project id' }, { status: 400 });
   }
@@ -88,9 +88,9 @@ export async function POST(
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const projectId = params?.id;
+  const { id: projectId } = await params;
   if (!projectId) {
     return NextResponse.json({ error: 'Missing project id' }, { status: 400 });
   }
@@ -115,9 +115,9 @@ export async function GET(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const projectId = params?.id;
+  const { id: projectId } = await params;
   if (!projectId) {
     return NextResponse.json({ error: 'Missing project id' }, { status: 400 });
   }

@@ -315,6 +315,51 @@ export function BuilderClient() {
         }));
     };
 
+    const handleReorderCategory = (categoryId: string, direction: 'up' | 'down') => {
+        setProject(prev => {
+            const index = prev.categories.findIndex(c => c.id === categoryId);
+            if (index === -1) return prev;
+            const newIndex = direction === 'up' ? index - 1 : index + 1;
+            if (newIndex < 0 || newIndex >= prev.categories.length) return prev;
+
+            const newCategories = [...prev.categories];
+            const [movedCategory] = newCategories.splice(index, 1);
+            newCategories.splice(newIndex, 0, movedCategory);
+
+            return {
+                ...prev,
+                categories: newCategories
+            };
+        });
+    };
+
+    const handleReorderItem = (categoryId: string, itemId: string, direction: 'up' | 'down') => {
+        setProject(prev => {
+            const newCategories = prev.categories.map(c => {
+                if (c.id !== categoryId) return c;
+
+                const index = c.items.findIndex(i => i.id === itemId);
+                if (index === -1) return c;
+                const newIndex = direction === 'up' ? index - 1 : index + 1;
+                if (newIndex < 0 || newIndex >= c.items.length) return c;
+
+                const newItems = [...c.items];
+                const [movedItem] = newItems.splice(index, 1);
+                newItems.splice(newIndex, 0, movedItem);
+
+                return {
+                    ...c,
+                    items: newItems
+                };
+            });
+
+            return {
+                ...prev,
+                categories: newCategories
+            };
+        });
+    };
+
     const handleAiSuggest = (suggestedCategories: BoqCategory[]) => {
         setProject(prev => ({
             ...prev,
@@ -823,7 +868,7 @@ export function BuilderClient() {
                                 </div>
                             </div>
                         ) : (
-                            <BoqTable
+                             <BoqTable
                                 project={project}
                                 onUpdateProjectInfo={handleUpdateProjectInfo}
                                 onUpdateCategory={handleUpdateCategory}
@@ -831,6 +876,8 @@ export function BuilderClient() {
                                 onDeleteItem={handleDeleteItem}
                                 onAddItem={handleAddItem}
                                 onDeleteCategory={handleDeleteCategory}
+                                onReorderCategory={handleReorderCategory}
+                                onReorderItem={handleReorderItem}
                             />
                         )}
                     </div>

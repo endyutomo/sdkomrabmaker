@@ -40,7 +40,7 @@ export function useSupabaseQuery<T>(
                     timeoutPromise
                 ]) as any;
 
-                if (queryError) {
+                if (queryError && Object.keys(queryError).length > 0) {
                     console.error(`Supabase error for ${table}:`, queryError);
                     
                     // If it's a missing table or RLS error, don't block the UI
@@ -54,6 +54,11 @@ export function useSupabaseQuery<T>(
                         setError(queryError);
                         setData([]);
                     }
+                } else if (queryError) {
+                    // Empty error object - likely a connectivity issue or Supabase project sleeping
+                    console.warn(`Supabase returned empty error for ${table}. Possible connection or CORS issue.`);
+                    setData([]);
+                    setError(null);
                 } else {
                     setData(result as T[]);
                     setError(null);
@@ -78,22 +83,32 @@ export function useSupabaseQuery<T>(
 
         fetchData();
 
-        // Setup real-time subscription without problematic filters
-        // Just listen to changes and refetch data - don't try to filter in subscription
-        const subscription = supabase
-            .channel(`${table}_changes_${user.id}`)
-            .on(
-                'postgres_changes',
-                { event: '*', schema: 'public', table: table },
-                () => {
-                    // Refetch to apply RLS filters properly
-                    fetchData();
-                }
-            )
-            .subscribe();
+        // Setup real-time subscription with error handling
+        let subscription: any = null;
+        try {
+            subscription = supabase
+                .channel(`${table}_changes_${user.id}`)
+                .on(
+                    'postgres_changes',
+                    { event: '*', schema: 'public', table: table },
+                    () => {
+                        // Refetch to apply RLS filters properly
+                        fetchData();
+                    }
+                )
+                .subscribe();
+        } catch (subErr) {
+            console.warn(`Failed to subscribe to ${table} changes:`, subErr);
+        }
 
         return () => {
-            subscription.unsubscribe();
+            if (subscription?.unsubscribe) {
+                try {
+                    subscription.unsubscribe();
+                } catch (unsubErr) {
+                    console.warn(`Failed to unsubscribe from ${table}:`, unsubErr);
+                }
+            }
         };
     }, [user, table, ...dependencies]);
 

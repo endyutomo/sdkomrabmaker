@@ -1,9 +1,9 @@
 {
   "node": {
-    "4038b570432c3a58e62076a4ec5d3cc2f6b698ad83": {
+    "40f6f3fcacae9bb52b5f0e89f1fc29146ffdb16541": {
       "workers": {
         "app/builder/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fadmin%2FDocuments%2FGitHub%2Fsdkomrabmaker%2Fsrc%2Fai%2Fflows%2Fai-price-suggestion.ts%22%2C%5B%7B%22id%22%3A%224038b570432c3a58e62076a4ec5d3cc2f6b698ad83%22%2C%22exportedName%22%3A%22suggestItemPrice%22%2C%22filename%22%3A%22ai%2Fflows%2Fai-price-suggestion.ts%22%7D%5D%5D%2C%5B%22%2FUsers%2Fadmin%2FDocuments%2FGitHub%2Fsdkomrabmaker%2Fsrc%2Fai%2Fflows%2Fai-boq-item-suggestion.ts%22%2C%5B%7B%22id%22%3A%224098522462137a448c9e20175c913d0e6b4421ef3a%22%2C%22exportedName%22%3A%22suggestBoqItems%22%2C%22filename%22%3A%22ai%2Fflows%2Fai-boq-item-suggestion.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fadmin%2FDocuments%2FGitHub%2Fsdkomrabmaker%2Fsrc%2Fai%2Fflows%2Fai-price-suggestion.ts%22%2C%5B%7B%22id%22%3A%2240f6f3fcacae9bb52b5f0e89f1fc29146ffdb16541%22%2C%22exportedName%22%3A%22suggestItemPrice%22%2C%22filename%22%3A%22ai%2Fflows%2Fai-price-suggestion.ts%22%7D%5D%5D%2C%5B%22%2FUsers%2Fadmin%2FDocuments%2FGitHub%2Fsdkomrabmaker%2Fsrc%2Fai%2Fflows%2Fai-boq-item-suggestion.ts%22%2C%5B%7B%22id%22%3A%2240d74c2dd38f275645962cbb69b62e9747e317b496%22%2C%22exportedName%22%3A%22suggestBoqItems%22%2C%22filename%22%3A%22ai%2Fflows%2Fai-boq-item-suggestion.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
@@ -13,10 +13,10 @@
       "filename": "ai/flows/ai-price-suggestion.ts",
       "exportedName": "suggestItemPrice"
     },
-    "4098522462137a448c9e20175c913d0e6b4421ef3a": {
+    "40d74c2dd38f275645962cbb69b62e9747e317b496": {
       "workers": {
         "app/builder/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fadmin%2FDocuments%2FGitHub%2Fsdkomrabmaker%2Fsrc%2Fai%2Fflows%2Fai-price-suggestion.ts%22%2C%5B%7B%22id%22%3A%224038b570432c3a58e62076a4ec5d3cc2f6b698ad83%22%2C%22exportedName%22%3A%22suggestItemPrice%22%2C%22filename%22%3A%22ai%2Fflows%2Fai-price-suggestion.ts%22%7D%5D%5D%2C%5B%22%2FUsers%2Fadmin%2FDocuments%2FGitHub%2Fsdkomrabmaker%2Fsrc%2Fai%2Fflows%2Fai-boq-item-suggestion.ts%22%2C%5B%7B%22id%22%3A%224098522462137a448c9e20175c913d0e6b4421ef3a%22%2C%22exportedName%22%3A%22suggestBoqItems%22%2C%22filename%22%3A%22ai%2Fflows%2Fai-boq-item-suggestion.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fadmin%2FDocuments%2FGitHub%2Fsdkomrabmaker%2Fsrc%2Fai%2Fflows%2Fai-price-suggestion.ts%22%2C%5B%7B%22id%22%3A%2240f6f3fcacae9bb52b5f0e89f1fc29146ffdb16541%22%2C%22exportedName%22%3A%22suggestItemPrice%22%2C%22filename%22%3A%22ai%2Fflows%2Fai-price-suggestion.ts%22%7D%5D%5D%2C%5B%22%2FUsers%2Fadmin%2FDocuments%2FGitHub%2Fsdkomrabmaker%2Fsrc%2Fai%2Fflows%2Fai-boq-item-suggestion.ts%22%2C%5B%7B%22id%22%3A%2240d74c2dd38f275645962cbb69b62e9747e317b496%22%2C%22exportedName%22%3A%22suggestBoqItems%22%2C%22filename%22%3A%22ai%2Fflows%2Fai-boq-item-suggestion.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": false
         }
       },
@@ -28,5 +28,5 @@
     }
   },
   "edge": {},
-  "encryptionKey": "OM9HDn8aYzhOtEigoYC4G7gvQ4CdDppjUyWoDE5WfIk="
+  "encryptionKey": "G0CPL7QF01+v0QvFTKPcxr7Utf1aibs7odler7GDPGg="
 }
