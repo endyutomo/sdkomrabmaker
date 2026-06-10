@@ -56,6 +56,8 @@ import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { BookTemplate } from "lucide-react";
+import { AnalyticsCharts } from "@/components/dashboard/analytics-charts";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -339,6 +341,12 @@ export default function DashboardPage() {
               </Button>
             </div>
           )}
+          <Link href="/catalog">
+            <Button variant="outline" size="sm" className="flex items-center gap-2">
+              <BookTemplate className="h-4 w-4" />
+              Katalog
+            </Button>
+          </Link>
           <Link href="/settings">
             <Button variant="outline" size="sm" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />
@@ -432,6 +440,11 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
+
+          {/* Analytics Charts */}
+          {!isProjectsLoading && projects && projects.length > 0 && (
+            <AnalyticsCharts projects={projects} />
+          )}
         </div>
 
         {/* Filter Bar */}

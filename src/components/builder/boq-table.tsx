@@ -11,6 +11,8 @@ import {
   Package,
   UserCog,
   ChevronDown,
+  ChevronUp,
+  ChevronsUpDown,
   Calculator,
   Sparkles,
   Loader2,
@@ -28,7 +30,8 @@ import {
   ImageOff,
   Store,
   Percent,
-  Coins
+  Coins,
+  GripVertical
 } from "lucide-react";
 import {
   Dialog,
@@ -65,6 +68,8 @@ interface BoqTableProps {
   onDeleteItem: (categoryId: string, itemId: string) => void;
   onAddItem: (categoryId: string, type?: 'perangkat' | 'jasa') => void;
   onDeleteCategory: (categoryId: string) => void;
+  onReorderCategory?: (categoryId: string, direction: 'up' | 'down') => void;
+  onReorderItem?: (categoryId: string, itemId: string, direction: 'up' | 'down') => void;
 }
 
 export function BoqTable({
@@ -349,12 +354,35 @@ export function BoqTable({
         </div>
       </div>
 
-      {categories.map((category) => (
+      {categories.map((category, catIdx) => (
         <div key={category.id} className="bg-white rounded-xl shadow-sm border overflow-hidden">
           <div className="bg-slate-50 p-6 flex flex-col sm:flex-row items-center justify-between border-b gap-4">
             <div className="flex items-center gap-4 flex-1 w-full">
-              <div className="h-10 w-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center font-bold">
-                {categories.indexOf(category) + 1}
+              <div className="flex items-center gap-1">
+                {onReorderCategory && (
+                  <div className="flex flex-col gap-0.5 mr-1">
+                    <button
+                      onClick={() => onReorderCategory(category.id, 'up')}
+                      disabled={catIdx === 0}
+                      className="h-4 w-4 flex items-center justify-center text-slate-400 hover:text-primary disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                      title="Pindah ke atas"
+                    >
+                      <ChevronUp className="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                      onClick={() => onReorderCategory(category.id, 'down')}
+                      disabled={catIdx === categories.length - 1}
+                      className="h-4 w-4 flex items-center justify-center text-slate-400 hover:text-primary disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                      title="Pindah ke bawah"
+                    >
+                      <ChevronDown className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                )}
+                <GripVertical className="h-4 w-4 text-slate-300 cursor-grab active:cursor-grabbing hidden sm:block" />
+                <div className="h-10 w-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center font-bold">
+                  {catIdx + 1}
+                </div>
               </div>
               <Input
                 className="font-bold text-2xl bg-transparent border-transparent hover:border-slate-200 focus:border-primary h-12 w-full max-w-xl transition-all"
@@ -392,8 +420,28 @@ export function BoqTable({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {category.items.map((item) => (
+                {category.items.map((item, itemIdx) => (
                   <TableRow key={item.id} className="group transition-colors hover:bg-slate-50/80">
+                    <TableCell className="text-center w-[30px] p-1">
+                      {onReorderItem && (
+                        <div className="flex flex-col gap-0.5 items-center">
+                          <button
+                            onClick={() => onReorderItem(category.id, item.id, 'up')}
+                            disabled={itemIdx === 0}
+                            className="h-3 w-3 flex items-center justify-center text-slate-300 hover:text-primary disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                          >
+                            <ChevronUp className="h-3 w-3" />
+                          </button>
+                          <button
+                            onClick={() => onReorderItem(category.id, item.id, 'down')}
+                            disabled={itemIdx === category.items.length - 1}
+                            className="h-3 w-3 flex items-center justify-center text-slate-300 hover:text-primary disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                          >
+                            <ChevronDown className="h-3 w-3" />
+                          </button>
+                        </div>
+                      )}
+                    </TableCell>
                     <TableCell className="text-center">
                       {item.type === 'perangkat' ? (
                         <Package className="h-5 w-5 text-primary opacity-60 mx-auto" />
