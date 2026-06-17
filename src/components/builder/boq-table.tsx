@@ -409,6 +409,7 @@ export function BoqTable({
             <Table className="table-auto w-full min-w-[1500px]">
               <TableHeader>
                 <TableRow className="bg-slate-50/50 hover:bg-slate-50/50">
+                  <TableHead className="w-[30px]"></TableHead>
                   <TableHead className="w-[60px] text-center">Tipe</TableHead>
                   <TableHead className="min-w-[600px]">Uraian Pekerjaan & Spesifikasi</TableHead>
                   <TableHead className="w-[120px]">Satuan</TableHead>
