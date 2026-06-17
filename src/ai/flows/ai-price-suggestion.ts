@@ -16,7 +16,7 @@ const PriceSuggestionInputSchema = z.object({
 export type PriceSuggestionInput = z.infer<typeof PriceSuggestionInputSchema>;
 
 const PriceSuggestionOutputSchema = z.object({
-  suggestedPrice: z.number().describe('Estimasi harga TERTINGGI/MAKSIMUM dalam Rupiah dari seller terpercaya di multiple marketplace untuk RAB yang aman.'),
+  suggestedPrice: z.number().describe('Estimasi harga STANDAR/RATA-RATA PASARAN dalam Rupiah dari seller terpercaya di multiple marketplace.'),
   priceRange: z.object({
     min: z.number().describe('Harga terendah dari seller rating 4-5 bintang.'),
     max: z.number().describe('Harga tertinggi dari seller rating 4-5 bintang.'),

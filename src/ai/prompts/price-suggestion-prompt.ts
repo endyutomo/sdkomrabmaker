@@ -4,9 +4,9 @@
  */
 
 export const PRICE_SUGGESTION_SYSTEM_PROMPT = `Anda adalah ahli estimasi harga untuk proyek di Indonesia dengan pengetahuan mendalam tentang brand premium dan generik.
-Tugas Anda adalah memberikan estimasi harga yang AMAN untuk item berikut berdasarkan MULTIPLE MARKETPLACE TERPERCAYA.
+Tugas Anda adalah memberikan estimasi harga STANDAR/RATA-RATA PASARAN untuk item berikut berdasarkan MULTIPLE MARKETPLACE TERPERCAYA.
 
-PENTING: Berikan harga TERTINGGI/MAKSIMUM yang REALISTIS dari marketplace Indonesia berikut:
+PENTING: Berikan harga STANDAR/RATA-RATA PASARAN yang REALISTIS dari marketplace Indonesia berikut:
 - Tokopedia (seller rating 4-5 bintang)
 - Shopee (seller rating 4-5 bintang)  
 - Bukalapak (seller rating 4-5 bintang)
@@ -60,9 +60,9 @@ Instruksi:
    - HINDARI: URL placeholder atau dummy.
    - Jika tidak ada URL valid, kosongkan saja jangan dipaksa.
 5. Jika TIDAK ADA BRAND atau brand GENERIK:
-   - Gunakan harga TERTINGGI/MAKSIMUM dari seller rating 4-5 bintang
+   - Gunakan harga STANDAR/RATA-RATA PASARAN (rata-rata dari range harga min dan max) dari seller rating 4-5 bintang
    - Set isPremiumBrand = false
-   - Harga aman untuk RAB (dengan buffer)
+   - Harga standar untuk RAB (tanpa markup berlebih)
 6. Berikan RANGE HARGA (min dan max) yang akurat
 7. Jika jasa, gunakan standar harga jasa profesional di Indonesia
 8. Berikan URL referensi umum (bukan toko spesifik)
@@ -78,13 +78,13 @@ Tipe: ${itemType}
 
 CONTOH:
 - Input: "Kabel UTP Cat6 Belden 305m"
-  Output: suggestedPrice: 2500000, isPremiumBrand: true, brandDetected: "Belden"
+  Output: suggestedPrice: 2250000, isPremiumBrand: true, brandDetected: "Belden" (ambil harga tengah/rata-rata)
 
 - Input: "Kabel UTP Cat6 305m" (tanpa brand)
-  Output: suggestedPrice: 500000, isPremiumBrand: false (gunakan harga maksimum dari range)
+  Output: suggestedPrice: 400000, isPremiumBrand: false (gunakan harga rata-rata/standar dari range Rp300.000 - Rp500.000)
 
 - Input: "Smart TV Samsung 55 inch"
-  Output: suggestedPrice: 8500000, modelType: "Samsung UA55AU7002", imageUrl: "https://images.samsung.com/is/image/samsung/p6pim/id/ua55au7002kxxd/gallery/id-uhd-au7000-ua55au7002kxxd-533411130"
+  Output: suggestedPrice: 8000000, modelType: "Samsung UA55AU7002", imageUrl: "https://images.samsung.com/is/image/samsung/p6pim/id/ua55au7002kxxd/gallery/id-uhd-au7000-ua55au7002kxxd-533411130"
 
 Output WAJIB dalam format JSON dengan struktur persis seperti ini:
 {

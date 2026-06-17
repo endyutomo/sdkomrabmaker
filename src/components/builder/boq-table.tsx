@@ -175,7 +175,7 @@ export function BoqTable({
       toast({
         variant: "destructive",
         title: "Nama item tidak spesifik",
-        description: "Masukkan nama item yang jelas sebelum meminta saran harga tertinggi.",
+        description: "Masukkan nama item yang jelas sebelum meminta saran harga standar pasaran.",
       });
       return;
     }
@@ -217,11 +217,11 @@ export function BoqTable({
 
       const toastTitle = result.isPremiumBrand
         ? `Harga Brand Premium: ${result.brandDetected}`
-        : "Saran Harga Teraman Berhasil";
+        : "Saran Harga Standar Berhasil";
 
       const toastDescription = result.isPremiumBrand
         ? `${result.brandNote || `Brand premium terdeteksi. Harga dari ${result.marketplaceSources?.join(', ') || result.sourceName}.`}`
-        : `Menggunakan harga tertinggi (aman) dari ${result.marketplaceSources?.join(', ') || result.sourceName}.`;
+        : `Menggunakan harga standar pasaran dari ${result.marketplaceSources?.join(', ') || result.sourceName}.`;
 
       toast({
         title: toastTitle,
@@ -656,7 +656,7 @@ export function BoqTable({
       {/* Rekapitulasi */}
       <div className="bg-white rounded-2xl shadow-xl border p-10 space-y-8">
         <h3 className="text-2xl font-bold text-primary flex items-center gap-3">
-          <Calculator className="h-7 w-7" /> Rekapitulasi Anggaran (Saran Harga Tertinggi)
+          <Calculator className="h-7 w-7" /> Rekapitulasi Anggaran (Saran Harga Standar Pasaran)
         </h3>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
@@ -728,7 +728,7 @@ export function BoqTable({
               <div className="absolute top-0 right-0 p-6 opacity-10">
                 <Coins className="h-32 w-32" />
               </div>
-              <span className="text-xs opacity-80 uppercase tracking-widest font-black">Total Penawaran Aman</span>
+              <span className="text-xs opacity-80 uppercase tracking-widest font-black">Total Penawaran Standar Pasaran</span>
               <div className="text-5xl font-black tracking-tight drop-shadow-lg">
                 {formatCurrency(grandTotal)}
               </div>
