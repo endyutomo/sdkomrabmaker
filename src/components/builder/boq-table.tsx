@@ -279,33 +279,33 @@ export function BoqTable({
   return (
     <div className="space-y-10 animate-fade-in-up">
       {/* Kop Surat */}
-      <div className="bg-white rounded-2xl shadow-sm border p-8 space-y-6">
-        <div className="flex flex-col md:flex-row justify-between items-start gap-6 border-b pb-8">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 space-y-6">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-6 border-b dark:border-slate-800 pb-8">
           <div className="space-y-4 flex-1 w-full">
-            <div className="flex items-center gap-2 text-primary">
+            <div className="flex items-center gap-2 text-primary dark:text-emerald-400">
               <Building2 className="h-5 w-5" />
               <span className="text-xs font-bold uppercase tracking-wider">Informasi Klien</span>
             </div>
             <Input
-              className="text-3xl font-bold bg-transparent border-none focus:ring-0 p-0 h-auto placeholder:text-muted-foreground/30"
+              className="text-3xl font-bold bg-transparent border-none focus:ring-0 p-0 h-auto placeholder:text-muted-foreground/30 text-slate-900 dark:text-slate-100"
               placeholder="Nama Klien / Perusahaan"
               value={project.clientName}
               onChange={(e) => onUpdateProjectInfo({ clientName: e.target.value })}
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-slate-50 p-2 rounded-lg border border-slate-100">
-                <MapPin className="h-4 w-4 shrink-0" />
+              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-slate-50 dark:bg-slate-950 p-2 rounded-lg border border-slate-100 dark:border-slate-800/80">
+                <MapPin className="h-4 w-4 shrink-0 text-slate-400" />
                 <Input
-                  className="bg-transparent border-none focus:ring-0 p-0 h-auto text-sm"
+                  className="bg-transparent border-none focus:ring-0 p-0 h-auto text-sm text-slate-900 dark:text-slate-100"
                   placeholder="Lokasi Proyek"
                   value={project.projectLocation}
                   onChange={(e) => onUpdateProjectInfo({ projectLocation: e.target.value })}
                 />
               </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-slate-50 p-2 rounded-lg border border-slate-100">
-                <FileText className="h-4 w-4 shrink-0" />
+              <div className="flex items-center gap-2 text-sm text-muted-foreground bg-slate-50 dark:bg-slate-950 p-2 rounded-lg border border-slate-100 dark:border-slate-800/80">
+                <FileText className="h-4 w-4 shrink-0 text-slate-400" />
                 <Input
-                  className="bg-transparent border-none focus:ring-0 p-0 h-auto text-sm font-medium"
+                  className="bg-transparent border-none focus:ring-0 p-0 h-auto text-sm font-medium text-slate-900 dark:text-slate-100"
                   placeholder="Nama Proyek"
                   value={project.title}
                   onChange={(e) => onUpdateProjectInfo({ title: e.target.value })}
@@ -315,37 +315,37 @@ export function BoqTable({
           </div>
 
           <div className="space-y-4 w-full md:w-72">
-            <div className="flex items-center gap-2 text-primary">
+            <div className="flex items-center gap-2 text-primary dark:text-emerald-400">
               <Hash className="h-5 w-5" />
               <span className="text-xs font-bold uppercase tracking-wider">Data Dokumen</span>
             </div>
             <div className="space-y-2">
-              <Label className="text-[10px] text-muted-foreground uppercase font-bold">Nomor Dokumen</Label>
+              <Label className="text-[10px] text-slate-700 dark:text-slate-300 uppercase font-bold">Nomor Dokumen</Label>
               <Input
-                className="text-sm border-slate-200 focus:border-primary transition-colors h-11"
+                className="text-sm bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus:border-primary transition-colors h-11 text-slate-900 dark:text-slate-100 font-semibold"
                 placeholder="RAB/2024/001"
                 value={project.documentNumber}
                 onChange={(e) => onUpdateProjectInfo({ documentNumber: e.target.value })}
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-[10px] text-muted-foreground uppercase font-bold">Tanggal</Label>
-              <div className="flex items-center gap-2 bg-slate-50 border rounded-md px-3 h-11 border-slate-200">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
+              <Label className="text-[10px] text-slate-700 dark:text-slate-300 uppercase font-bold">Tanggal</Label>
+              <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-950 border rounded-md px-3 h-11 border-slate-200 dark:border-slate-800">
+                <Calendar className="h-4 w-4 text-primary dark:text-emerald-400 shrink-0" />
                 <input
                   type="date"
-                  className="bg-transparent border-none focus:ring-0 text-sm flex-1 outline-none"
+                  className="bg-transparent border-none focus:ring-0 text-sm flex-1 outline-none text-slate-900 font-bold dark:text-slate-100 [color-scheme:light] dark:[color-scheme:dark]"
                   value={project.documentDate}
                   onChange={(e) => onUpdateProjectInfo({ documentDate: e.target.value })}
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-[10px] text-muted-foreground uppercase font-bold">Pembuat RAB</Label>
-              <div className="flex items-center gap-2 bg-white border rounded-md px-3 h-11 border-slate-200 focus-within:border-primary transition-colors">
-                <User className="h-4 w-4 text-primary" />
+              <Label className="text-[10px] text-slate-700 dark:text-slate-300 uppercase font-bold">Pembuat RAB</Label>
+              <div className="flex items-center gap-2 bg-white dark:bg-slate-950 border rounded-md px-3 h-11 border-slate-200 dark:border-slate-800 focus-within:border-primary transition-colors">
+                <User className="h-4 w-4 text-primary dark:text-emerald-400" />
                 <Input
-                  className="bg-transparent border-none focus:ring-0 p-0 h-auto text-sm font-semibold"
+                  className="bg-transparent border-none focus:ring-0 p-0 h-auto text-sm font-semibold text-slate-900 dark:text-slate-100"
                   placeholder="Nama Penyusun"
                   value={project.creatorName || ""}
                   onChange={(e) => onUpdateProjectInfo({ creatorName: e.target.value })}
@@ -357,8 +357,8 @@ export function BoqTable({
       </div>
 
       {categories.map((category, catIdx) => (
-        <div key={category.id} className="bg-white rounded-xl shadow-sm border overflow-hidden">
-          <div className="bg-slate-50 p-6 flex flex-col sm:flex-row items-center justify-between border-b gap-4">
+        <div key={category.id} className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div className="bg-slate-50 dark:bg-slate-900/60 p-6 flex flex-col sm:flex-row items-center justify-between border-b border-slate-200 dark:border-slate-800 gap-4">
             <div className="flex items-center gap-4 flex-1 w-full">
               <div className="flex items-center gap-1">
                 {onReorderCategory && (
@@ -455,7 +455,7 @@ export function BoqTable({
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Input
-                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 font-medium text-slate-900 transition-all px-3 -ml-2 text-base w-full"
+                          className="bg-transparent border-none hover:bg-white dark:hover:bg-slate-800 hover:border-slate-200 dark:hover:border-slate-700 focus:bg-white dark:focus:bg-slate-800 focus:border-primary h-11 font-medium text-slate-900 dark:text-slate-100 transition-all px-3 -ml-2 text-base w-full"
                           value={item.name}
                           placeholder="Ketik nama item..."
                           onChange={(e) => onUpdateItem(category.id, item.id, { name: e.target.value })}
@@ -514,7 +514,7 @@ export function BoqTable({
                     </TableCell>
                     <TableCell>
                       <Input
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-slate-600 px-3 -ml-2 w-full text-base"
+                        className="bg-transparent border-none hover:bg-white dark:hover:bg-slate-800 hover:border-slate-200 dark:hover:border-slate-700 focus:bg-white dark:focus:bg-slate-800 focus:border-primary h-11 text-slate-600 dark:text-slate-300 px-3 -ml-2 w-full text-base"
                         value={item.unit}
                         onChange={(e) => onUpdateItem(category.id, item.id, { unit: e.target.value })}
                       />
@@ -522,7 +522,7 @@ export function BoqTable({
                     <TableCell>
                       <Input
                         type="number"
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-bold px-3 -ml-2 w-full text-lg"
+                        className="bg-transparent border-none hover:bg-white dark:hover:bg-slate-800 hover:border-slate-200 dark:hover:border-slate-700 focus:bg-white dark:focus:bg-slate-800 focus:border-primary h-11 text-right font-bold text-slate-900 dark:text-slate-100 px-3 -ml-2 w-full text-lg"
                         value={item.quantity}
                         onChange={(e) => onUpdateItem(category.id, item.id, { quantity: parseFloat(e.target.value) || 0 })}
                       />
@@ -531,7 +531,7 @@ export function BoqTable({
                       <div className="flex flex-col items-end gap-1">
                         <Input
                           type="number"
-                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-black text-slate-900 px-3 -ml-2 w-full text-lg"
+                          className="bg-transparent border-none hover:bg-white dark:hover:bg-slate-800 hover:border-slate-200 dark:hover:border-slate-700 focus:bg-white dark:focus:bg-slate-800 focus:border-primary h-11 text-right font-black text-slate-900 dark:text-slate-100 px-3 -ml-2 w-full text-lg"
                           value={item.unitPrice}
                           onChange={(e) => onUpdateItem(category.id, item.id, { unitPrice: parseFloat(e.target.value) || 0 })}
                           onBlur={() => recordToCatalog(item)}
@@ -572,7 +572,7 @@ export function BoqTable({
                     <TableCell>
                       <Input
                         type="number"
-                        className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-right font-bold text-accent px-3 -ml-2 w-full text-lg"
+                        className="bg-transparent border-none hover:bg-white dark:hover:bg-slate-800 hover:border-slate-200 dark:hover:border-slate-700 focus:bg-white dark:focus:bg-slate-800 focus:border-primary h-11 text-right font-bold text-accent px-3 -ml-2 w-full text-lg"
                         value={item.margin || 0}
                         onChange={(e) => onUpdateItem(category.id, item.id, { margin: parseFloat(e.target.value) || 0 })}
                       />
@@ -584,11 +584,11 @@ export function BoqTable({
                       <div className="flex items-center gap-2">
                         <Store className="h-4 w-4 text-muted-foreground shrink-0" />
                         <Input
-                          className="bg-transparent border-none hover:bg-white hover:border-slate-200 focus:bg-white focus:border-primary h-11 text-sm sm:text-sm text-slate-700 px-3 -ml-1 w-full font-medium"
+                          className="bg-transparent border-none hover:bg-white dark:hover:bg-slate-800 hover:border-slate-200 dark:hover:border-slate-700 focus:bg-white dark:focus:bg-slate-800 focus:border-primary h-11 text-sm sm:text-sm text-slate-700 dark:text-slate-300 px-3 -ml-1 w-full font-medium"
                           value={item.vendorName || ""}
                           placeholder="Nama Toko / Vendor..."
                           onChange={(e) => onUpdateItem(category.id, item.id, { vendorName: e.target.value })}
-                          onBlur={() => recordToCatalog(item)}
+                          onBlur={() => setTimeout(() => recordToCatalog(item), 500)}
                         />
                       </div>
                     </TableCell>
@@ -654,7 +654,7 @@ export function BoqTable({
       ))}
 
       {/* Rekapitulasi */}
-      <div className="bg-white rounded-2xl shadow-xl border p-10 space-y-8">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-10 space-y-8">
         <h3 className="text-2xl font-bold text-primary flex items-center gap-3">
           <Calculator className="h-7 w-7" /> Rekapitulasi Anggaran (Saran Harga Standar Pasaran)
         </h3>
